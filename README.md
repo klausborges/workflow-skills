@@ -4,9 +4,7 @@ personal agent workflow skills for codebase explanation, diagnosis, planning, im
 
 [![skills.sh](https://skills.sh/b/klausborges/workflow-skills)](https://skills.sh/klausborges/workflow-skills)
 
-inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and [vercel labs skills](https://github.com/vercel-labs/skills).
-
-the goal is not to mirror those repos. this repo keeps the pieces that fit a concise, explicit, handoff-friendly workflow.
+inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and built to work with [vercel labs skills](https://github.com/vercel-labs/skills).
 
 fork it if your planning/review language is different. the useful parts should feel like shop tools, not house rules.
 
@@ -42,7 +40,31 @@ then try a concrete prompt:
 
 target-state docs live in [`docs/`](./docs/). canonical shared language and templates live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 
-## install
+## future work
+
+these are active, temporary plans i am committing as a public roadmap while i learn in public. completed plans should disappear before they become stale context.
+
+- [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): clarify when prototypes should be shown, discarded, or absorbed.
+- [`review-work-dogfooding`](./plans/review-work-dogfooding.md): tune review behavior from real project reviews.
+- [`invocation-policy-dogfooding`](./plans/invocation-policy-dogfooding.md): decide whether `use-workflow` stays implicit and how provider controls should be documented.
+- [`setup-quality-gates`](./plans/setup-quality-gates.md): research and plan an opinionated local quality-gate setup skill.
+- [`workflow-plugin-experiments`](./plans/workflow-plugin-experiments.md): compare plugin, hook, and package experiments for OpenCode, Pi, and Factory Droid.
+
+## install from github
+
+install the collection:
+
+```bash
+npx skills add klausborges/workflow-skills --skill '*' -a claude-code codex -y
+```
+
+install one skill:
+
+```bash
+npx skills add klausborges/workflow-skills --skill plan-work -a claude-code codex -y
+```
+
+## local install
 
 list local skills:
 
@@ -50,43 +72,29 @@ list local skills:
 npx skills add . --list
 ```
 
-install all skills into this repo for claude code and codex:
+install all local skills into this repo for claude code and codex:
 
 ```bash
 mise run install
 ```
 
-install globally for claude code and codex:
+install local skills globally for claude code and codex:
 
 ```bash
 mise run install:global
 ```
 
-install into another repo from this checkout:
+install local skills into another repo:
 
 ```bash
 cd /path/to/other/repo
 npx skills add /path/to/this/repo --skill '*' -a claude-code codex -y
 ```
 
-install one skill:
+install one local skill:
 
 ```bash
 npx skills add . --skill plan-work -a claude-code codex -y
-```
-
-## github install
-
-install from GitHub:
-
-```bash
-npx skills add klausborges/workflow-skills --skill '*' -a claude-code codex -y
-```
-
-direct github urls also work:
-
-```bash
-npx skills add https://github.com/klausborges/workflow-skills --skill plan-work -a claude-code codex -y
 ```
 
 ## skills.sh
@@ -120,7 +128,7 @@ mise run prek:install
 
 ## credits
 
-this repo borrows workflow ideas from [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and [vercel labs skills](https://github.com/vercel-labs/skills). the structure is intentionally smaller and easier to fork.
+this repo borrows selectively from [matt pocock's skills](https://github.com/mattpocock/skills) and [superpowers](https://github.com/obra/superpowers). matt's repo is a useful model for small focused skills, while superpowers is the heavier workflow loop this trims down. [vercel labs skills](https://github.com/vercel-labs/skills) shaped the packaging target through the skills CLI.
 
 ## license
 
