@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Codebase"
+  short_description: "Map codebase areas, modules, callers, flows, tests, and terms."
+  default_prompt: "Explain how this codebase area works."

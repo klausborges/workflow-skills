@@ -21,6 +21,8 @@ Keep answers short and practical unless the user asks for depth. This skill is a
 
 - New feature or fuzzy idea: use `plan-work`. Expect focused questions, a Design Brief, then Target-State Docs and a Plan if you approve the direction.
 - Approved Plan or next phase: use `implement-plan`. Expect code changes, verification, Plan updates, and phase self-review.
+- Codebase explanation: use `explain-codebase`. Expect a read-only map of purpose, entry points, modules, callers, flows, tests, terms, and unknowns.
+- Diagnosis: use `diagnose-issue`. Expect reproduction, root-cause investigation, a focused fix when safe, and verification.
 - Review: use `review-work`. Expect findings first, ordered by severity, with evidence and recommended fixes.
 - Handoff: use `write-handoff`. Expect a fresh-context prompt or file with read-first context, task, constraints, verification, and out-of-scope.
 - Architecture improvement: use `improve-architecture`. Expect targeted improvement candidates before any redesign or refactor plan.

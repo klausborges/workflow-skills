@@ -1,6 +1,6 @@
 ---
 name: use-workflow
-description: Lightweight umbrella workflow router. Use for substantial feature, implementation, handoff, review, architecture, or planning work in repos that follow this workflow; establishes vocabulary and routes to plan-work, implement-plan, write-handoff, review-work, improve-architecture, or plan-prototype while honoring repo-local instructions.
+description: Lightweight umbrella workflow router. Use for substantial feature, implementation, handoff, review, diagnosis, explanation, architecture, or planning work in repos that follow this workflow; establishes vocabulary and routes to plan-work, implement-plan, write-handoff, review-work, diagnose-issue, explain-codebase, improve-architecture, or plan-prototype while honoring repo-local instructions.
 ---
 
 # Use Workflow
@@ -23,6 +23,8 @@ Key terms:
 
 ## Routing
 
+- "Explain this code", "how does this work", codebase map, feature/module/flow orientation -> `explain-codebase`
+- Bug, failing test, build failure, flaky behavior, unexpected output, performance regression, or "debug/diagnose this" -> `diagnose-issue`
 - Fuzzy idea, new feature, architecture/product/workflow change, or multi-step task -> `plan-work`
 - Approved Plan, "implement phase N", or planned checklist execution -> `implement-plan`
 - Prompt for another agent/model/tool, continuation brief, or "handoff" -> `write-handoff`

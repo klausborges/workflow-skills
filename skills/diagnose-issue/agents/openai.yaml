@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose Issue"
+  short_description: "Reproduce, diagnose, and fix bugs, failures, flakes, and perf regressions."
+  default_prompt: "Diagnose this issue."

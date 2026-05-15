@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repo defines a small set of agent workflow skills for explaining the workflow, planning, implementation, handoff, review, architecture improvement, and planning prototypes.
+This repo defines a small set of agent workflow skills for explaining the workflow, explaining codebase areas, diagnosis, planning, implementation, handoff, review, architecture improvement, and planning prototypes.
 
 The skills are intended to be portable across repos and agent tools while preserving a concise, explicit workflow. They borrow selectively from Matt Pocock's agent skills, Superpowers, and Vercel Labs Skills without requiring those projects at runtime.
 
@@ -10,6 +10,8 @@ The skills are intended to be portable across repos and agent tools while preser
 
 - The repo exposes installable skills under `skills/`.
 - `explain-workflow` explains how to use the workflow skills for concrete situations without starting the work by default.
+- `explain-codebase` explains unfamiliar codebase areas, modules, callers, flows, tests, and terms without editing files.
+- `diagnose-issue` builds a feedback loop, reproduces the issue, finds root cause, and fixes normal bugs after the verification path is clear.
 - `use-workflow` routes substantial work to the most specific workflow skill without forcing itself into small direct tasks.
 - `plan-work` turns unclear feature or workflow ideas into Target-State Docs and an ephemeral Plan.
 - `implement-plan` executes approved Plan phases, keeps checklist state current, verifies work, and runs phase self-review.
@@ -39,6 +41,21 @@ Installable skills must be self-contained. The canonical files in `skills/_share
 1. The user asks how to use the workflow, how to invoke a skill, or how the workflow applies to a concrete situation.
 2. The agent answers from the user's point of view with the relevant skill, what to ask next, and what to expect.
 3. If the request might also mean "start the work", the agent explains first and gives the exact next prompt instead of starting by default.
+
+### Codebase Explanation
+
+1. The user asks how a codebase area, feature, flow, module, or call path works.
+2. The agent reads local docs, relevant source, callers, entry points, and tests.
+3. The agent returns a read-only map of purpose, entry points, key modules, flow, tests/checks, terms, and unknowns.
+4. If concrete architecture friction appears, the agent may recommend `improve-architecture` as a next step without starting it automatically.
+
+### Diagnosis
+
+1. The user reports a bug, failing test, build failure, flaky behavior, unexpected output, or performance regression.
+2. The agent builds or identifies a fast feedback loop and reproduces the reported symptom.
+3. The agent forms falsifiable hypotheses, instruments narrowly, and identifies root cause before changing behavior.
+4. The agent fixes normal bugs once root cause and verification path are clear.
+5. The agent stops before risky fixes, public behavior changes, production-sensitive work, performance trade-offs, or missing architecture seams.
 
 ### Planning
 
@@ -81,6 +98,8 @@ Installable skills must be self-contained. The canonical files in `skills/_share
 - Skills should use stronger tools when available or requested, but must remain portable and fall back to first-party docs, `llms.txt`, official examples, CLI help, and local examples.
 - The workflow should not require commits, worktrees, issue publishing, or subagent-driven implementation by default. Subagents are preferred for self-review when the harness provides fresh-context subagents.
 - Handoffs are first-class workflow artifacts, not summaries.
+- Codebase explanation is read-only by default.
+- Diagnosis requires root-cause evidence before fixes.
 
 ## Out of Scope
 

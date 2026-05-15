@@ -1,6 +1,6 @@
 # workflow skills
 
-personal agent workflow skills for planning, implementation, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
+personal agent workflow skills for codebase explanation, diagnosis, planning, implementation, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
 
 [![skills.sh](https://skills.sh/b/klausborges/workflow-skills)](https://skills.sh/klausborges/workflow-skills)
 
@@ -19,6 +19,8 @@ if the agent does not pick it up, be explicit: `use explain-workflow to show me 
 then try a concrete prompt:
 
 - `use plan-work to plan this feature`
+- `explain how this code path works`
+- `diagnose this failing test`
 - `use review-work to review this change`
 - `use write-handoff to prepare a handoff`
 - `use improve-architecture to find deepening opportunities`
@@ -28,6 +30,8 @@ then try a concrete prompt:
 | skill                                                            | purpose                                                                                                                |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [`explain-workflow`](./skills/explain-workflow/SKILL.md)         | explain how to use the workflow skills for a concrete situation.                                                       |
+| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | explain codebase areas, modules, callers, flows, tests, and terms without editing files.                               |
+| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | reproduce, diagnose, and fix normal bugs, failures, flaky behavior, and performance regressions.                       |
 | [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route substantial workflow work to the right skill.                                                                    |
 | [`plan-work`](./skills/plan-work/SKILL.md)                       | research, ask questions, write target-state docs, and create an ephemeral plan.                                        |
 | [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement approved plan phases with verification, plan updates, and self-review.                                       |

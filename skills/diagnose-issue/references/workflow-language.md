@@ -1,0 +1,21 @@
+# Workflow Language
+
+Use these terms consistently.
+
+**Plan**: ephemeral phased implementation artifact in `plans/`.
+Avoid: spec, permanent documentation.
+
+**Target-State Doc**: durable document under `docs/` describing behavior, concepts, or structure that should remain true after implementation.
+Avoid: implementation plan, code dump.
+
+**Glossary**: `GLOSSARY.md` or scoped `docs/<scope>/GLOSSARY.md`; canonical terms, relationships, and flagged ambiguities only.
+Avoid: context dump, implementation notes.
+
+**Handoff**: copyable prompt or file that gives a fresh agent enough context to continue, implement, research, refactor, fix, or review work.
+Avoid: status summary.
+
+**Durable Handoff**: handoff for later/unknown agents or repeated work across models/tools.
+
+**ADR**: concise record of a hard-to-reverse, surprising, trade-off-driven decision.
+
+**Research Ladder**: portable source preference for technical investigation.
