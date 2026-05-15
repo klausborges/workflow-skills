@@ -1,0 +1,8 @@
+.references/
+plans/
+skills-lock.json
+.agents/skills/
+.claude/skills/
+.cursor/skills/
+.factory/skills/
+.pi/skills/

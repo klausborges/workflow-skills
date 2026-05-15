@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: sync-skill-references
+        name: Check generated skill references
+        entry: scripts/sync-skill-references.sh --check
+        language: system
+        pass_filenames: false
+
+      - id: format-ci
+        name: Check Markdown formatting
+        entry: mise run format:ci
+        language: system
+        pass_filenames: false

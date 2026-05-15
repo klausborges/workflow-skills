@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve Architecture"
+  short_description: "Find and shape architecture deepening opportunities."
+  default_prompt: "Find architecture improvement opportunities."

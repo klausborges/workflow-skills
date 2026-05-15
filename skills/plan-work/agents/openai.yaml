@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Work"
+  short_description: "Research, grill, document, and plan substantial work."
+  default_prompt: "Plan this work before implementation."

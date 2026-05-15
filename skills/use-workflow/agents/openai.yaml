@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Workflow"
+  short_description: "Route substantial work through the workflow skills."
+  default_prompt: "Use the workflow skills for this work."

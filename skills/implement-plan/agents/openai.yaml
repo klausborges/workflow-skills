@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Plan"
+  short_description: "Implement approved plan phases with verification and review."
+  default_prompt: "Implement the selected plan phase."

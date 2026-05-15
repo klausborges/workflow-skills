@@ -1,0 +1,39 @@
+[tools]
+oxfmt = "latest"
+prek = "latest"
+
+[tasks.install]
+description = "Install these skills locally for Claude Code and Codex"
+run = "npx skills add . --skill '*' -a claude-code codex -y"
+
+[tasks."install:global"]
+description = "Install these skills globally for Claude Code and Codex"
+run = "npx skills add . --skill '*' -a claude-code codex -g -y"
+
+[tasks.format]
+description = "Format owned Markdown files"
+run = "oxfmt --write AGENTS.md GLOSSARY.md README.md 'docs/**/*.md' 'skills/**/*.md'"
+
+[tasks."format:ci"]
+description = "Check owned Markdown formatting"
+run = "oxfmt --check AGENTS.md GLOSSARY.md README.md 'docs/**/*.md' 'skills/**/*.md'"
+
+[tasks."sync-references"]
+description = "Generate shared reference docs into each installable skill"
+run = "scripts/sync-skill-references.sh"
+
+[tasks."sync-references:ci"]
+description = "Check generated skill reference docs are current"
+run = "scripts/sync-skill-references.sh --check"
+
+[tasks.check]
+description = "Run local repository checks"
+depends = ["sync-references:ci", "format:ci"]
+
+[tasks."prek:install"]
+description = "Install prek git hooks"
+run = "prek install"
+
+[tasks."pre-commit"]
+description = "Run prek hooks across the repository"
+run = "prek run --all-files"

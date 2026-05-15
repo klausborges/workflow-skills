@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Prototype"
+  short_description: "Use throwaway prototypes to answer planning questions."
+  default_prompt: "Prototype this planning question."

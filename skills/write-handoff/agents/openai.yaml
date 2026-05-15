@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Handoff"
+  short_description: "Create fresh-context prompts or handoff files."
+  default_prompt: "Write a handoff for this work."
