@@ -2,13 +2,14 @@
 
 ## Purpose
 
-This repo defines a small set of agent workflow skills for planning, implementation, handoff, review, architecture improvement, and planning prototypes.
+This repo defines a small set of agent workflow skills for explaining the workflow, planning, implementation, handoff, review, architecture improvement, and planning prototypes.
 
 The skills are intended to be portable across repos and agent tools while preserving a concise, explicit workflow. They borrow selectively from Matt Pocock's agent skills, Superpowers, and Vercel Labs Skills without requiring those projects at runtime.
 
 ## Target State
 
 - The repo exposes installable skills under `skills/`.
+- `explain-workflow` explains how to use the workflow skills for concrete situations without starting the work by default.
 - `use-workflow` routes substantial work to the most specific workflow skill without forcing itself into small direct tasks.
 - `plan-work` turns unclear feature or workflow ideas into Target-State Docs and an ephemeral Plan.
 - `implement-plan` executes approved Plan phases, keeps checklist state current, verifies work, and runs phase self-review.
@@ -32,6 +33,12 @@ Shared skill references live in `skills/_shared/`:
 Installable skills must be self-contained. The canonical files in `skills/_shared/` are generated into each skill's `references/` directory, and skill instructions should link to those local generated copies.
 
 ## User/System Flows
+
+### Explanation
+
+1. The user asks how to use the workflow, how to invoke a skill, or how the workflow applies to a concrete situation.
+2. The agent answers from the user's point of view with the relevant skill, what to ask next, and what to expect.
+3. If the request might also mean "start the work", the agent explains first and gives the exact next prompt instead of starting by default.
 
 ### Planning
 

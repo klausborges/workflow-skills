@@ -10,10 +10,24 @@ the goal is not to mirror those repos. this repo keeps the pieces that fit a con
 
 fork it if your planning/review language is different. the useful parts should feel like shop tools, not house rules.
 
+## after install
+
+ask `explain how the workflow skills work`.
+
+if the agent does not pick it up, be explicit: `use explain-workflow to show me how this workflow works`.
+
+then try a concrete prompt:
+
+- `use plan-work to plan this feature`
+- `use review-work to review this change`
+- `use write-handoff to prepare a handoff`
+- `use improve-architecture to find deepening opportunities`
+
 ## skills
 
 | skill                                                            | purpose                                                                                                                |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [`explain-workflow`](./skills/explain-workflow/SKILL.md)         | explain how to use the workflow skills for a concrete situation.                                                       |
 | [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route substantial workflow work to the right skill.                                                                    |
 | [`plan-work`](./skills/plan-work/SKILL.md)                       | research, ask questions, write target-state docs, and create an ephemeral plan.                                        |
 | [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement approved plan phases with verification, plan updates, and self-review.                                       |

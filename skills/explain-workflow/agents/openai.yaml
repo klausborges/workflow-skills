@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Workflow"
+  short_description: "Explain how to use the workflow skills."
+  default_prompt: "Explain how to use this workflow."
