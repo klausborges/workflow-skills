@@ -33,6 +33,7 @@ Use `review-work` on real project changes and tune the review workflow from evid
 - Current repo decision: review output leads with findings, ordered by severity.
 - Current repo decision: multi-aspect review is explicit/requested or inferred only when useful, then reconciled before reporting.
 - Current repo decision: `improve-architecture` may be recommended from review, but should not start automatically.
+- Dogfooding finding: review follow-up needed an explicit patch-now path; `write-handoff` is for fresh-context transfer, not the default next step after accepted findings.
 
 ## Phase 1: Collect Real Review Sessions
 
@@ -81,6 +82,7 @@ Review should stay findings-first and evidence-led. Improvements should reduce f
 - [ ] Decide whether the output shape needs tighter instructions.
 - [ ] Decide whether multi-aspect review needs stronger trigger guidance.
 - [ ] Decide whether routing boundaries with `diagnose-issue` and `improve-architecture` need clarification.
+- [ ] Clarify review follow-up routing after accepted findings. Partially completed: `review-work` and `use-workflow` now distinguish direct patching, Plan-backed `implement-plan`, and fresh-context `write-handoff`.
 - [ ] Update `skills/review-work/SKILL.md` and related docs if needed.
 - [ ] Run repository checks.
 
@@ -115,3 +117,4 @@ Status: PASS
 ## Discovered Follow-Ups
 
 - Consider a reusable review-fix handoff template if repeated review rounds show the same handoff shape.
+- Finish dogfooding the new review follow-up routing against real review sessions before marking the clarification task complete.

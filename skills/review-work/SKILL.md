@@ -43,6 +43,12 @@ Possible aspects:
 - security or data-loss risks
 - architecture and maintainability
 
+## Follow-Up
+
+When accepted findings should be fixed in the same context, patch them directly if the scope is small and clear. If the review is tied to an existing Plan or planned checklist, route the fix work through `implement-plan` and keep the Plan updated.
+
+Use `write-handoff` only when the user wants a fresh-context transfer, delegation prompt, or saved review-fix brief. Do not treat a `Review-Fix Handoff` as the default next step after every review.
+
 ## Output
 
 Lead with findings, ordered by severity. Include file/line references when possible.

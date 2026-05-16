@@ -27,6 +27,7 @@ Key terms:
 - Bug, failing test, build failure, flaky behavior, unexpected output, performance regression, or "debug/diagnose this" -> `diagnose-issue`
 - Fuzzy idea, new feature, architecture/product/workflow change, or multi-step task -> `plan-work`
 - Approved Plan, "implement phase N", or planned checklist execution -> `implement-plan`
+- Patch accepted review findings -> direct scoped implementation; use `implement-plan` when the review fix belongs to an existing Plan.
 - Prompt for another agent/model/tool, continuation brief, or "handoff" -> `write-handoff`
 - "Review this", adversarial review, multi-aspect review, test/library/performance/security review -> `review-work`
 - "Improve architecture", "find deepening opportunities", hard-to-test/scattered/shallow code, architecture refactor -> `improve-architecture`
@@ -40,4 +41,5 @@ If several apply, choose the most specific skill. If the user explicitly names a
 - Use the Research Ladder from [research-ladder.md](references/research-ladder.md) before serious technical recommendations.
 - Create durable docs only when information should remain useful after the Plan is deleted.
 - Keep handoffs first-class; do not treat them as implementation summaries.
+- After review, prefer the user's requested follow-up: patch accepted findings, route Plan-backed fixes through `implement-plan`, or write a handoff only when transferring context.
 - Do not commit, create worktrees, publish issues, or start implementation unless requested or clearly part of the repo's local workflow.
