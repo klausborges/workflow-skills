@@ -34,6 +34,7 @@ Use `review-work` on real project changes and tune the review workflow from evid
 - Current repo decision: multi-aspect review is explicit/requested or inferred only when useful, then reconciled before reporting.
 - Current repo decision: `improve-architecture` may be recommended from review, but should not start automatically.
 - Dogfooding finding: review follow-up needed an explicit patch-now path; `write-handoff` is for fresh-context transfer, not the default next step after accepted findings.
+- Reference signal: Matt Pocock's review skill uses a crisp Standards/Spec split. Do not import "spec" as workflow vocabulary; evaluate whether `review-work` should more explicitly suggest Plan/Target-State Doc/acceptance compliance as a multi-aspect lens when those artifacts exist.
 
 ## Phase 1: Collect Real Review Sessions
 
@@ -81,6 +82,7 @@ Review should stay findings-first and evidence-led. Improvements should reduce f
 
 - [ ] Decide whether the output shape needs tighter instructions.
 - [ ] Decide whether multi-aspect review needs stronger trigger guidance.
+- [ ] Decide whether Plan/Target-State Doc/acceptance compliance should be a more explicit suggested multi-aspect lens when those artifacts exist.
 - [ ] Decide whether routing boundaries with `diagnose-issue` and `improve-architecture` need clarification.
 - [ ] Clarify review follow-up routing after accepted findings. Partially completed: `review-work` and `use-workflow` now distinguish direct patching, Plan-backed `implement-plan`, and fresh-context `write-handoff`.
 - [ ] Update `skills/review-work/SKILL.md` and related docs if needed.

@@ -33,6 +33,7 @@ Clarify how `plan-prototype` should behave when visual or logic prototypes are u
 - Current repo decision: `plan-prototype` should stay tooling-neutral by default and use existing project tooling when possible.
 - Current repo decision: prototype code should answer one planning question, then be deleted or absorbed.
 - Open question: when a prototype exists, the skill should be clearer about when to show it to the user.
+- Reference signal: Matt Pocock's `prototype` skill has a sharper logic-vs-UI split, including runnable terminal logic probes and comparable UI variants. Evaluate whether the current visual/logic split needs clearer mode selection, variant comparison, or cleanup/absorption guidance.
 
 ## Phase 1: Collect Prototype-Use Examples
 
@@ -79,6 +80,7 @@ The skill should remain lightweight and should not force one browser, server, or
 ### Tasks
 
 - [ ] Decide whether `plan-prototype` needs explicit "show the prototype" guidance.
+- [ ] Compare current `plan-prototype` behavior against Matt Pocock's `prototype` skill, especially logic-vs-UI mode selection, variant comparison, and prototype cleanup or absorption.
 - [ ] Update `skills/plan-prototype/SKILL.md` if the examples reveal missing behavior.
 - [ ] Update `docs/workflow.md` only if the decision becomes durable workflow policy.
 - [ ] Run generated-reference sync if shared references change.

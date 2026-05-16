@@ -2,20 +2,69 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     fs,
     io::Write,
+    ops::Range,
     path::{Path, PathBuf},
 };
 
 #[cfg(unix)]
 use std::os::unix::fs::MetadataExt;
 
-use miette::{Diagnostic, IntoDiagnostic, Result};
-use serde::Deserialize;
+use miette::{Diagnostic, IntoDiagnostic, NamedSource, Result, SourceSpan};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
+use tiktoken_rs::{CoreBPE, cl100k_base_singleton, o200k_base_singleton};
+use toml::Spanned;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum RefsAction {
     Sync,
     Verify,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum BenchEncoding {
+    O200kBase,
+    Cl100kBase,
+}
+
+impl BenchEncoding {
+    #[must_use]
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::O200kBase => "o200k_base",
+            Self::Cl100kBase => "cl100k_base",
+        }
+    }
+
+    fn tokenizer(self) -> &'static CoreBPE {
+        match self {
+            Self::O200kBase => o200k_base_singleton(),
+            Self::Cl100kBase => cl100k_base_singleton(),
+        }
+    }
+}
+
+#[derive(Debug, Serialize)]
+pub struct BenchCount {
+    pub encoding: String,
+    pub files: Vec<BenchFileCount>,
+    pub total: BenchTotal,
+}
+
+#[derive(Debug, Serialize)]
+pub struct BenchFileCount {
+    pub path: String,
+    pub canonical_path: String,
+    pub lines: usize,
+    pub bytes: usize,
+    pub tokens: usize,
+}
+
+#[derive(Debug, Default, Serialize)]
+pub struct BenchTotal {
+    pub lines: usize,
+    pub bytes: usize,
+    pub tokens: usize,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -27,14 +76,48 @@ enum ValidationMode {
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct SkillToml {
-    references: ReferenceMetadata,
+    references: RawReferenceMetadata,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
+struct RawReferenceMetadata {
+    shared: Vec<Spanned<String>>,
+    owned: Vec<Spanned<String>>,
+}
+
+#[derive(Debug)]
 struct ReferenceMetadata {
     shared: Vec<String>,
     owned: Vec<String>,
+    spans: ReferenceSpans,
+}
+
+#[derive(Debug)]
+struct ReferenceSpans {
+    shared: Vec<ReferenceSpan>,
+    owned: Vec<ReferenceSpan>,
+}
+
+#[derive(Debug)]
+struct ReferenceSpan {
+    value: String,
+    span: Range<usize>,
+}
+
+impl From<RawReferenceMetadata> for ReferenceMetadata {
+    fn from(raw: RawReferenceMetadata) -> Self {
+        let shared_spans = reference_spans(&raw.shared);
+        let owned_spans = reference_spans(&raw.owned);
+        Self {
+            shared: raw.shared.into_iter().map(Spanned::into_inner).collect(),
+            owned: raw.owned.into_iter().map(Spanned::into_inner).collect(),
+            spans: ReferenceSpans {
+                shared: shared_spans,
+                owned: owned_spans,
+            },
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -51,9 +134,71 @@ struct SkillPlan {
     metadata: ReferenceMetadata,
 }
 
+#[derive(Debug)]
+struct SkillMetadata {
+    path: PathBuf,
+    source: String,
+    references: ReferenceMetadata,
+}
+
 #[derive(Debug, Diagnostic, Error)]
 #[error("reference validation failed:\n{summary}")]
 struct ValidationFailed {
+    summary: String,
+    #[related]
+    related: Vec<ValidationIssue>,
+}
+
+#[derive(Debug, Diagnostic, Error)]
+#[error("{message}")]
+struct ValidationIssue {
+    message: String,
+    #[source_code]
+    source_code: NamedSource<String>,
+    #[label("relevant metadata")]
+    span: SourceSpan,
+}
+
+#[derive(Debug, Default)]
+struct ValidationErrors {
+    messages: Vec<String>,
+    related: Vec<ValidationIssue>,
+}
+
+impl ValidationErrors {
+    fn push(&mut self, message: String) {
+        self.messages.push(message);
+    }
+
+    fn push_spanned(&mut self, message: String, path: &Path, source: &str, span: Range<usize>) {
+        self.messages.push(message.clone());
+        self.related.push(ValidationIssue {
+            message,
+            source_code: NamedSource::new(display(path), source.to_owned()),
+            span: (span.start, span.end.saturating_sub(span.start)).into(),
+        });
+    }
+
+    const fn is_empty(&self) -> bool {
+        self.messages.is_empty()
+    }
+
+    fn into_validation_failed(self) -> ValidationFailed {
+        ValidationFailed {
+            summary: self
+                .messages
+                .into_iter()
+                .map(|error| format!("- {error}"))
+                .collect::<Vec<_>>()
+                .join("\n"),
+            related: self.related,
+        }
+    }
+}
+
+#[derive(Debug, Diagnostic, Error)]
+#[error("benchmark failed:\n{summary}")]
+struct BenchmarkFailed {
     summary: String,
 }
 
@@ -80,11 +225,114 @@ pub fn run_refs(root: &Path, action: RefsAction) -> Result<()> {
     Ok(())
 }
 
+/// Count line, byte, and token footprint for explicit files.
+///
+/// # Errors
+///
+/// Returns a diagnostic error when inputs are missing, are directories, are not
+/// UTF-8 text, or cannot be read.
+pub fn count_bench(root: &Path, encoding: BenchEncoding, paths: &[PathBuf]) -> Result<BenchCount> {
+    let root = root.canonicalize().unwrap_or_else(|_| root.to_path_buf());
+    let tokenizer = encoding.tokenizer();
+    let mut seen = BTreeSet::new();
+    let mut files = Vec::new();
+    let mut errors = Vec::new();
+
+    if paths.is_empty() {
+        errors.push("no benchmark files provided".to_owned());
+    }
+
+    for path in paths {
+        let input_path = if path.is_absolute() {
+            path.clone()
+        } else {
+            root.join(path)
+        };
+        let display_path = display_bench_path(&root, path, &input_path);
+
+        let canonical_path = match input_path.canonicalize() {
+            Ok(canonical_path) => canonical_path,
+            Err(error) => {
+                errors.push(format!(
+                    "cannot canonicalize benchmark path {display_path}: {error}"
+                ));
+                continue;
+            }
+        };
+
+        if !seen.insert(canonical_path.clone()) {
+            continue;
+        }
+
+        let metadata = match fs::metadata(&canonical_path) {
+            Ok(metadata) => metadata,
+            Err(error) => {
+                errors.push(format!(
+                    "cannot inspect benchmark path {display_path}: {error}"
+                ));
+                continue;
+            }
+        };
+
+        if metadata.is_dir() {
+            errors.push(format!("benchmark path is a directory: {display_path}"));
+            continue;
+        }
+
+        if !metadata.is_file() {
+            errors.push(format!("benchmark path is not a file: {display_path}"));
+            continue;
+        }
+
+        let content = match fs::read_to_string(&canonical_path) {
+            Ok(content) => content,
+            Err(error) => {
+                errors.push(format!(
+                    "cannot read benchmark file {display_path}: {error}"
+                ));
+                continue;
+            }
+        };
+
+        files.push(BenchFileCount {
+            path: display_path,
+            canonical_path: display(&canonical_path),
+            lines: logical_line_count(&content),
+            bytes: content.len(),
+            tokens: tokenizer.encode_ordinary(&content).len(),
+        });
+    }
+
+    if !errors.is_empty() {
+        return Err(BenchmarkFailed {
+            summary: errors
+                .into_iter()
+                .map(|error| format!("- {error}"))
+                .collect::<Vec<_>>()
+                .join("\n"),
+        }
+        .into());
+    }
+
+    let total = files.iter().fold(BenchTotal::default(), |mut total, file| {
+        total.lines += file.lines;
+        total.bytes += file.bytes;
+        total.tokens += file.tokens;
+        total
+    });
+
+    Ok(BenchCount {
+        encoding: encoding.as_str().to_owned(),
+        files,
+        total,
+    })
+}
+
 fn validate(
     root: &Path,
     mode: ValidationMode,
 ) -> std::result::Result<(BTreeMap<String, SharedReference>, Vec<SkillPlan>), ValidationFailed> {
-    let mut errors = Vec::new();
+    let mut errors = ValidationErrors::default();
     let shared = load_shared_references(root, &mut errors);
     let skill_dirs = installable_skill_dirs(root, &mut errors);
     let mut plans = Vec::new();
@@ -98,19 +346,13 @@ fn validate(
     if errors.is_empty() {
         Ok((shared, plans))
     } else {
-        Err(ValidationFailed {
-            summary: errors
-                .into_iter()
-                .map(|error| format!("- {error}"))
-                .collect::<Vec<_>>()
-                .join("\n"),
-        })
+        Err(errors.into_validation_failed())
     }
 }
 
 fn load_shared_references(
     root: &Path,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) -> BTreeMap<String, SharedReference> {
     let shared_dir = root.join("skills").join("_shared");
     let mut shared = BTreeMap::new();
@@ -194,7 +436,7 @@ fn load_shared_references(
     shared
 }
 
-fn installable_skill_dirs(root: &Path, errors: &mut Vec<String>) -> Vec<PathBuf> {
+fn installable_skill_dirs(root: &Path, errors: &mut ValidationErrors) -> Vec<PathBuf> {
     let skills_dir = root.join("skills");
     let entries = match fs::read_dir(&skills_dir) {
         Ok(entries) => entries,
@@ -256,7 +498,7 @@ fn validate_skill(
     shared: &BTreeMap<String, SharedReference>,
     dir: &Path,
     mode: ValidationMode,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) -> Option<SkillPlan> {
     let name = dir
         .file_name()
@@ -267,15 +509,15 @@ fn validate_skill(
     let skill_md_path = dir.join("SKILL.md");
     let references_dir = dir.join("references");
 
-    let metadata = read_metadata(root, &name, &metadata_path, errors)?;
+    let skill_metadata = read_metadata(root, &name, &metadata_path, errors)?;
     validate_package_source_file(root, "skill instruction file", &skill_md_path, errors);
 
-    validate_metadata_names(&name, &metadata, shared, errors);
+    validate_metadata_names(&name, &skill_metadata, shared, errors);
     validate_reference_files(
         root,
         &name,
         shared,
-        &metadata,
+        &skill_metadata.references,
         &references_dir,
         mode,
         errors,
@@ -285,7 +527,7 @@ fn validate_skill(
         name,
         root: root.to_path_buf(),
         references_dir,
-        metadata,
+        metadata: skill_metadata.references,
     })
 }
 
@@ -293,8 +535,8 @@ fn read_metadata(
     root: &Path,
     name: &str,
     metadata_path: &Path,
-    errors: &mut Vec<String>,
-) -> Option<ReferenceMetadata> {
+    errors: &mut ValidationErrors,
+) -> Option<SkillMetadata> {
     if !validate_package_source_file(root, "skill metadata file", metadata_path, errors) {
         errors.push(format!(
             "skill `{name}` is missing metadata at {}",
@@ -315,12 +557,21 @@ fn read_metadata(
     };
 
     match toml::from_str::<SkillToml>(&content) {
-        Ok(parsed) => Some(parsed.references),
+        Ok(parsed) => Some(SkillMetadata {
+            path: metadata_path.to_path_buf(),
+            source: content,
+            references: parsed.references.into(),
+        }),
         Err(error) => {
-            errors.push(format!(
+            let message = format!(
                 "skill `{name}` has invalid metadata {}: {error}",
                 display(metadata_path)
-            ));
+            );
+            if let Some(span) = error.span() {
+                errors.push_spanned(message, metadata_path, &content, span);
+            } else {
+                errors.push(message);
+            }
             None
         }
     }
@@ -328,35 +579,49 @@ fn read_metadata(
 
 fn validate_metadata_names(
     skill_name: &str,
-    metadata: &ReferenceMetadata,
+    metadata: &SkillMetadata,
     shared: &BTreeMap<String, SharedReference>,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) {
-    validate_sorted(skill_name, "shared", &metadata.shared, errors);
-    validate_sorted(skill_name, "owned", &metadata.owned, errors);
+    validate_sorted(skill_name, "shared", &metadata.references.shared, errors);
+    validate_sorted(skill_name, "owned", &metadata.references.owned, errors);
 
     let mut seen = BTreeSet::new();
-    for reference in metadata.shared.iter().chain(metadata.owned.iter()) {
-        if !is_valid_reference_name(reference) {
-            errors.push(format!(
-                "skill `{skill_name}` has invalid reference name `{reference}`; use bare [a-z0-9-]+ names without `.md`"
-            ));
+    for reference in metadata
+        .references
+        .spans
+        .shared
+        .iter()
+        .chain(metadata.references.spans.owned.iter())
+    {
+        if !is_valid_reference_name(&reference.value) {
+            let message = format!(
+                "skill `{skill_name}` has invalid reference name `{}`; use bare [a-z0-9-]+ names without `.md`",
+                reference.value
+            );
+            errors.push_spanned(
+                message,
+                &metadata.path,
+                &metadata.source,
+                reference.span.clone(),
+            );
         }
 
-        if !seen.insert(reference) {
+        if !seen.insert(&reference.value) {
             errors.push(format!(
-                "skill `{skill_name}` declares duplicate reference `{reference}`"
+                "skill `{skill_name}` declares duplicate reference `{}`",
+                reference.value
             ));
         }
     }
 
-    for reference in &metadata.shared {
+    for reference in &metadata.references.shared {
         if !shared.contains_key(reference) {
             errors.push(format!("skill `{skill_name}` declares shared reference `{reference}` but no shared source exists"));
         }
     }
 
-    for reference in &metadata.owned {
+    for reference in &metadata.references.owned {
         if shared.contains_key(reference) {
             errors.push(format!(
                 "skill `{skill_name}` declares owned reference `{reference}`, but that name collides with a shared reference"
@@ -365,7 +630,12 @@ fn validate_metadata_names(
     }
 }
 
-fn validate_sorted(skill_name: &str, field: &str, values: &[String], errors: &mut Vec<String>) {
+fn validate_sorted(
+    skill_name: &str,
+    field: &str,
+    values: &[String],
+    errors: &mut ValidationErrors,
+) {
     let mut sorted = values.to_vec();
     sorted.sort();
 
@@ -383,7 +653,7 @@ fn validate_reference_files(
     metadata: &ReferenceMetadata,
     references_dir: &Path,
     mode: ValidationMode,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) {
     let declared_shared: BTreeSet<_> = metadata.shared.iter().cloned().collect();
     let declared_owned: BTreeSet<_> = metadata.owned.iter().cloned().collect();
@@ -472,7 +742,7 @@ fn sync_references(shared: &BTreeMap<String, SharedReference>, plans: &[SkillPla
             )?;
         }
 
-        let mut errors = Vec::new();
+        let mut errors = ValidationErrors::default();
         for (reference, path) in
             reference_files(&plan.root, &plan.name, &plan.references_dir, &mut errors)
         {
@@ -482,7 +752,7 @@ fn sync_references(shared: &BTreeMap<String, SharedReference>, plans: &[SkillPla
         }
 
         if !errors.is_empty() {
-            return Err(miette::Report::msg(errors.join("\n")));
+            return Err(errors.into_validation_failed().into());
         }
     }
 
@@ -569,7 +839,7 @@ fn reference_files(
     root: &Path,
     skill_name: &str,
     references_dir: &Path,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) -> BTreeMap<String, PathBuf> {
     let mut files = BTreeMap::new();
 
@@ -678,7 +948,12 @@ fn is_temp_reference_artifact(path: &Path) -> bool {
         .is_some_and(|name| name.starts_with('.') && name.contains(".tmp."))
 }
 
-fn validate_mutation_target(root: &Path, skill_name: &str, path: &Path, errors: &mut Vec<String>) {
+fn validate_mutation_target(
+    root: &Path,
+    skill_name: &str,
+    path: &Path,
+    errors: &mut ValidationErrors,
+) {
     if let Ok(metadata) = fs::symlink_metadata(path) {
         if metadata.file_type().is_symlink() {
             errors.push(format!(
@@ -900,7 +1175,7 @@ fn validate_package_source_file(
     root: &Path,
     description: &str,
     path: &Path,
-    errors: &mut Vec<String>,
+    errors: &mut ValidationErrors,
 ) -> bool {
     let metadata = match fs::symlink_metadata(path) {
         Ok(metadata) => metadata,
@@ -976,4 +1251,32 @@ fn display(path: &Path) -> String {
 fn display_relative(root: &Path, path: &Path) -> String {
     path.strip_prefix(root)
         .map_or_else(|_| display(path), display)
+}
+
+fn display_bench_path(root: &Path, original: &Path, input_path: &Path) -> String {
+    if original.is_absolute() {
+        input_path
+            .strip_prefix(root)
+            .map_or_else(|_| display(original), display)
+    } else {
+        display(original)
+    }
+}
+
+fn logical_line_count(content: &str) -> usize {
+    if content.is_empty() {
+        0
+    } else {
+        content.lines().count()
+    }
+}
+
+fn reference_spans(values: &[Spanned<String>]) -> Vec<ReferenceSpan> {
+    values
+        .iter()
+        .map(|value| ReferenceSpan {
+            value: value.get_ref().clone(),
+            span: value.span(),
+        })
+        .collect()
 }

@@ -2,8 +2,6 @@
 
 personal agent workflow skills for codebase explanation, diagnosis, planning, implementation, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
 
-[![skills.sh](https://skills.sh/b/klausborges/workflow-skills)](https://skills.sh/klausborges/workflow-skills)
-
 inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and built to work with [vercel labs skills](https://github.com/vercel-labs/skills).
 
 fork it if your planning/review language is different. the useful parts should feel like shop tools, not house rules.
@@ -42,12 +40,14 @@ target-state docs live in [`docs/`](./docs/). canonical shared language and temp
 
 ## future work
 
-these are active, temporary plans i am committing as a public roadmap while i learn in public. completed plans should disappear before they become stale context.
+these active plans are kept here as a public roadmap and examples of the workflow in use. completed plans should disappear before they become stale context.
 
 - [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): clarify when prototypes should be shown, discarded, or absorbed.
 - [`review-work-dogfooding`](./plans/review-work-dogfooding.md): tune review behavior from real project reviews.
 - [`invocation-policy-dogfooding`](./plans/invocation-policy-dogfooding.md): decide whether `use-workflow` stays implicit and how provider controls should be documented.
+- [`reference-signal-improvements`](./plans/reference-signal-improvements.md): evaluate compact signals from reference skills without bloating this workflow.
 - [`setup-quality-gates`](./plans/setup-quality-gates.md): research and plan an opinionated local quality-gate setup skill.
+- [`wflow-minijinja-templating`](./plans/wflow-minijinja-templating.md): plan template rendering only if provider-specific generated files become necessary.
 - [`workflow-plugin-experiments`](./plans/workflow-plugin-experiments.md): compare plugin, hook, and package experiments for OpenCode, Pi, and Factory Droid.
 
 ## install from github
@@ -101,6 +101,8 @@ npx skills add . --skill plan-work -a claude-code codex -y
 
 once indexed, the collection should be available at [`skills.sh/klausborges/workflow-skills`](https://skills.sh/klausborges/workflow-skills).
 
+[![skills.sh](https://skills.sh/b/klausborges/workflow-skills)](https://skills.sh/klausborges/workflow-skills)
+
 ## validate
 
 local validation uses Rust/Cargo for repo maintenance checks. installed skills do not require Rust.
@@ -127,6 +129,26 @@ install pre-commit hooks:
 ```bash
 mise run prek:install
 ```
+
+## reference comparison
+
+rough `o200k_base` token counts for equivalent workflow areas. equivalent skills are approximate because the repos split workflow ideas differently.
+
+the goal is to use references deliberately and keep installed skills small enough to load well, not to turn the repo into benchmaxxing theater.
+
+| workflow area        | local tokens | matt pocock tokens | superpowers tokens |
+| -------------------- | -----------: | -----------------: | -----------------: |
+| planning             |        1,611 |              2,916 |             14,948 |
+| implementation       |        2,021 |              2,092 |             10,152 |
+| review               |        1,508 |              1,052 |              3,210 |
+| diagnosis            |        1,512 |              1,947 |             14,015 |
+| architecture         |          965 |              3,832 |             13,186 |
+| prototype            |          606 |              3,525 |             13,186 |
+| codebase explanation |          748 |                 89 |                n/a |
+| handoff              |        1,436 |                160 |                n/a |
+| workflow routing     |        1,079 |              3,281 |              3,106 |
+| workflow explanation |          866 |                n/a |              3,106 |
+| total                |       12,352 |             22,894 |             88,909 |
 
 ## credits
 

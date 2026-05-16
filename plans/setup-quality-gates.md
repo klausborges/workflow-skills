@@ -39,7 +39,7 @@ Add a local-only `setup-quality-gates` skill that detects project stack profiles
 - User preference: allow adding tools and dependencies after presenting the detected repo profile and proposed gate set.
 - This Plan is not implementation-ready until Phase 0 completes. Tool defaults need a fresh research pass against current first-party docs and real repo examples.
 - `wflow refs` now treats extra `references/*.md` files as orphan drift while allowing declared skill-owned reference docs. Decision: stack profile docs should use `skill.toml` owned references.
-- `plans/reference-artifact-reduction.md` owns the `skill.toml` metadata model and `wflow refs` CLI work needed before this Plan can add skill-owned stack reference docs.
+- The `skill.toml` metadata model and `wflow refs` checks have landed. This Plan only needs to confirm the behavior still supports stack profile docs before adding the skill.
 - Research must cover what can be packaged into an installed skill versus what requires a repo-local or globally available `wflow` binary.
 
 ## Phase 0: Research And Grill Stack Defaults
@@ -74,17 +74,17 @@ Quality gate tooling changes quickly, especially in JS frameworks. The current p
 - [ ] Later phase tasks reflect researched defaults rather than placeholders.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
 
-## Phase 1: Confirm Reference Artifact Reduction Dependency
+## Phase 1: Confirm Reference Metadata Tooling
 
 Mode: AFK
 
 ### Goal
 
-Confirm `reference-artifact-reduction` has landed enough metadata and CLI support for skill-owned reference docs.
+Confirm the landed metadata and `wflow refs` tooling supports skill-owned reference docs.
 
 ### Context
 
-`setup-quality-gates` needs stack-specific reference docs such as `node.md`, `node-react-vite.md`, `node-svelte.md`, and `rust.md`. `plans/reference-artifact-reduction.md` replaces the old all-copy shell script with `skill.toml` metadata and `wflow refs` verification so those owned docs can be declared safely.
+`setup-quality-gates` needs stack-specific reference docs such as `node.md`, `node-react-vite.md`, `node-svelte.md`, and `rust.md`. The repo now uses `skill.toml` metadata and `wflow refs` verification, so this phase should verify the current behavior directly instead of depending on a completed historical Plan.
 
 ### Tasks
 
@@ -97,7 +97,7 @@ Confirm `reference-artifact-reduction` has landed enough metadata and CLI suppor
 
 ### Acceptance Criteria
 
-- [ ] `plans/reference-artifact-reduction.md` Phase 4 is complete or equivalent behavior exists.
+- [ ] Metadata-driven reference verification is present in the repo.
 - [ ] Declared skill-owned references can ship with a skill.
 - [ ] Missing/stale generated shared references are still reported.
 - [ ] Shared-name collisions remain protected from accidental skill ownership.
@@ -108,7 +108,7 @@ Confirm `reference-artifact-reduction` has landed enough metadata and CLI suppor
 
 ### Notes
 
-This phase is a prerequisite for stack-profile docs. Do not add the `setup-quality-gates` skill references until this is solved.
+This phase is a prerequisite for stack-profile docs. Do not add the `setup-quality-gates` skill references until this is confirmed against the current repo tooling.
 
 ## Phase 2: Define Stack Profiles And Docs
 
