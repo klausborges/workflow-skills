@@ -1,0 +1,6 @@
+[references]
+shared = [
+  "architecture-language",
+  "workflow-language",
+]
+owned = []

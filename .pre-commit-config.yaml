@@ -1,9 +1,9 @@
 repos:
   - repo: local
     hooks:
-      - id: sync-skill-references
+      - id: sync-references
         name: Check generated skill references
-        entry: scripts/sync-skill-references.sh --check
+        entry: mise run sync-references:ci
         language: system
         pass_filenames: false
 

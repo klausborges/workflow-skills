@@ -103,6 +103,8 @@ once indexed, the collection should be available at [`skills.sh/klausborges/work
 
 ## validate
 
+local validation uses Rust/Cargo for repo maintenance checks. installed skills do not require Rust.
+
 ```bash
 npx skills add . --list
 mise run check

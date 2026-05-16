@@ -1,0 +1,6 @@
+[references]
+shared = [
+  "templates",
+  "workflow-language",
+]
+owned = []

@@ -20,15 +20,27 @@ run = "oxfmt --check AGENTS.md GLOSSARY.md README.md 'docs/**/*.md' 'skills/**/*
 
 [tasks."sync-references"]
 description = "Generate shared reference docs into each installable skill"
-run = "scripts/sync-skill-references.sh"
+run = "env -u RUSTC_WRAPPER cargo run --quiet --bin wflow -- refs sync"
 
 [tasks."sync-references:ci"]
 description = "Check generated skill reference docs are current"
-run = "scripts/sync-skill-references.sh --check"
+run = "env -u RUSTC_WRAPPER cargo run --quiet --bin wflow -- refs verify"
+
+[tasks."rust:fmt"]
+description = "Check Rust formatting"
+run = "env -u RUSTC_WRAPPER cargo fmt --check"
+
+[tasks."rust:test"]
+description = "Run Rust tests"
+run = "env -u RUSTC_WRAPPER cargo test"
+
+[tasks."rust:clippy"]
+description = "Run Rust lints"
+run = "env -u RUSTC_WRAPPER cargo clippy --all-targets --all-features -- -D warnings -W clippy::pedantic -W clippy::nursery"
 
 [tasks.check]
 description = "Run local repository checks"
-depends = ["sync-references:ci", "format:ci"]
+depends = ["sync-references:ci", "format:ci", "rust:fmt", "rust:test", "rust:clippy"]
 
 [tasks."prek:install"]
 description = "Install prek git hooks"

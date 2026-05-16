@@ -1,6 +1,7 @@
 .references/
 plans/.local/
 skills-lock.json
+target/
 .agents/skills/
 .claude/skills/
 .cursor/skills/

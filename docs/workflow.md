@@ -32,7 +32,40 @@ Shared skill references live in `skills/_shared/`:
 - `research-ladder.md` defines source preferences without hard-coding one research tool.
 - `architecture-language.md` defines optional architecture vocabulary.
 
-Installable skills must be self-contained. The canonical files in `skills/_shared/` are generated into each skill's `references/` directory, and skill instructions should link to those local generated copies.
+Installable skills must be self-contained. The canonical files in `skills/_shared/` are generated into each skill's `references/` directory according to each skill's metadata.
+
+## Reference Metadata
+
+Each installable skill has a `skill.toml` file that declares the reference files shipped with that skill:
+
+```toml
+[references]
+shared = [
+  "workflow-language",
+]
+owned = []
+```
+
+Reference names are bare names. A shared reference named `workflow-language` maps to `skills/_shared/workflow-language.md` and is generated into `skills/<skill>/references/workflow-language.md`.
+
+`skill.toml` is the only reference artifact contract. `wflow` does not parse `SKILL.md` links; this intentionally avoids Markdown path parsing and keeps verification focused on the files that will be packaged with each skill.
+
+To add an existing shared reference to a skill:
+
+1. Add the bare reference name to `[references].shared` in that skill's `skill.toml`.
+2. Run `mise run sync-references`.
+3. Run `mise run check`.
+4. Optionally link the generated local file from `SKILL.md`, for example `references/workflow-language.md`.
+
+To add a skill-owned reference:
+
+1. Create `skills/<skill>/references/<name>.md`.
+2. Add the bare reference name to `[references].owned`.
+3. Use a name that does not exist in `skills/_shared/`; shared-name collisions are rejected.
+4. Run `mise run check`.
+5. Optionally link it from that skill's `SKILL.md`.
+
+`wflow refs sync` may create, update, and prune generated shared references. It must not delete skill-owned references. `wflow refs verify` fails when metadata, generated shared files, skill-owned files, or stale temporary reference artifacts disagree.
 
 ## User/System Flows
 

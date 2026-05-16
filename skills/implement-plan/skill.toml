@@ -1,0 +1,8 @@
+[references]
+shared = [
+  "document-conventions",
+  "research-ladder",
+  "templates",
+  "workflow-language",
+]
+owned = []

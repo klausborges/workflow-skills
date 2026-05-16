@@ -12,7 +12,7 @@ Add a local-only `setup-quality-gates` skill that detects project stack profiles
 ## Phase Checklist
 
 - [ ] Phase 0: Research and grill stack defaults
-- [ ] Phase 1: Support skill-owned reference docs
+- [ ] Phase 1: Confirm reference artifact reduction dependency
 - [ ] Phase 2: Define stack profiles and docs
 - [ ] Phase 3: Add detection and proposal workflow
 - [ ] Phase 4: Implement local gate setup behavior
@@ -38,7 +38,9 @@ Add a local-only `setup-quality-gates` skill that detects project stack profiles
 - Factory's official plugin marketplace includes focused skills with supporting docs. Decision: keep per-stack knowledge in skill references such as `node.md`, `node-react-vite.md`, `node-svelte.md`, and `rust.md`.
 - User preference: allow adding tools and dependencies after presenting the detected repo profile and proposed gate set.
 - This Plan is not implementation-ready until Phase 0 completes. Tool defaults need a fresh research pass against current first-party docs and real repo examples.
-- The current generated-reference script treats extra `references/*.md` files as orphan drift. Decision: before adding stack profile docs, update the tooling so generated shared references remain drift-checked while skill-owned reference docs are allowed.
+- `wflow refs` now treats extra `references/*.md` files as orphan drift while allowing declared skill-owned reference docs. Decision: stack profile docs should use `skill.toml` owned references.
+- `plans/reference-artifact-reduction.md` owns the `skill.toml` metadata model and `wflow refs` CLI work needed before this Plan can add skill-owned stack reference docs.
+- Research must cover what can be packaged into an installed skill versus what requires a repo-local or globally available `wflow` binary.
 
 ## Phase 0: Research And Grill Stack Defaults
 
@@ -54,7 +56,9 @@ Quality gate tooling changes quickly, especially in JS frameworks. The current p
 
 ### Tasks
 
-- [ ] Research current first-party docs for `mise`, `prek`, `oxlint`, ESLint, Prettier, TypeScript, Vite/React, Svelte, Rust `cargo fmt`, and Rust `clippy`.
+- [ ] Research current first-party docs for `mise`, `prek`, `oxlint`, ESLint, Prettier, TypeScript, Vite/React, Svelte, Rust `cargo fmt`, Rust `clippy`, and relevant Rust CLI packaging patterns.
+- [ ] Research how installed skills can access helper binaries or scripts across Codex, Claude Code, and other target harnesses.
+- [ ] Decide which setup-quality-gates behavior belongs in `wflow` versus in skill instructions and reference docs.
 - [ ] Check real-world repo examples where first-party docs leave ambiguity.
 - [ ] Compare `oxlint` suitability for Node React/Vite against ESLint/Prettier fallback cases.
 - [ ] Research Svelte's current lint/format/typecheck expectations and document why it needs a separate profile.
@@ -70,34 +74,34 @@ Quality gate tooling changes quickly, especially in JS frameworks. The current p
 - [ ] Later phase tasks reflect researched defaults rather than placeholders.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
 
-## Phase 1: Support Skill-Owned Reference Docs
+## Phase 1: Confirm Reference Artifact Reduction Dependency
 
 Mode: AFK
 
 ### Goal
 
-Update generated-reference tooling so skills can keep their own `references/*.md` docs alongside generated shared references.
+Confirm `reference-artifact-reduction` has landed enough metadata and CLI support for skill-owned reference docs.
 
 ### Context
 
-`setup-quality-gates` needs stack-specific reference docs such as `node.md`, `node-react-vite.md`, `node-svelte.md`, and `rust.md`. The current `scripts/sync-skill-references.sh --check` flags any non-shared `.md` in `references/` as orphan drift, which blocks that structure.
+`setup-quality-gates` needs stack-specific reference docs such as `node.md`, `node-react-vite.md`, `node-svelte.md`, and `rust.md`. `plans/reference-artifact-reduction.md` replaces the old all-copy shell script with `skill.toml` metadata and `wflow refs` verification so those owned docs can be declared safely.
 
 ### Tasks
 
-- [ ] Update `scripts/sync-skill-references.sh` to distinguish generated shared references from skill-owned references.
-- [ ] Preserve drift checks for generated shared files copied from `skills/_shared/`.
-- [ ] Allow extra skill-owned `references/*.md` files that do not collide with shared reference filenames.
-- [ ] Decide whether the convention needs an explicit marker, manifest, filename rule, or just "shared filename collision means generated; other files are owned".
-- [ ] Add or update docs/comments so future skills understand the generated-vs-owned reference convention.
-- [ ] Verify the script still detects missing or stale generated shared references.
-- [ ] Verify the script allows a skill-owned reference file.
+- [ ] Confirm `wflow refs verify` allows declared skill-owned references.
+- [ ] Confirm `wflow refs verify` rejects undeclared skill-owned references.
+- [ ] Confirm `wflow refs verify` rejects collisions between owned reference names and shared reference names.
+- [ ] Confirm `wflow refs sync` never deletes skill-owned references.
+- [ ] Confirm `skill.toml` can declare the stack profile docs this skill needs.
+- [ ] Decide whether setup-quality-gates should call `wflow` commands directly or only instruct the agent to use repo-local tooling.
 
 ### Acceptance Criteria
 
-- [ ] `scripts/sync-skill-references.sh --check` passes when a skill has extra owned reference docs.
-- [ ] Missing generated shared references are still reported.
-- [ ] Stale generated shared references are still reported.
-- [ ] Shared filename collisions remain protected from accidental skill ownership.
+- [ ] `plans/reference-artifact-reduction.md` Phase 4 is complete or equivalent behavior exists.
+- [ ] Declared skill-owned references can ship with a skill.
+- [ ] Missing/stale generated shared references are still reported.
+- [ ] Shared-name collisions remain protected from accidental skill ownership.
+- [ ] The packaging/access model for any `wflow` helper usage is understood before this skill depends on it.
 - [ ] `mise run check` passes.
 - [ ] Implementation self-review completed.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
@@ -129,7 +133,7 @@ This skill is intentionally personal/opinionated. It should be clear about stack
 - [ ] Decide default `mise` task names: `format`, `format:ci`, `lint`, `typecheck`, `test`, and `check`.
 - [ ] Decide default `prek` hook composition for fast local gates.
 - [ ] Decide strictness ramps for existing repos with many current violations.
-- [ ] Confirm skill-owned references are allowed by the sync script before adding profile docs.
+- [ ] Confirm skill-owned references are allowed by `wflow refs verify` before adding profile docs.
 
 ### Acceptance Criteria
 
