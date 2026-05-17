@@ -1,242 +1,14 @@
-use std::{
-    fs,
-    io::Write,
-    os::unix::fs::{PermissionsExt, symlink},
-    path::PathBuf,
-    process::{Command, Output, Stdio},
-};
+use std::{fs, os::unix::fs::symlink};
 
 use tempfile::TempDir;
 
-struct Fixture {
-    _temp: TempDir,
-    root: PathBuf,
-}
+mod support;
 
-impl Fixture {
-    fn valid() -> Self {
-        let temp = TempDir::new().expect("temp dir");
-        let root = temp.path().to_path_buf();
-        let fixture = Self { _temp: temp, root };
-
-        fixture.write("skills/_shared/templates.md", "templates\n");
-        fixture.write("skills/_shared/workflow-language.md", "workflow\n");
-        fixture.write(
-            "skills/demo/SKILL.md",
-            "Use [workflow](references/workflow-language.md).\n",
-        );
-        fixture.write(
-            "skills/demo/skill.toml",
-            r#"[references]
-shared = [
-  "workflow-language",
-]
-owned = []
-"#,
-        );
-        fixture.write("skills/demo/references/workflow-language.md", "workflow\n");
-
-        fixture
-    }
-
-    fn write(&self, path: &str, content: &str) {
-        let path = self.path(path);
-        fs::create_dir_all(path.parent().expect("parent dir")).expect("create parent dir");
-        fs::write(path, content).expect("write fixture file");
-    }
-
-    fn path(&self, path: &str) -> PathBuf {
-        self.root.join(path)
-    }
-
-    fn remove(&self, path: &str) {
-        fs::remove_file(self.root.join(path)).expect("remove fixture file");
-    }
-
-    fn remove_dir(&self, path: &str) {
-        fs::remove_dir_all(self.root.join(path)).expect("remove fixture dir");
-    }
-
-    fn read(&self, path: &str) -> String {
-        fs::read_to_string(self.root.join(path)).expect("read fixture file")
-    }
-
-    fn exists(&self, path: &str) -> bool {
-        self.path(path).exists()
-    }
-
-    fn run(&self, args: &[&str]) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_wflow"))
-            .arg("--root")
-            .arg(&self.root)
-            .args(args)
-            .output()
-            .expect("run wflow")
-    }
-
-    fn run_with_stdin(&self, args: &[&str], stdin: &str) -> Output {
-        let mut child = Command::new(env!("CARGO_BIN_EXE_wflow"))
-            .arg("--root")
-            .arg(&self.root)
-            .args(args)
-            .stdin(Stdio::piped())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .expect("spawn wflow");
-
-        child
-            .stdin
-            .as_mut()
-            .expect("stdin")
-            .write_all(stdin.as_bytes())
-            .expect("write stdin");
-
-        child.wait_with_output().expect("run wflow")
-    }
-
-    fn assert_ok(&self, args: &[&str]) {
-        let output = self.run(args);
-        assert!(
-            output.status.success(),
-            "expected success, got stderr:\n{}",
-            stderr(&output)
-        );
-    }
-
-    fn assert_err_contains(&self, args: &[&str], expected: &str) {
-        let output = self.run(args);
-        assert!(!output.status.success(), "expected failure");
-        assert!(
-            stderr(&output).contains(expected),
-            "expected stderr to contain {expected:?}, got:\n{}",
-            stderr(&output)
-        );
-    }
-}
+use support::{Fixture, stderr};
 
 #[test]
 fn verify_accepts_valid_metadata() {
     Fixture::valid().assert_ok(&["refs", "verify"]);
-}
-
-#[test]
-fn bench_count_reports_json_file_and_totals() {
-    let fixture = Fixture::valid();
-    fixture.write("a.md", "hello\nworld\n");
-    fixture.write("b.md", "hello");
-
-    let output = fixture.run(&["bench", "count", "--json", "a.md", "b.md"]);
-    assert!(output.status.success(), "stderr:\n{}", stderr(&output));
-
-    let json: serde_json::Value = serde_json::from_str(&stdout(&output)).expect("json output");
-    assert_eq!(json["encoding"], "o200k_base");
-    assert_eq!(json["files"].as_array().expect("files").len(), 2);
-    assert_eq!(json["total"]["lines"], 3);
-    assert_eq!(json["total"]["bytes"], 17);
-    assert_eq!(json["total"]["tokens"], 5);
-}
-
-#[test]
-fn bench_count_accepts_files_from_stdin_and_deduplicates() {
-    let fixture = Fixture::valid();
-    fixture.write("a.md", "hello\n");
-
-    let output = fixture.run_with_stdin(
-        &["bench", "count", "--json", "a.md", "--files-from", "-"],
-        "a.md\n\n",
-    );
-    assert!(output.status.success(), "stderr:\n{}", stderr(&output));
-
-    let json: serde_json::Value = serde_json::from_str(&stdout(&output)).expect("json output");
-    assert_eq!(json["files"].as_array().expect("files").len(), 1);
-    assert_eq!(json["total"]["lines"], 1);
-    assert_eq!(json["total"]["bytes"], 6);
-}
-
-#[test]
-fn bench_count_reports_files_from_path_read_errors_with_context() {
-    let fixture = Fixture::valid();
-
-    fixture.assert_err_contains(
-        &["bench", "count", "--files-from", "missing-list.txt"],
-        "failed to read --files-from missing-list.txt",
-    );
-}
-
-#[test]
-fn bench_count_supports_cl100k_base_encoding() {
-    let fixture = Fixture::valid();
-    fixture.write("a.md", "hello\n");
-
-    let output = fixture.run(&[
-        "bench",
-        "count",
-        "--json",
-        "--encoding",
-        "cl100k_base",
-        "a.md",
-    ]);
-    assert!(output.status.success(), "stderr:\n{}", stderr(&output));
-
-    let json: serde_json::Value = serde_json::from_str(&stdout(&output)).expect("json output");
-    assert_eq!(json["encoding"], "cl100k_base");
-    assert_eq!(json["total"]["tokens"], 2);
-}
-
-#[test]
-fn bench_count_treats_special_token_sentinels_as_ordinary_text() {
-    let fixture = Fixture::valid();
-    fixture.write("a.md", "<|endoftext|>");
-
-    let output = fixture.run(&["bench", "count", "--json", "a.md"]);
-    assert!(output.status.success(), "stderr:\n{}", stderr(&output));
-
-    let json: serde_json::Value = serde_json::from_str(&stdout(&output)).expect("json output");
-    assert_eq!(json["total"]["tokens"], 7);
-}
-
-#[test]
-fn bench_count_rejects_directories_and_missing_files() {
-    let fixture = Fixture::valid();
-    fixture.write("a.md", "hello\n");
-
-    let output = fixture.run(&["bench", "count", "skills", "missing.md"]);
-    let stderr = stderr(&output);
-    assert!(!output.status.success(), "expected failure");
-    assert!(stderr.contains("benchmark path is a directory"), "{stderr}");
-    assert!(
-        stderr.contains("cannot canonicalize benchmark path"),
-        "{stderr}"
-    );
-}
-
-#[test]
-fn bench_count_rejects_invalid_utf8() {
-    let fixture = Fixture::valid();
-    let path = fixture.path("bad.md");
-    fs::write(path, [0xff, 0xfe]).expect("write invalid utf8");
-
-    fixture.assert_err_contains(&["bench", "count", "bad.md"], "cannot read benchmark file");
-}
-
-#[test]
-fn bench_count_rejects_unreadable_files() {
-    let fixture = Fixture::valid();
-    let path = fixture.path("unreadable.md");
-    fs::write(&path, "secret\n").expect("write unreadable file");
-    let mut permissions = fs::metadata(&path).expect("metadata").permissions();
-    permissions.set_mode(0o000);
-    fs::set_permissions(&path, permissions).expect("set unreadable permissions");
-
-    fixture.assert_err_contains(
-        &["bench", "count", "unreadable.md"],
-        "cannot read benchmark file",
-    );
-
-    let mut permissions = fs::metadata(&path).expect("metadata").permissions();
-    permissions.set_mode(0o644);
-    fs::set_permissions(&path, permissions).expect("restore permissions");
 }
 
 #[test]
@@ -275,6 +47,30 @@ fn verify_invalid_toml_reports_source_context() {
     assert!(stderr.contains("invalid metadata"), "{stderr}");
     assert!(stderr.contains("skills/demo/skill.toml"), "{stderr}");
     assert!(stderr.contains("[references"), "{stderr}");
+}
+
+#[test]
+fn verify_invalid_toml_does_not_skip_package_file_errors() {
+    let fixture = Fixture::valid();
+    let external = TempDir::new().expect("external temp dir");
+    let external_file = external.path().join("SKILL.md");
+    fs::write(
+        &external_file,
+        "Use [workflow](references/workflow-language.md).\n",
+    )
+    .expect("write external skill markdown");
+    fixture.remove("skills/demo/SKILL.md");
+    symlink(&external_file, fixture.path("skills/demo/SKILL.md")).expect("symlink skill markdown");
+    fixture.write("skills/demo/skill.toml", "[references\nshared = []\n");
+
+    let output = fixture.run(&["refs", "verify"]);
+    let stderr = stderr(&output);
+    assert!(!output.status.success(), "expected failure");
+    assert!(stderr.contains("invalid metadata"), "{stderr}");
+    assert!(
+        stderr.contains("symlinked skill instruction file"),
+        "{stderr}"
+    );
 }
 
 #[test]
@@ -517,6 +313,50 @@ owned = [
 }
 
 #[test]
+fn verify_reports_errors_across_metadata_package_generated_and_filesystem_categories() {
+    let fixture = Fixture::valid();
+    let external = TempDir::new().expect("external temp dir");
+    let external_file = external.path().join("SKILL.md");
+    fs::write(
+        &external_file,
+        "Use [workflow](references/workflow-language.md).\n",
+    )
+    .expect("write external skill markdown");
+    fixture.remove("skills/demo/SKILL.md");
+    symlink(&external_file, fixture.path("skills/demo/SKILL.md")).expect("symlink skill markdown");
+    fixture.write(
+        "skills/demo/skill.toml",
+        r#"[references]
+shared = [
+  "workflow-language.md",
+]
+owned = [
+  "local-notes",
+]
+"#,
+    );
+
+    let output = fixture.run(&["refs", "verify"]);
+    let stderr = stderr(&output);
+    assert!(!output.status.success(), "expected failure");
+    assert!(stderr.contains("invalid reference name"), "{stderr}");
+    assert!(stderr.contains("workflow-language.md"), "{stderr}");
+    assert!(stderr.contains("skills/demo/skill.toml"), "{stderr}");
+    assert!(
+        stderr.contains("symlinked skill instruction file"),
+        "{stderr}"
+    );
+    assert!(
+        stderr.contains("undeclared generated shared reference"),
+        "{stderr}"
+    );
+    assert!(
+        stderr.contains("missing declared skill-owned reference"),
+        "{stderr}"
+    );
+}
+
+#[test]
 fn verify_accepts_skill_markdown_links_not_declared_in_metadata() {
     let fixture = Fixture::valid();
     fixture.write(
@@ -543,154 +383,6 @@ owned = []
     fixture.write("skills/demo/references/templates.md", "templates\n");
 
     fixture.assert_ok(&["refs", "verify"]);
-}
-
-#[test]
-fn sync_copies_declared_shared_references_and_prunes_extra_generated_files() {
-    let fixture = Fixture::valid();
-    fixture.write("skills/demo/references/workflow-language.md", "stale\n");
-    fixture.write("skills/demo/references/templates.md", "templates\n");
-
-    fixture.assert_ok(&["refs", "sync"]);
-
-    assert_eq!(
-        fixture.read("skills/demo/references/workflow-language.md"),
-        "workflow\n"
-    );
-    assert!(!fixture.exists("skills/demo/references/templates.md"));
-}
-
-#[test]
-fn sync_creates_missing_references_directory() {
-    let fixture = Fixture::valid();
-    fixture.remove_dir("skills/demo/references");
-
-    fixture.assert_ok(&["refs", "sync"]);
-
-    assert_eq!(
-        fixture.read("skills/demo/references/workflow-language.md"),
-        "workflow\n"
-    );
-}
-
-#[test]
-fn sync_preserves_declared_skill_owned_references() {
-    let fixture = Fixture::valid();
-    fixture.write(
-        "skills/demo/SKILL.md",
-        "Use [workflow](references/workflow-language.md) and [local](references/local-notes.md).\n",
-    );
-    fixture.write(
-        "skills/demo/skill.toml",
-        r#"[references]
-shared = [
-  "workflow-language",
-]
-owned = [
-  "local-notes",
-]
-"#,
-    );
-    fixture.write("skills/demo/references/local-notes.md", "local\n");
-
-    fixture.assert_ok(&["refs", "sync"]);
-
-    assert_eq!(
-        fixture.read("skills/demo/references/local-notes.md"),
-        "local\n"
-    );
-}
-
-#[test]
-fn sync_does_not_rewrite_unchanged_generated_references() {
-    let fixture = Fixture::valid();
-    let path = fixture.path("skills/demo/references/workflow-language.md");
-    let mut permissions = fs::metadata(&path).expect("metadata").permissions();
-    permissions.set_mode(0o444);
-    fs::set_permissions(&path, permissions).expect("set readonly permissions");
-
-    fixture.assert_ok(&["refs", "sync"]);
-}
-
-#[test]
-fn sync_rejects_symlinked_references_directory_without_mutating_external_target() {
-    let fixture = Fixture::valid();
-    let external = TempDir::new().expect("external temp dir");
-    fixture.remove_dir("skills/demo/references");
-    symlink(external.path(), fixture.path("skills/demo/references"))
-        .expect("symlink references dir");
-
-    fixture.assert_err_contains(&["refs", "sync"], "symlinked references directory");
-
-    assert!(
-        !external.path().join("workflow-language.md").exists(),
-        "sync wrote through a symlinked references directory"
-    );
-}
-
-#[test]
-fn sync_rejects_symlinked_reference_file_without_mutating_external_target() {
-    let fixture = Fixture::valid();
-    let external = TempDir::new().expect("external temp dir");
-    let external_file = external.path().join("workflow-language.md");
-    fs::write(&external_file, "external\n").expect("write external file");
-    fixture.remove("skills/demo/references/workflow-language.md");
-    symlink(
-        &external_file,
-        fixture.path("skills/demo/references/workflow-language.md"),
-    )
-    .expect("symlink reference file");
-    fixture.write("skills/_shared/workflow-language.md", "changed\n");
-
-    fixture.assert_err_contains(&["refs", "sync"], "symlinked reference file");
-
-    assert_eq!(
-        fs::read_to_string(external_file).expect("read external file"),
-        "external\n"
-    );
-}
-
-#[test]
-fn sync_rejects_hardlinked_reference_file_without_mutating_external_target() {
-    let fixture = Fixture::valid();
-    let external = TempDir::new().expect("external temp dir");
-    let external_file = external.path().join("workflow-language.md");
-    fs::write(&external_file, "external\n").expect("write external file");
-    fixture.remove("skills/demo/references/workflow-language.md");
-    fs::hard_link(
-        &external_file,
-        fixture.path("skills/demo/references/workflow-language.md"),
-    )
-    .expect("hardlink reference file");
-    fixture.write("skills/_shared/workflow-language.md", "changed\n");
-
-    fixture.assert_err_contains(&["refs", "sync"], "hardlinked reference file");
-
-    assert_eq!(
-        fs::read_to_string(external_file).expect("read external file"),
-        "external\n"
-    );
-}
-
-#[test]
-fn sync_rejects_symlinked_shared_reference_source_without_copying_external_content() {
-    let fixture = Fixture::valid();
-    let external = TempDir::new().expect("external temp dir");
-    let external_file = external.path().join("workflow-language.md");
-    fs::write(&external_file, "external\n").expect("write external file");
-    fixture.remove("skills/_shared/workflow-language.md");
-    symlink(
-        &external_file,
-        fixture.path("skills/_shared/workflow-language.md"),
-    )
-    .expect("symlink shared reference source");
-
-    fixture.assert_err_contains(&["refs", "sync"], "symlinked shared reference file");
-
-    assert_eq!(
-        fixture.read("skills/demo/references/workflow-language.md"),
-        "workflow\n"
-    );
 }
 
 #[test]
@@ -732,58 +424,6 @@ fn verify_rejects_symlinked_skill_markdown() {
 }
 
 #[test]
-fn sync_rejects_symlinked_skill_directory_without_mutating_external_target() {
-    let temp = TempDir::new().expect("temp dir");
-    let root = temp.path().to_path_buf();
-    fs::create_dir_all(root.join("skills")).expect("create skills dir");
-    fs::create_dir_all(root.join("skills/_shared")).expect("create shared dir");
-    fs::write(root.join("skills/_shared/templates.md"), "templates\n").expect("write templates");
-    fs::write(
-        root.join("skills/_shared/workflow-language.md"),
-        "workflow\n",
-    )
-    .expect("write workflow");
-
-    let external = TempDir::new().expect("external temp dir");
-    fs::create_dir_all(external.path().join("references")).expect("create external refs");
-    fs::write(
-        external.path().join("SKILL.md"),
-        "Use [workflow](references/workflow-language.md).\n",
-    )
-    .expect("write external skill");
-    fs::write(
-        external.path().join("skill.toml"),
-        r#"[references]
-shared = [
-  "workflow-language",
-]
-owned = []
-"#,
-    )
-    .expect("write external metadata");
-    fs::write(
-        external.path().join("references/templates.md"),
-        "templates\n",
-    )
-    .expect("write external undeclared reference");
-    fs::write(
-        external.path().join("references/workflow-language.md"),
-        "workflow\n",
-    )
-    .expect("write external declared reference");
-
-    symlink(external.path(), root.join("skills/demo")).expect("symlink skill dir");
-
-    let fixture = Fixture { _temp: temp, root };
-    fixture.assert_err_contains(&["refs", "sync"], "skill directory is symlinked");
-
-    assert!(
-        external.path().join("references/templates.md").exists(),
-        "sync deleted an external generated reference through a symlinked skill dir"
-    );
-}
-
-#[test]
 fn verify_rejects_skill_owned_shared_name_collision() {
     let fixture = Fixture::valid();
     fixture.write(
@@ -797,34 +437,4 @@ owned = [
     );
 
     fixture.assert_err_contains(&["refs", "verify"], "collides with a shared reference");
-}
-
-#[test]
-fn sync_reports_preflight_errors_before_writing() {
-    let fixture = Fixture::valid();
-    fixture.write(
-        "skills/demo/skill.toml",
-        r#"[references]
-shared = [
-  "missing-source",
-]
-owned = []
-"#,
-    );
-    fixture.write("skills/demo/references/workflow-language.md", "stale\n");
-
-    fixture.assert_err_contains(&["refs", "sync"], "missing-source");
-
-    assert_eq!(
-        fixture.read("skills/demo/references/workflow-language.md"),
-        "stale\n"
-    );
-}
-
-fn stderr(output: &Output) -> String {
-    String::from_utf8_lossy(&output.stderr).into_owned()
-}
-
-fn stdout(output: &Output) -> String {
-    String::from_utf8_lossy(&output.stdout).into_owned()
 }

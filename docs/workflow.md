@@ -65,7 +65,7 @@ To add a skill-owned reference:
 4. Run `mise run check`.
 5. Optionally link it from that skill's `SKILL.md`.
 
-`wflow refs sync` may create, update, and prune generated shared references. It must not delete skill-owned references. `wflow refs verify` fails when metadata, generated shared files, skill-owned files, or stale temporary reference artifacts disagree.
+`wflow refs sync` may create, update, and prune generated shared references. It must not delete skill-owned references. `wflow refs verify` fails when metadata, package files, generated shared files, skill-owned files, or stale temporary reference artifacts disagree. Verification reports independent validation failures together when it can; for example, invalid `skill.toml` does not suppress package-file safety checks for the same skill.
 
 ## User/System Flows
 
