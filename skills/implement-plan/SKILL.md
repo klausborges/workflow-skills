@@ -1,6 +1,6 @@
 ---
 name: implement-plan
-description: Implement selected phases from an approved Plan. Use when the user asks to implement a Plan, continue planned work, work through phase(s), run work unattended, or execute checklist items with TDD, verification, Plan updates, and phase self-review.
+description: Implement selected phases from an approved Plan. Use when the user asks to implement a Plan, continue planned work, work through phase(s), run work unattended, or execute checklist items with test/verification cadence, Plan updates, and phase self-review.
 ---
 
 # Implement Plan
@@ -19,9 +19,34 @@ Use [document-conventions.md](references/document-conventions.md), [templates.md
 5. Restate phase work and mode/override in a short checklist.
 6. Research implementation-specific gaps.
 7. Ask questions only for real ambiguity, HITL work, or mode override confirmation.
-8. Implement with pragmatic red/green TDD unless the user explicitly opts out.
+8. Use feedback-calibrated test discipline. If the user explicitly opts out of automated tests, record the fallback verification evidence instead.
 
 Confirmation is not required for straightforward AFK work with no ambiguity.
+
+## Test/Verification Cadence
+
+Use the fastest meaningful feedback loop for each behavior change.
+
+Before implementation or at the start of each phase, identify:
+
+- target behavior
+- test surface
+- narrowest useful command
+- cadence: fast red/green, same-phase test loop, acceptance gate, or manual/observational fallback
+- reason when not using fast red/green
+
+Cadences:
+
+- `Fast red/green`: cheap unit tests, focused integration tests, or focused component/browser tests that can run in isolation. Write one behavior test, run it red, implement the smallest green change, and repeat vertically.
+- `Same-phase test loop`: medium-cost or setup-heavy integration, UI, browser, or visual tests. Write or update tests during the phase and run the narrowest relevant command before phase completion.
+- `Acceptance gate`: heavy E2E, full-browser, full-suite, or slow visual checks. Prefer lower-level tests for logic, then run the heavy check at module or phase closeout before claiming completion.
+- `Manual/observational fallback`: only when useful automated tests are unavailable or impractical. Record why, run the strongest available check, and state residual risk.
+
+Rules:
+
+- Heavy tests change cadence; they are not permission to skip tests or checks.
+- Test behavior through public or stable interfaces. Avoid implementation-detail tests and unnecessary mocks.
+- Do not claim fixed, passing, or complete until verification commands or manual checks have run and the output or evidence has been read.
 
 ## Phase Modes
 
@@ -53,7 +78,9 @@ Self-review checks:
 
 - every task was implemented or deliberately moved
 - every acceptance criterion is satisfied by evidence
-- tests cover intended behavior at the right level
+- test/verification cadence was identified and followed
+- tests or checks cover intended behavior at the right level
+- fallback verification, missing automation, or skipped fast red/green has an explicit reason
 - no obvious plan drift, overbuild, missing docs updates, or Target-State Doc drift
 - durable docs and code remain coherent without references to Plan files or phases
 - verification commands were run and read

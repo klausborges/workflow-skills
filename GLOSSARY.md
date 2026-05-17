@@ -36,6 +36,10 @@ _Avoid_: Unreconciled subagent dump, default review
 The act of changing code and tests for selected Plan phase work, with verification and checklist updates.
 _Avoid_: Handoff, review
 
+**Feedback-Calibrated Test Discipline**:
+A testing and verification practice that chooses the fastest meaningful feedback loop for each behavior change. Cheap tests use red/green vertical slices; medium or heavy tests use same-phase or acceptance-gate verification; fallback requires an explicit reason and replacement evidence.
+_Avoid_: Blanket red/green TDD for every test type, skipping tests because they are expensive
+
 **Research Ladder**:
 A portable source preference for technical investigation that uses stronger tools when available and falls back to first-party docs, `llms.txt`, official examples, CLI help, and local examples.
 _Avoid_: Hard-coded tool dependency, web search first
@@ -59,6 +63,7 @@ _Avoid_: Design note, decision log for obvious choices
 - A **Scoped Doc Directory** groups **Target-State Docs** when a feature, app, or monorepo area is too large for a single doc.
 - A **Plan** may produce one or more **Handoffs** during implementation or review.
 - **Implementation** and **Handoff** are separate workflows, even when both reference the same **Plan**.
+- **Feedback-Calibrated Test Discipline** is part of **Implementation**: test cost changes cadence, not the expectation that behavior changes get meaningful test or verification evidence.
 - An **ADR** supplements a **Target-State Doc** or **Plan** only when the decision meets the ADR threshold.
 - A **Glossary** should contain domain/workflow language only, not implementation details.
 - A root **Glossary** is the default; scoped glossaries live under `docs/<scope>/GLOSSARY.md`; a **Glossary Map** exists only when discovery becomes hard.

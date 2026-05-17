@@ -87,6 +87,7 @@ One sentence describing the outcome.
 
 ## Verification Strategy
 
+- Test/verification cadence:
 - Targeted tests:
 - Integration/UI checks:
 - Type/lint/build:
@@ -113,6 +114,14 @@ Brief outcome for this phase.
 ### Context
 
 Related docs, assumptions, constraints, and prior decisions.
+
+### Test/Verification Cadence
+
+- Cadence: Fast red/green | Same-phase test loop | Acceptance gate | Manual/observational fallback
+- Target behavior:
+- Test surface:
+- Narrowest useful command:
+- Reason if not fast red/green:
 
 ### Tasks
 
@@ -206,6 +215,13 @@ Status: PASS | FIXED | NEEDS_HITL
 ### Verification
 
 - `command`: result
+
+### Test/Verification Cadence
+
+- Cadence used:
+- Test surface:
+- Narrowest useful command:
+- Reason if no automated test or no fast red/green:
 
 ### Doc Check
 

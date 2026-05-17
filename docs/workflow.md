@@ -14,10 +14,10 @@ The skills are intended to be portable across repos and agent tools while preser
 - `diagnose-issue` builds a feedback loop, reproduces the issue, finds root cause, and fixes normal bugs after the verification path is clear.
 - `use-workflow` routes substantial work to the most specific workflow skill without forcing itself into small direct tasks.
 - `plan-work` turns unclear feature or workflow ideas into Target-State Docs first, then an ephemeral Plan.
-- `implement-plan` executes approved Plan phases, keeps checklist state current, verifies work, updates durable docs when implementation changes target state, and runs phase self-review.
+- `implement-plan` executes approved Plan phases, keeps checklist state current, uses feedback-calibrated test discipline, updates durable docs when implementation changes target state, and runs phase self-review.
 - `write-handoff` creates fresh-context prompts or files for implementation, continuation, research, refactor, bugfix, review, or review-fix work.
 - `review-work` reviews implementation against Plans, Target-State Docs, acceptance criteria, tests, and risk, then handles final doc sync and Plan cleanup prompts when work is fully implemented and reviewed.
-- `improve-architecture` remains explicit-invocation by default and shapes targeted architecture improvements.
+- `improve-architecture` remains explicit-invocation by default, shapes targeted architecture improvements, and conditionally compares seam/interface options before planning candidate changes.
 - `plan-prototype` supports throwaway visual or logic prototypes that answer a planning question, then get deleted or absorbed.
 
 ## Key Concepts
@@ -107,7 +107,7 @@ To add a skill-owned reference:
 2. Before code changes, the agent checks whether needed Target-State Docs exist and reflect the intended target state; missing or stale durable docs are updated first.
 3. The agent identifies selected phases or infers the next unchecked phase.
 4. The agent asks questions only for real ambiguity, HITL work, or explicit override confirmation.
-5. The agent implements with pragmatic red/green TDD by default unless the user opts out.
+5. The agent uses feedback-calibrated test discipline: cheap tests use red/green vertical slices, while medium or heavy tests use same-phase or acceptance-gate verification with the narrowest meaningful command.
 6. The agent updates Plan tasks and acceptance criteria only when work is verified.
 7. When implementation reveals durable behavior, constraints, or terminology changes, the agent updates Target-State Docs immediately; uncertain or temporary notes stay in the Plan until resolved.
 8. Before completing a phase, the agent runs focused self-review, using a fresh subagent when the harness provides one.
