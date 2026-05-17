@@ -15,7 +15,7 @@ Use the repo's `GLOSSARY.md` when present. If missing, use the conventions in [w
 
 Key terms:
 
-- **Plan**: ephemeral phased implementation artifact in `plans/`.
+- **Plan**: ephemeral phased implementation artifact in `plans/`; ask before deleting after full implementation and final review.
 - **Target-State Doc**: durable doc under `docs/`.
 - **Handoff**: fresh-context prompt or file.
 - **Glossary**: canonical terms only, not a context dump.
@@ -38,8 +38,12 @@ If several apply, choose the most specific skill. If the user explicitly names a
 ## Defaults
 
 - Plan before nontrivial implementation.
+- Write or update needed Target-State Docs before creating the Plan when durable behavior, constraints, or terminology are involved.
+- During implementation, run a Target-State Doc preflight before code changes and update durable docs immediately when target state changes.
+- During review, sync Target-State Docs before closeout and ask whether to delete the completed Plan only after full implementation and final review pass.
 - Use the Research Ladder from [research-ladder.md](references/research-ladder.md) before serious technical recommendations.
 - Create durable docs only when information should remain useful after the Plan is deleted.
+- Do not put references to Plan files, Plan phases, or Plan-only decisions in Target-State Docs or code.
 - Keep handoffs first-class; do not treat them as implementation summaries.
 - After review, prefer the user's requested follow-up: patch accepted findings, route Plan-backed fixes through `implement-plan`, or write a handoff only when transferring context.
-- Do not commit, create worktrees, publish issues, or start implementation unless requested or clearly part of the repo's local workflow.
+- Do not commit, create worktrees, publish issues, delete Plans, or start implementation unless requested or clearly part of the repo's local workflow.

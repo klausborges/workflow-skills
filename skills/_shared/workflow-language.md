@@ -2,11 +2,11 @@
 
 Use these terms consistently.
 
-**Plan**: ephemeral phased implementation artifact in `plans/`.
+**Plan**: ephemeral phased implementation artifact in `plans/`. After full implementation and final review, ask before deleting the completed Plan.
 Avoid: spec, permanent documentation.
 
 **Target-State Doc**: durable document under `docs/` describing behavior, concepts, or structure that should remain true after implementation.
-Avoid: implementation plan, code dump.
+Avoid: implementation plan, code dump, references to Plan files or phases.
 
 **Glossary**: `GLOSSARY.md` or scoped `docs/<scope>/GLOSSARY.md`; canonical terms, relationships, and flagged ambiguities only.
 Avoid: context dump, implementation notes.

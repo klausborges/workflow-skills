@@ -13,10 +13,10 @@ The skills are intended to be portable across repos and agent tools while preser
 - `explain-codebase` explains unfamiliar codebase areas, modules, callers, flows, tests, and terms without editing files.
 - `diagnose-issue` builds a feedback loop, reproduces the issue, finds root cause, and fixes normal bugs after the verification path is clear.
 - `use-workflow` routes substantial work to the most specific workflow skill without forcing itself into small direct tasks.
-- `plan-work` turns unclear feature or workflow ideas into Target-State Docs and an ephemeral Plan.
-- `implement-plan` executes approved Plan phases, keeps checklist state current, verifies work, and runs phase self-review.
+- `plan-work` turns unclear feature or workflow ideas into Target-State Docs first, then an ephemeral Plan.
+- `implement-plan` executes approved Plan phases, keeps checklist state current, verifies work, updates durable docs when implementation changes target state, and runs phase self-review.
 - `write-handoff` creates fresh-context prompts or files for implementation, continuation, research, refactor, bugfix, review, or review-fix work.
-- `review-work` reviews implementation against Plans, Target-State Docs, acceptance criteria, tests, and risk.
+- `review-work` reviews implementation against Plans, Target-State Docs, acceptance criteria, tests, and risk, then handles final doc sync and Plan cleanup prompts when work is fully implemented and reviewed.
 - `improve-architecture` remains explicit-invocation by default and shapes targeted architecture improvements.
 - `plan-prototype` supports throwaway visual or logic prototypes that answer a planning question, then get deleted or absorbed.
 
@@ -33,6 +33,8 @@ Shared skill references live in `skills/_shared/`:
 - `architecture-language.md` defines optional architecture vocabulary.
 
 Installable skills must be self-contained. The canonical files in `skills/_shared/` are generated into each skill's `references/` directory according to each skill's metadata.
+
+Workflow lifecycle rules that affect installed skill behavior should be mirrored in shared references or templates, so standalone installed skills keep the same planning, implementation, review, and cleanup expectations.
 
 ## Reference Metadata
 
@@ -102,11 +104,14 @@ To add a skill-owned reference:
 ### Implementation
 
 1. The agent reads the Plan, related Target-State Docs, and relevant source.
-2. The agent identifies selected phases or infers the next unchecked phase.
-3. The agent asks questions only for real ambiguity, HITL work, or explicit override confirmation.
-4. The agent implements with pragmatic red/green TDD by default unless the user opts out.
-5. The agent updates Plan tasks and acceptance criteria only when work is verified.
-6. Before completing a phase, the agent runs focused self-review, using a fresh subagent when the harness provides one.
+2. Before code changes, the agent checks whether needed Target-State Docs exist and reflect the intended target state; missing or stale durable docs are updated first.
+3. The agent identifies selected phases or infers the next unchecked phase.
+4. The agent asks questions only for real ambiguity, HITL work, or explicit override confirmation.
+5. The agent implements with pragmatic red/green TDD by default unless the user opts out.
+6. The agent updates Plan tasks and acceptance criteria only when work is verified.
+7. When implementation reveals durable behavior, constraints, or terminology changes, the agent updates Target-State Docs immediately; uncertain or temporary notes stay in the Plan until resolved.
+8. Before completing a phase, the agent runs focused self-review, using a fresh subagent when the harness provides one.
+9. When all implementation phases are complete, the agent leaves Plan cleanup for final review.
 
 ### Handoff
 
@@ -119,17 +124,24 @@ To add a skill-owned reference:
 ### Review
 
 1. The agent starts from the Plan, Target-State Docs, acceptance criteria, and tests.
-2. Findings lead, ordered by severity.
-3. Multi-aspect review is explicit, inferred from the change when requested, and reconciled before reporting.
-4. Review may recommend `improve-architecture` when architecture friction is real, but should not start it automatically.
+2. The agent checks whether Target-State Docs still match the implemented behavior.
+3. Small, factual doc drift may be fixed directly when implementation evidence is clear.
+4. Substantive or product-sensitive doc drift is a blocking review finding until the user decides or the fix is routed through implementation.
+5. Findings lead, ordered by severity.
+6. Multi-aspect review is explicit, inferred from the change when requested, and reconciled before reporting.
+7. Review may recommend `improve-architecture` when architecture friction is real, but should not start it automatically.
+8. After full implementation and review pass with Target-State Docs current, the agent asks the user whether to delete the completed Plan.
 
 ## Constraints
 
 - Plans are ephemeral; durable target state belongs in `docs/`.
+- Target-State Docs and code should not reference Plan files, Plan phases, or Plan-only decisions; they must remain coherent after completed Plans are deleted.
 - Target-State Docs should avoid code examples except for stable contracts that prose cannot describe clearly.
 - ADRs are rare and reserved for hard-to-reverse, surprising, trade-off-heavy decisions.
 - Skills should use stronger tools when available or requested, but must remain portable and fall back to first-party docs, `llms.txt`, official examples, CLI help, and local examples.
 - The workflow should not require commits, worktrees, issue publishing, or subagent-driven implementation by default. Subagents are preferred for self-review when the harness provides fresh-context subagents.
+- Users may commit Plans when useful for history, but live workflow state should not depend on completed Plans remaining in the workspace.
+- Agents must not delete Plans automatically. Plan deletion requires explicit user approval after full implementation, final review, and Target-State Doc sync.
 - Handoffs are first-class workflow artifacts, not summaries.
 - Codebase explanation is read-only by default.
 - Diagnosis requires root-cause evidence before fixes.

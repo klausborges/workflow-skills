@@ -15,8 +15,9 @@ Use [document-conventions.md](references/document-conventions.md), [research-lad
 Default to balanced review with adversarial checks.
 
 - Start from the Plan, related Target-State Docs, and acceptance criteria.
+- Check whether related Target-State Docs still match the implemented behavior.
 - Treat implementation as untrusted until verified.
-- Prioritize real bugs, missing requirements, test gaps, and maintainability risks.
+- Prioritize real bugs, missing requirements, doc drift, test gaps, and maintainability risks.
 - Use adversarial depth for high-risk surfaces or when requested.
 
 Supported overrides include "quick review", "review this hard", "adversarial review", "paranoid review", "compliance review against the plan", "focus on architecture", and "focus on tests".
@@ -49,6 +50,17 @@ When accepted findings should be fixed in the same context, patch them directly 
 
 Use `write-handoff` only when the user wants a fresh-context transfer, delegation prompt, or saved review-fix brief. Do not treat a `Review-Fix Handoff` as the default next step after every review.
 
+## Final Doc Sync And Plan Cleanup
+
+Use when review is tied to a Plan and implementation appears complete.
+
+1. Confirm the relevant Plan phases and acceptance criteria are complete, or report incomplete implementation as a blocking finding.
+2. Check related Target-State Docs against the implemented behavior.
+3. Patch small, factual doc drift directly when implementation evidence is clear.
+4. Report substantive, ambiguous, or product-sensitive doc drift as a blocking finding and recommend a decision or Plan-backed implementation fix.
+5. Do not ask to delete a Plan while blocking findings, incomplete implementation, incomplete verification, or doc drift remain.
+6. After full implementation and review pass with Target-State Docs current, ask the user whether to delete the completed Plan. Never delete a Plan automatically.
+
 ## Output
 
 Lead with findings, ordered by severity. Include file/line references when possible.
@@ -63,5 +75,7 @@ For each finding:
 After findings, include:
 
 - verification run or skipped
+- Target-State Doc sync status
+- Plan cleanup prompt status when reviewing completed Plan-backed work
 - residual risks
 - optional recommendation for `improve-architecture` when architecture friction is real

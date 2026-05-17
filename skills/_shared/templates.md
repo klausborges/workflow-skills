@@ -31,7 +31,7 @@ High-level criteria the final Plan phases must cover.
 
 ### Docs Needed
 
-Whether Target-State Docs or ADRs should be created/updated.
+Whether Target-State Docs or ADRs should be created/updated before the Plan.
 
 ### Open Risks
 
@@ -79,7 +79,7 @@ One sentence describing the outcome.
 
 ## Related Docs
 
-- Optional links to Target-State Docs.
+- Optional links to durable Target-State Docs.
 
 ## Phase Checklist
 
@@ -92,6 +92,7 @@ One sentence describing the outcome.
 - Type/lint/build:
 - Manual checks:
 - Final review triggers:
+- Doc lifecycle:
 
 ## Out of Scope
 
@@ -121,6 +122,7 @@ Related docs, assumptions, constraints, and prior decisions.
 ### Acceptance Criteria
 
 - [ ] Observable behavior or developer-facing contract is true.
+- [ ] Related Target-State Docs are current for durable behavior, constraints, or terminology changed in this phase.
 - [ ] Relevant verification passes.
 - [ ] Implementation self-review completed.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
@@ -132,6 +134,12 @@ Concise load-bearing implementation details only.
 ## Discovered Follow-Ups
 
 - Useful but non-required work discovered during implementation.
+
+## Final Review And Cleanup
+
+- [ ] Final review passed with no blocking findings.
+- [ ] Related Target-State Docs are current.
+- [ ] User was asked whether to delete this completed Plan.
 ```
 
 ## Handoff
@@ -192,11 +200,17 @@ Status: PASS | FIXED | NEEDS_HITL
 
 - Tasks checked:
 - Acceptance criteria checked:
+- Target-State Docs updated or confirmed current:
 - Tasks added/moved:
 
 ### Verification
 
 - `command`: result
+
+### Doc Check
+
+- Target-State Docs current:
+- Durable docs/code free of stale Plan references:
 
 ### Recommendation
 

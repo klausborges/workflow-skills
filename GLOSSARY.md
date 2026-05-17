@@ -6,10 +6,10 @@ This glossary defines the language for this agent skill workflow. It exists to k
 
 **Target-State Doc**:
 A durable document describing the desired behavior, concepts, or structure of a system after implementation.
-_Avoid_: Spec, implementation plan, code example dump
+_Avoid_: Spec, implementation plan, code example dump, references to Plan files or phases
 
 **Plan**:
-An ephemeral phased implementation artifact used to guide and track work toward an accepted target state.
+An ephemeral phased implementation artifact used to guide and track work toward an accepted target state. After full implementation and final review, the agent asks before deleting the completed Plan.
 _Avoid_: Spec, target-state doc, permanent documentation
 
 **Scoped Doc Directory**:
@@ -55,6 +55,7 @@ _Avoid_: Design note, decision log for obvious choices
 ## Relationships
 
 - A **Plan** may be standalone or reference one or more related **Target-State Docs**.
+- Completed **Plans** should not be required by live docs or code after cleanup. Durable docs and code should not depend on Plan files, Plan phases, or Plan-only decisions.
 - A **Scoped Doc Directory** groups **Target-State Docs** when a feature, app, or monorepo area is too large for a single doc.
 - A **Plan** may produce one or more **Handoffs** during implementation or review.
 - **Implementation** and **Handoff** are separate workflows, even when both reference the same **Plan**.

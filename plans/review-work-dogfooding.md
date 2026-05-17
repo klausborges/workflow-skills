@@ -35,6 +35,7 @@ Use `review-work` on real project changes and tune the review workflow from evid
 - Current repo decision: `improve-architecture` may be recommended from review, but should not start automatically.
 - Dogfooding finding: review follow-up needed an explicit patch-now path; `write-handoff` is for fresh-context transfer, not the default next step after accepted findings.
 - Reference signal: Matt Pocock's review skill uses a crisp Standards/Spec split. Do not import "spec" as workflow vocabulary; evaluate whether `review-work` should more explicitly suggest Plan/Target-State Doc/acceptance compliance as a multi-aspect lens when those artifacts exist.
+- Lifecycle signal: `review-work` now owns final Target-State Doc sync and the ask-before-delete Plan prompt after Plan-backed work is fully implemented and reviewed. Dogfood this closeout behavior on a later completed Plan before treating the review ergonomics as proven.
 
 ## Phase 1: Collect Real Review Sessions
 
@@ -85,6 +86,7 @@ Review should stay findings-first and evidence-led. Improvements should reduce f
 - [ ] Decide whether Plan/Target-State Doc/acceptance compliance should be a more explicit suggested multi-aspect lens when those artifacts exist.
 - [ ] Decide whether routing boundaries with `diagnose-issue` and `improve-architecture` need clarification.
 - [ ] Clarify review follow-up routing after accepted findings. Partially completed: `review-work` and `use-workflow` now distinguish direct patching, Plan-backed `implement-plan`, and fresh-context `write-handoff`.
+- [ ] Dogfood final Target-State Doc sync and Plan cleanup prompt behavior against a later completed Plan.
 - [ ] Update `skills/review-work/SKILL.md` and related docs if needed.
 - [ ] Run repository checks.
 
@@ -94,6 +96,7 @@ Review should stay findings-first and evidence-led. Improvements should reduce f
 - [ ] Multi-aspect review remains explicit or clearly justified.
 - [ ] `improve-architecture` remains a recommendation unless explicitly invoked.
 - [ ] `diagnose-issue` remains the better route for root-cause debugging.
+- [ ] Final doc sync and Plan cleanup prompting are evaluated against a later completed Plan.
 - [ ] `mise run check` passes.
 - [ ] Implementation self-review completed.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
