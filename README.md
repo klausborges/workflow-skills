@@ -43,7 +43,6 @@ target-state docs live in [`docs/`](./docs/). canonical shared language and temp
 these active plans are kept here as a public roadmap and examples of the workflow in use. completed plans should disappear before they become stale context.
 
 - [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): clarify when prototypes should be shown, discarded, or absorbed.
-- [`review-work-dogfooding`](./plans/review-work-dogfooding.md): tune review behavior from real project reviews.
 - [`invocation-policy-dogfooding`](./plans/invocation-policy-dogfooding.md): decide whether `use-workflow` stays implicit and how provider controls should be documented.
 - [`setup-quality-gates`](./plans/setup-quality-gates.md): research and plan an opinionated local quality-gate setup skill.
 - [`wflow-minijinja-templating`](./plans/wflow-minijinja-templating.md): plan template rendering only if provider-specific generated files become necessary.
@@ -137,17 +136,17 @@ the goal is to use references deliberately and keep installed skills small enoug
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        1,994 |              2,916 |             14,948 |
-| implementation       |        2,830 |              2,092 |             10,152 |
-| review               |        1,814 |              1,052 |              3,210 |
-| diagnosis            |        1,541 |              1,947 |             14,015 |
-| architecture         |        1,226 |              3,832 |             13,186 |
-| prototype            |          651 |              3,525 |             13,186 |
-| codebase explanation |          782 |                 89 |                n/a |
-| handoff              |        1,666 |                160 |                n/a |
-| workflow routing     |        1,227 |              3,281 |              3,106 |
-| workflow explanation |          910 |                n/a |              3,106 |
-| total                |       14,641 |             22,894 |             88,909 |
+| planning             |        2,086 |              2,916 |             14,948 |
+| implementation       |        2,922 |              2,092 |             10,152 |
+| review               |        2,604 |              1,052 |              3,210 |
+| diagnosis            |        1,633 |              1,947 |             14,015 |
+| architecture         |        1,318 |              3,832 |             13,186 |
+| prototype            |          743 |              3,525 |             13,186 |
+| codebase explanation |          874 |                 89 |                n/a |
+| handoff              |        1,758 |                160 |                n/a |
+| workflow routing     |        1,319 |              3,281 |              3,106 |
+| workflow explanation |        1,002 |                n/a |              3,106 |
+| total                |       16,259 |             22,894 |             88,909 |
 
 ## credits
 

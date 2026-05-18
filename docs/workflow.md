@@ -16,7 +16,7 @@ The skills are intended to be portable across repos and agent tools while preser
 - `plan-work` turns unclear feature or workflow ideas into Target-State Docs first, then an ephemeral Plan.
 - `implement-plan` executes approved Plan phases, keeps checklist state current, uses feedback-calibrated test discipline, updates durable docs when implementation changes target state, and runs phase self-review.
 - `write-handoff` creates fresh-context prompts or files for implementation, continuation, research, refactor, bugfix, review, or review-fix work.
-- `review-work` reviews implementation against Plans, Target-State Docs, acceptance criteria, tests, and risk, then handles final doc sync and Plan cleanup prompts when work is fully implemented and reviewed.
+- `review-work` reviews implementation against Plans, Target-State Docs, acceptance criteria, tests, and risk, reports review signal across repeated rounds, and handles final doc sync and Plan cleanup prompts when work is fully implemented and reviewed.
 - `improve-architecture` remains explicit-invocation by default, shapes targeted architecture improvements, and conditionally compares seam/interface options before planning candidate changes.
 - `plan-prototype` supports throwaway visual or logic prototypes that answer a planning question, then get deleted or absorbed.
 
@@ -124,13 +124,15 @@ To add a skill-owned reference:
 ### Review
 
 1. The agent starts from the Plan, Target-State Docs, acceptance criteria, and tests.
-2. The agent checks whether Target-State Docs still match the implemented behavior.
-3. Small, factual doc drift may be fixed directly when implementation evidence is clear.
-4. Substantive or product-sensitive doc drift is a blocking review finding until the user decides or the fix is routed through implementation.
-5. Findings lead, ordered by severity.
-6. Multi-aspect review is explicit, inferred from the change when requested, and reconciled before reporting.
-7. Review may recommend `improve-architecture` when architecture friction is real, but should not start it automatically.
-8. After full implementation and review pass with Target-State Docs current, the agent asks the user whether to delete the completed Plan.
+2. The agent establishes the review boundary from the Plan, phase, explicit target, or user-provided diff range; it asks only when scope is unclear or too broad to review responsibly.
+3. The agent checks whether Target-State Docs still match the implemented behavior.
+4. Small, factual doc drift may be fixed directly when implementation evidence is clear.
+5. Substantive or product-sensitive doc drift is a blocking review finding until the user decides or the fix is routed through implementation.
+6. Findings lead, ordered by severity.
+7. Multi-aspect review is explicit, inferred from the change when requested, and reconciled before reporting.
+8. Repeated review rounds focus on the delta since accepted fixes plus unresolved high-risk surfaces, then report high, medium, or low Review Signal with a recommendation to patch, rerun a scoped review, close out, or route architecture friction to `improve-architecture`.
+9. Review may recommend `improve-architecture` when architecture friction is real, but should not start it automatically.
+10. After full implementation and review pass with Target-State Docs current, the agent asks the user whether to delete the completed Plan.
 
 ## Constraints
 

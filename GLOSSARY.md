@@ -32,6 +32,10 @@ _Avoid_: Implementation handoff, research dump
 A review mode that evaluates the same work through multiple focused lenses, then reconciles and verifies the findings before reporting.
 _Avoid_: Unreconciled subagent dump, default review
 
+**Review Signal**:
+The amount of actionable, verified review value remaining in a review round. High signal means findings block closeout or materially affect correctness, docs, tests, verification, regression risk, or user-visible behavior. Medium signal means valid findings remain but are localized and likely patchable. Low signal means remaining findings are minor, speculative, stylistic, already-deferred, or better routed to follow-up or architecture work.
+_Avoid_: Treating every nit as a reason to keep reviewing, stopping before blocking findings are resolved
+
 **Implementation**:
 The act of changing code and tests for selected Plan phase work, with verification and checklist updates.
 _Avoid_: Handoff, review
@@ -63,6 +67,7 @@ _Avoid_: Design note, decision log for obvious choices
 - A **Scoped Doc Directory** groups **Target-State Docs** when a feature, app, or monorepo area is too large for a single doc.
 - A **Plan** may produce one or more **Handoffs** during implementation or review.
 - **Implementation** and **Handoff** are separate workflows, even when both reference the same **Plan**.
+- **Review Signal** helps decide whether another review round is worth running: repeated rounds should tighten the finding threshold and can close out before findings reach zero when remaining findings are low signal.
 - **Feedback-Calibrated Test Discipline** is part of **Implementation**: test cost changes cadence, not the expectation that behavior changes get meaningful test or verification evidence.
 - An **ADR** supplements a **Target-State Doc** or **Plan** only when the decision meets the ADR threshold.
 - A **Glossary** should contain domain/workflow language only, not implementation details.

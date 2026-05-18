@@ -16,6 +16,9 @@ Avoid: status summary.
 
 **Durable Handoff**: handoff for later/unknown agents or repeated work across models/tools.
 
+**Review Signal**: actionable, verified review value remaining in a review round. High signal blocks closeout or materially affects correctness, docs, tests, verification, regression risk, or user-visible behavior. Medium signal is valid but localized and patchable. Low signal is minor, speculative, stylistic, already-deferred, or better routed to follow-up or architecture work.
+Avoid: treating every nit as a reason to keep reviewing, stopping before blockers are resolved.
+
 **Feedback-Calibrated Test Discipline**: choose the fastest meaningful feedback loop for each behavior change. Cheap tests use red/green vertical slices; slower UI/E2E checks use same-phase or acceptance-gate verification. Fallback requires an explicit reason and replacement evidence.
 Avoid: blanket red/green TDD for heavy suites, skipping tests because they are expensive.
 
