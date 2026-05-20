@@ -19,7 +19,7 @@ Keep answers short and practical unless the user asks for depth. This skill is a
 
 ## Quick Recipes
 
-- New feature or fuzzy idea: use `plan-work`. Expect focused questions, a Design Brief, then Target-State Docs and an ephemeral Plan if you approve the direction.
+- New feature or fuzzy idea: use `plan-work`. Expect focused questions, a Design Brief, target-state artifacts for durable behavior, and an ephemeral Plan if you approve the direction.
 - Approved Plan or next phase: use `implement-plan`. Expect code changes, verification, Plan updates, and phase self-review.
 - Codebase explanation: use `explain-codebase`. Expect a read-only map of purpose, entry points, modules, callers, flows, tests, terms, and unknowns.
 - Diagnosis: use `diagnose-issue`. Expect reproduction, root-cause investigation, a focused fix when safe, and verification.
@@ -36,7 +36,7 @@ If the user asks "how do I use the workflow for X?", explain the likely workflow
 Example:
 
 ```text
-for auth, use `plan-work`. ask: "use plan-work to plan auth." the agent will ask focused questions, draft a design brief, then write target-state docs and a plan after you approve the direction.
+for auth, use `plan-work`. ask: "use plan-work to plan auth." the agent will ask focused questions, draft a design brief, then write target-state artifacts and a plan after you approve the direction.
 ```
 
 ## Output Shape

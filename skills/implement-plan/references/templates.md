@@ -31,7 +31,7 @@ High-level criteria the final Plan phases must cover.
 
 ### Docs Needed
 
-Whether Target-State Docs or ADRs should be created/updated before the Plan.
+Whether target-state artifacts, Target-State Docs, draft docs, Plan Doc Delta, or ADRs should be created/updated before the Plan.
 
 ### Open Risks
 
@@ -79,7 +79,7 @@ One sentence describing the outcome.
 
 ## Related Docs
 
-- Optional links to durable Target-State Docs.
+- Optional links to durable Target-State Docs. Draft docs are referenced through `Doc Delta` > `Draft Docs`, not here.
 
 ## Phase Checklist
 
@@ -132,6 +132,7 @@ Related docs, assumptions, constraints, and prior decisions.
 
 - [ ] Observable behavior or developer-facing contract is true.
 - [ ] Related Target-State Docs are current for durable behavior, constraints, or terminology changed in this phase.
+- [ ] Phase-relevant Doc Delta items and referenced draft docs are resolved.
 - [ ] Relevant verification passes.
 - [ ] Implementation self-review completed.
 - [ ] Plan checklist is updated with completed work and newly discovered tasks.
@@ -140,6 +141,19 @@ Related docs, assumptions, constraints, and prior decisions.
 
 Concise load-bearing implementation details only.
 
+## Doc Delta
+
+Include only when durable docs are affected. Keep this section near the end of the Plan. Use checkboxes. Each item should carry an inline phase tag, such as `(Phase 2)`. Items without a tag default to the final implementation phase.
+
+### Draft Docs
+
+- [ ] (Phase N) `docs/_drafts/<topic>.md`: promote to or merge into `docs/<topic>.md`.
+- [x] (Phase N) `docs/_drafts/<topic>.md`: abandoned/deferred - reason and follow-up.
+
+### Existing Docs
+
+- [ ] (Phase N) `docs/<path>.md`: describe the future canonical-doc update.
+
 ## Discovered Follow-Ups
 
 - Useful but non-required work discovered during implementation.
@@ -147,6 +161,8 @@ Concise load-bearing implementation details only.
 ## Final Review And Cleanup
 
 - [ ] Final review passed with no blocking findings.
+- [ ] Referenced draft docs are promoted, merged, abandoned, or explicitly deferred.
+- [ ] Plan Doc Delta items are checked or removed as obsolete.
 - [ ] Related Target-State Docs are current.
 - [ ] User was asked whether to delete this completed Plan.
 ```
@@ -156,7 +172,7 @@ Concise load-bearing implementation details only.
 ```md
 # Handoff: Goal
 
-Type: Implementation | Continuation | Research | Refactor | Bugfix | Review | Review-Fix
+Type: Implementation | Continuation | Research | Refactor | Bugfix | Review | Review-Continuation | Review-Fix
 Durability: Immediate | Durable
 
 ## Read First

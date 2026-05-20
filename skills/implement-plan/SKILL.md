@@ -13,13 +13,14 @@ Use [document-conventions.md](references/document-conventions.md), [templates.md
 ## Before Code Changes
 
 1. Read the Plan and related Docs.
-2. Run a Target-State Doc preflight: if the Plan or target state needs durable docs, confirm related Docs exist and match the intended target state before code changes.
-3. If needed Docs are missing or stale, update them first. If doc writing reveals real ambiguity, stop and ask before implementation.
-4. Identify selected phase(s), or infer the next unchecked phase if not specified.
-5. Restate phase work and mode/override in a short checklist.
-6. Research implementation-specific gaps.
-7. Ask questions only for real ambiguity, HITL work, or mode override confirmation.
-8. Use feedback-calibrated test discipline. If the user explicitly opts out of automated tests, record the fallback verification evidence instead.
+2. Run a doc lifecycle preflight: read related canonical Target-State Docs, referenced draft docs, and the Plan's Doc Delta.
+3. Confirm canonical docs describe current durable truth. Keep future behavior in referenced draft docs or Doc Delta until the relevant phase lands.
+4. If needed target-state artifacts are missing or stale, update them first. If doc writing or Doc Delta shaping reveals real ambiguity, stop and ask before implementation.
+5. Identify selected phase(s), or infer the next unchecked phase if not specified.
+6. Restate phase work, mode/override, and phase-relevant Doc Delta or draft-doc work in a short checklist.
+7. Research implementation-specific gaps.
+8. Ask questions only for real ambiguity, HITL work, or mode override confirmation.
+9. Use feedback-calibrated test discipline. If the user explicitly opts out of automated tests, record the fallback verification evidence instead.
 
 Confirmation is not required for straightforward AFK work with no ambiguity.
 
@@ -61,7 +62,11 @@ Mode is guidance. User override phrases like "run phases 1-5 unattended" or "tre
 - Check completed task boxes as work lands.
 - Check acceptance criteria only after evidence proves them.
 - Mark a phase complete only when all required acceptance criteria are checked.
-- Update Target-State Docs immediately when implementation reveals durable behavior, constraints, or terminology changes.
+- Apply phase-relevant Doc Delta items and promote or merge referenced draft docs as behavior lands.
+- Check Doc Delta items only when the canonical doc update has landed or the item is removed as obsolete.
+- Delete draft docs after promotion or merge.
+- If a draft is abandoned or deferred, record it as a checked `Draft Docs` Doc Delta item with an inline reason before deleting it.
+- Update draft docs or Doc Delta immediately when implementation changes unresolved target state; update canonical docs once the behavior is settled.
 - Keep uncertain, temporary, or non-required discoveries in Plan notes or `Discovered Follow-Ups` until they are resolved.
 - Add required discovered tasks under the same phase.
 - Add useful but non-required work to `Discovered Follow-Ups`.
@@ -82,6 +87,7 @@ Self-review checks:
 - tests or checks cover intended behavior at the right level
 - fallback verification, missing automation, or skipped fast red/green has an explicit reason
 - no obvious plan drift, overbuild, missing docs updates, or Target-State Doc drift
+- phase-relevant Doc Delta items and referenced draft docs are resolved or intentionally still pending for later phases
 - durable docs and code remain coherent without references to Plan files or phases
 - verification commands were run and read
 

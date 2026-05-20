@@ -29,7 +29,7 @@ then try a concrete prompt:
 | [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | explain codebase areas, modules, callers, flows, tests, and terms without editing files.                               |
 | [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | reproduce, diagnose, and fix normal bugs, failures, flaky behavior, and performance regressions.                       |
 | [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route substantial workflow work to the right skill.                                                                    |
-| [`plan-work`](./skills/plan-work/SKILL.md)                       | research, ask questions, write target-state docs, and create an ephemeral plan.                                        |
+| [`plan-work`](./skills/plan-work/SKILL.md)                       | research, ask questions, write target-state artifacts, and create an ephemeral plan.                                   |
 | [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement approved plan phases with verification, plan updates, and self-review.                                       |
 | [`write-handoff`](./skills/write-handoff/SKILL.md)               | write fresh-context handoffs for implementation, continuation, research, refactor, bugfix, review, or review-fix work. |
 | [`review-work`](./skills/review-work/SKILL.md)                   | review work against plans, docs, acceptance criteria, tests, and risk.                                                 |
@@ -42,7 +42,8 @@ target-state docs live in [`docs/`](./docs/). canonical shared language and temp
 
 these active plans are kept here as a public roadmap and examples of the workflow in use. completed plans should disappear before they become stale context.
 
-- [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): clarify when prototypes should be shown, discarded, or absorbed.
+- [`plan-prototype-reference-improvements`](./plans/plan-prototype-reference-improvements.md): improve prototype guidance from Matt Pocock and Superpowers references.
+- [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): dogfood the improved prototype flow in real planning sessions.
 - [`invocation-policy-dogfooding`](./plans/invocation-policy-dogfooding.md): decide whether `use-workflow` stays implicit and how provider controls should be documented.
 - [`setup-quality-gates`](./plans/setup-quality-gates.md): research and plan an opinionated local quality-gate setup skill.
 - [`wflow-minijinja-templating`](./plans/wflow-minijinja-templating.md): plan template rendering only if provider-specific generated files become necessary.
@@ -134,19 +135,21 @@ rough `o200k_base` token counts for equivalent workflow areas. equivalent skills
 
 the goal is to use references deliberately and keep installed skills small enough to load well, not to turn the repo into benchmaxxing theater.
 
+local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml` is excluded.
+
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        2,086 |              2,916 |             14,948 |
-| implementation       |        2,922 |              2,092 |             10,152 |
-| review               |        2,604 |              1,052 |              3,210 |
-| diagnosis            |        1,633 |              1,947 |             14,015 |
-| architecture         |        1,318 |              3,832 |             13,186 |
-| prototype            |          743 |              3,525 |             13,186 |
-| codebase explanation |          874 |                 89 |                n/a |
-| handoff              |        1,758 |                160 |                n/a |
-| workflow routing     |        1,319 |              3,281 |              3,106 |
-| workflow explanation |        1,002 |                n/a |              3,106 |
-| total                |       16,259 |             22,894 |             88,909 |
+| planning             |        3,377 |              2,916 |             14,948 |
+| implementation       |        4,039 |              2,092 |             10,152 |
+| review               |        4,071 |              1,052 |              3,210 |
+| diagnosis            |        2,099 |              1,947 |             14,015 |
+| architecture         |        1,784 |              3,832 |             13,186 |
+| prototype            |        1,209 |              3,525 |             13,186 |
+| codebase explanation |        1,340 |                 89 |                n/a |
+| handoff              |        2,710 |                160 |                n/a |
+| workflow routing     |        1,914 |              3,281 |              3,106 |
+| workflow explanation |        1,471 |                n/a |              3,106 |
+| total                |       24,014 |             22,894 |             88,909 |
 
 ## credits
 

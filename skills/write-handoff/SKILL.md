@@ -19,8 +19,28 @@ Use the Handoff template in [templates.md](references/templates.md).
 - `Bugfix Handoff`: fix a discovered issue.
 - `Review Handoff`: review implementation with extra context.
 - `Review-Fix Handoff`: address accepted review findings.
+- `Review-Continuation Handoff`: run a continuation or explicitly independent next review round with fresh context.
 
 Use the same base template for all types. Adjust `Task`, `Current State`, and `Completion Criteria`.
+
+## Review Handoff Intent
+
+Use when the handoff target is a reviewer.
+
+- `delta`, `continuation`, or `another review`: write a Review-Continuation Handoff focused on accepted fixes, patch notes, changed surface, unresolved high-risk areas, and do-not-relitigate items.
+- `independent` or `cross-validation`: write a review handoff for an explicitly independent pass, and label the expected cost and duplicate-finding risk.
+- Ambiguous `fresh review` or `fresh context`: ask whether the user wants continuation/delta review or independent cross-validation before writing the handoff.
+- If prior Review Signal was low and the user still asks for another review handoff, write it if requested, but label it optional/low ROI.
+
+Review-Continuation Handoffs include:
+
+- prior findings and patch notes
+- accepted, rejected, and deferred items
+- Review Signal, scope, round, and intended next review mode
+- next focus and remaining risk surface
+- do-not-relitigate items
+- optional/low-ROI label when prior Review Signal was low
+- Target-State Doc sync status, current-Plan Doc Delta status, and referenced draft-doc status when Plan-backed
 
 ## Durability
 
