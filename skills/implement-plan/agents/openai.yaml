@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement Plan"
-  short_description: "Implement approved plan phases with verification and review."
+  short_description: "Implement Plan phases with evidence and fresh-context review."
   default_prompt: "Implement the selected plan phase."

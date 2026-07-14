@@ -23,31 +23,24 @@ then try a concrete prompt:
 
 ## skills
 
-| skill                                                            | purpose                                                                                                                |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| [`explain-workflow`](./skills/explain-workflow/SKILL.md)         | explain how to use the workflow skills for a concrete situation.                                                       |
-| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | explain codebase areas, modules, callers, flows, tests, and terms without editing files.                               |
-| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | reproduce, diagnose, and fix normal bugs, failures, flaky behavior, and performance regressions.                       |
-| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route substantial workflow work to the right skill.                                                                    |
-| [`plan-work`](./skills/plan-work/SKILL.md)                       | research, ask questions, write target-state artifacts, and create an ephemeral plan.                                   |
-| [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement approved plan phases with verification, plan updates, and self-review.                                       |
-| [`write-handoff`](./skills/write-handoff/SKILL.md)               | write fresh-context handoffs for implementation, continuation, research, refactor, bugfix, review, or review-fix work. |
-| [`review-work`](./skills/review-work/SKILL.md)                   | review work against plans, docs, acceptance criteria, tests, and risk.                                                 |
-| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | find architecture improvements without turning review into broad refactoring.                                          |
-| [`plan-prototype`](./skills/plan-prototype/SKILL.md)             | use throwaway visual or logic prototypes to answer planning questions.                                                 |
+| skill                                                            | purpose                                                                                 |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [`explain-workflow`](./skills/explain-workflow/SKILL.md)         | explain how to invoke the workflow without starting work by default.                    |
+| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map code areas, modules, callers, flows, tests, and terms without editing.              |
+| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find evidence-backed causes; apply fixes only when explicitly authorized.               |
+| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route work to the smallest fitting workflow.                                            |
+| [`plan-work`](./skills/plan-work/SKILL.md)                       | shape uncertain or substantial work, with an optional saved Plan.                       |
+| [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement Plan Phases with evidence, updates, and fresh-context review.                 |
+| [`write-handoff`](./skills/write-handoff/SKILL.md)               | write concise fresh-context handoffs with lifecycle separate from storage.              |
+| [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of Plans, changes, continuation rounds, or other scoped artifacts.     |
+| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | discover evidence-backed architecture improvements without forcing a refactor workflow. |
+| [`plan-prototype`](./skills/plan-prototype/SKILL.md)             | answer one planning question with a minimal throwaway visual or logic prototype.        |
 
-target-state docs live in [`docs/`](./docs/). canonical shared language and templates live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
+target-state docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 
 ## future work
 
-these active plans are kept here as a public roadmap and examples of the workflow in use. completed plans should disappear before they become stale context.
-
-- [`plan-prototype-reference-improvements`](./plans/plan-prototype-reference-improvements.md): improve prototype guidance from Matt Pocock and Superpowers references.
-- [`plan-prototype-dogfooding`](./plans/plan-prototype-dogfooding.md): dogfood the improved prototype flow in real planning sessions.
-- [`invocation-policy-dogfooding`](./plans/invocation-policy-dogfooding.md): decide whether `use-workflow` stays implicit and how provider controls should be documented.
-- [`setup-quality-gates`](./plans/setup-quality-gates.md): research and plan an opinionated local quality-gate setup skill.
-- [`wflow-minijinja-templating`](./plans/wflow-minijinja-templating.md): plan template rendering only if provider-specific generated files become necessary.
-- [`workflow-plugin-experiments`](./plans/workflow-plugin-experiments.md): compare plugin, hook, and package experiments for OpenCode, Pi, and Factory Droid.
+active development planning and the public Roadmap live under [`plans/`](./plans/).
 
 ## install from github
 
@@ -139,17 +132,17 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        3,377 |              2,916 |             14,948 |
-| implementation       |        4,039 |              2,092 |             10,152 |
-| review               |        4,071 |              1,052 |              3,210 |
-| diagnosis            |        2,099 |              1,947 |             14,015 |
-| architecture         |        1,784 |              3,832 |             13,186 |
-| prototype            |        1,209 |              3,525 |             13,186 |
-| codebase explanation |        1,340 |                 89 |                n/a |
-| handoff              |        2,710 |                160 |                n/a |
-| workflow routing     |        1,914 |              3,281 |              3,106 |
-| workflow explanation |        1,471 |                n/a |              3,106 |
-| total                |       24,014 |             22,894 |             88,909 |
+| planning             |        1,958 |              2,916 |             14,948 |
+| implementation       |        1,728 |              2,092 |             10,152 |
+| review               |        2,460 |              1,052 |              3,210 |
+| diagnosis            |          699 |              1,947 |             14,015 |
+| architecture         |          670 |              3,832 |             13,186 |
+| prototype            |          677 |              3,525 |             13,186 |
+| codebase explanation |          226 |                 89 |                n/a |
+| handoff              |        1,324 |                160 |                n/a |
+| workflow routing     |          951 |              3,281 |              3,106 |
+| workflow explanation |          768 |                n/a |              3,106 |
+| total                |       11,461 |             22,894 |             88,909 |
 
 ## credits
 

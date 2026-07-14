@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose Issue"
-  short_description: "Reproduce, diagnose, and fix bugs, failures, flakes, and perf regressions."
+  short_description: "Diagnose bugs, failures, flakes, and regressions without implicit fixes."
   default_prompt: "Diagnose this issue."

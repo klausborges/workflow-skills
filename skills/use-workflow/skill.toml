@@ -1,6 +1,5 @@
 [references]
 shared = [
-  "research-ladder",
   "workflow-language",
 ]
 owned = []

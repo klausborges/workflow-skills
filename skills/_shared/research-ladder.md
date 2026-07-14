@@ -1,28 +1,12 @@
 # Research Ladder
 
-Research before serious technical recommendations, but keep findings scoped and synthesized.
+Research only uncertainties that can materially change the conclusion, design, or safe implementation.
 
-Use better tools when available or requested by the prompt, `AGENTS.md`, or local project instructions:
+Start with cheap relevant evidence:
 
-- docs MCPs or documentation tools
-- Exa
-- `gh` CLI
-- `gh_grep` MCP
-- other project-specific research tools
+- local code, docs, schemas, tests, history, and project examples;
+- first-party docs, `llms.txt` indexes, official repositories/examples, and CLI help.
 
-Do not require those tools. Fall back to sane defaults:
+Escalate to documentation tools, Exa, `gh`, `gh_grep`, or other project tools when official/local evidence is incomplete, API usage needs real examples, or current information matters. Do not require a particular research tool.
 
-- first-party docs
-- `llms.txt` when available as a docs index
-- official repositories and official examples
-- CLI help such as `tool --help`
-- local docs and existing project examples
-
-Behavior:
-
-- Check cheap local/first-party sources first when useful.
-- Use official examples and real repo examples when API usage or integration patterns matter.
-- Use broader search tools when official docs are incomplete, behavior is uncertain, or current information matters.
-- Summarize findings into decisions, constraints, and trade-offs.
-- Avoid long research dumps.
-- Keep research notes in the Plan unless they describe durable target-state behavior.
+Return decisions, constraints, trade-offs, and cited evidence rather than a research dump. Keep notes in the existing owning artifact when useful; do not create a Plan or durable document only to store research.

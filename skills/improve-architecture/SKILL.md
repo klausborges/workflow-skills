@@ -1,68 +1,35 @@
 ---
 name: improve-architecture
-description: Find and shape architecture improvement opportunities. Use when the user asks to improve architecture, find deepening opportunities, make code easier to test or understand, reduce shallow/scattered/over-coupled code, review architecture, or refactor a landed feature using Module/Interface/Seam/Adapter/Depth/Leverage/Locality thinking.
+description: Discover and shape architecture improvement opportunities in hard-to-understand, hard-to-test, shallow, scattered, or over-coupled code. Use review-work for concrete change review and direct implementation for already-decided scoped refactors.
 ---
 
 # Improve Architecture
 
-Find architecture friction and shape targeted improvements.
+Find concrete architecture friction and shape only the decision still needed.
 
-Use workflow terms from [workflow-language.md](references/workflow-language.md).
-Use [architecture-language.md](references/architecture-language.md) and repo Glossary/ADRs when present.
+Use [architecture-language.md](references/architecture-language.md) and the repo Glossary/ADRs when present.
 
-## When To Use
+## Boundaries
 
-- After implementing and reviewing a Plan.
-- Before final review when architecture risk is visible.
-- On a feature that landed earlier and now shows friction.
-- When code is hard to test, hard to understand, shallow, scattered, or over-coupled.
+- Use this skill to discover opportunities or clarify an unresolved module/interface/seam choice.
+- Use `review-work` to judge architecture in a concrete change, PR, or Phase.
+- When the user has already chosen a bounded refactor, implement it directly or through `implement-plan`; do not force candidate selection, an interview, a Plan, or a handoff.
+- Review may recommend this skill but should not start it automatically.
 
-This skill is explicit-invocation by default. `review-work` may recommend it but should not start it automatically.
+## Discovery
 
-## Process
+1. Map the relevant modules, callers, interfaces, seams, and flows.
+2. Identify evidence-backed friction: knowledge scattered across callers, shallow pass-through layers, leaky implementation details, hard-to-test behavior, change amplification, or unclear ownership.
+3. Present a small ranked set of candidates only when the user has not already selected the area.
+4. For the chosen candidate, clarify only load-bearing constraints, migration, verification, and caller impact.
+5. Return the smallest useful next artifact: recommendation, interface choice, scoped implementation direction, Plan request, or handoff. Do not create a Plan or handoff by default.
 
-1. Read relevant Glossary and ADRs.
-2. Zoom out: map relevant modules, callers, seams, and flows at a high level.
-3. Explore friction:
-   - understanding requires bouncing across many shallow modules
-   - behavior is hard to test through a stable interface
-   - changes spread across many callers
-   - seams exist with only one real adapter
-   - implementation details leak through public surfaces
-4. Present numbered deepening candidates. Do not redesign yet.
-5. Let the user pick a candidate.
-6. Grill the chosen candidate: constraints, dependencies, seam placement, tests, migration path.
-7. If seam or interface placement is central to the candidate, compare seam/interface options before planning.
-8. Propose a focused improvement plan or handoff.
+Candidate summaries should name the area, observed friction, opportunity, benefits, risks, and evidence.
 
-## Candidate Format
+## Interface or seam choice
 
-- **Area**: module/feature in Glossary vocabulary.
-- **Problem**: concrete friction.
-- **Opportunity**: what could deepen or simplify.
-- **Benefits**: leverage, locality, and testability.
-- **Risks**: what could go wrong or invalidate the change.
+When placement is genuinely unresolved, compare two or three materially different options by caller impact, hidden complexity, migration cost, testability, volatility, and ownership. Recommend one. Skip this branch when placement is obvious or unchanged.
 
-## Seam/Interface Options
+Treat architecture vocabulary as heuristics. A single adapter can justify a seam when it isolates volatility, ownership, or testing; ask what boundary it protects. Prefer public or intentionally stable interfaces as behavioral test surfaces without exposing internals only for tests.
 
-Use this branch only when the selected candidate depends on where a seam lives or what callers must know about a new or changed interface.
-
-Before proposing implementation work:
-
-1. Frame the constraints: callers, dependencies, current seams, test surface, migration path, and relevant Glossary/ADR terms.
-2. Present 2-3 materially different options, such as:
-   - minimal interface with high leverage per entry point
-   - common-caller-optimized interface
-   - ports/adapters shape for cross-seam dependencies
-3. Compare options by caller impact, hidden complexity, migration cost, testability, and fit with current Glossary/ADRs.
-4. Recommend one option or a small hybrid before writing a Plan or handoff.
-
-Skip this branch when seam/interface placement is obvious, unchanged, or not load-bearing for the improvement.
-
-## Guardrails
-
-- Do not propose broad rewrites.
-- Do not relitigate ADRs unless friction is real enough to reopen the decision.
-- Do not force architecture vocabulary into ordinary feature work unless it clarifies the problem.
-- Prefer improvements that support current Plan/feature goals or real maintenance friction.
-- Do not create a standalone interface-design workflow unless repeated architecture work proves this branch is too large for `improve-architecture`.
+Do not propose broad rewrites, relitigate ADRs without new friction, or make ordinary feature work speak architecture jargon unnecessarily.

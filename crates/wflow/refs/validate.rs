@@ -196,12 +196,21 @@ fn validate_skill(
         .to_owned();
     let metadata_path = dir.join("skill.toml");
     let skill_md_path = dir.join("SKILL.md");
+    let interface_metadata_path = dir.join("agents").join("openai.yaml");
     let references_dir = dir.join("references");
 
     validate_package_source_file(root, "skill instruction file", &skill_md_path, errors);
+    validate_interface_metadata(root, &name, &interface_metadata_path, errors);
     let skill_metadata = read_metadata(root, &name, &metadata_path, errors)?;
 
     validate_metadata_names(&name, &skill_metadata, shared, errors);
+    validate_skill_reference_links(
+        root,
+        &name,
+        &skill_md_path,
+        &skill_metadata.references,
+        errors,
+    );
     validate_reference_files(
         root,
         &name,
@@ -218,6 +227,117 @@ fn validate_skill(
         references_dir,
         metadata: skill_metadata.references,
     })
+}
+
+fn validate_interface_metadata(
+    root: &Path,
+    skill_name: &str,
+    path: &Path,
+    errors: &mut ValidationErrors,
+) {
+    if !validate_package_source_file(root, "OpenAI interface metadata file", path, errors) {
+        errors.push(format!(
+            "skill `{skill_name}` is missing OpenAI interface metadata at {}",
+            display_relative(root, path)
+        ));
+        return;
+    }
+
+    let content = match fs::read_to_string(path) {
+        Ok(content) => content,
+        Err(error) => {
+            errors.push(format!(
+                "skill `{skill_name}` cannot read OpenAI interface metadata {}: {error}",
+                display_relative(root, path)
+            ));
+            return;
+        }
+    };
+
+    let lines = content
+        .lines()
+        .filter(|line| !line.trim().is_empty() && !line.trim_start().starts_with('#'))
+        .collect::<Vec<_>>();
+    let fields = ["display_name", "short_description", "default_prompt"];
+
+    if lines.len() != fields.len() + 1 || lines.first() != Some(&"interface:") {
+        errors.push(format!(
+            "skill `{skill_name}` has invalid OpenAI interface metadata {}; expected `interface` with display_name, short_description, and default_prompt",
+            display_relative(root, path)
+        ));
+        return;
+    }
+
+    for (line, field) in lines.iter().skip(1).zip(fields) {
+        let prefix = format!("  {field}: ");
+        let Some(value) = line.strip_prefix(&prefix) else {
+            errors.push(format!(
+                "skill `{skill_name}` has invalid OpenAI interface metadata {}; expected field `{field}`",
+                display_relative(root, path)
+            ));
+            continue;
+        };
+
+        let valid =
+            serde_json::from_str::<String>(value).is_ok_and(|parsed| !parsed.trim().is_empty());
+        if !valid {
+            errors.push(format!(
+                "skill `{skill_name}` OpenAI interface field `{field}` must be a non-empty JSON-compatible quoted string in {}",
+                display_relative(root, path)
+            ));
+        }
+    }
+}
+
+fn validate_skill_reference_links(
+    root: &Path,
+    skill_name: &str,
+    skill_md_path: &Path,
+    metadata: &ReferenceMetadata,
+    errors: &mut ValidationErrors,
+) {
+    let Ok(content) = fs::read_to_string(skill_md_path) else {
+        return;
+    };
+    let declared = declared_references(metadata);
+    let marker = "](references/";
+    let mut remainder = content.as_str();
+
+    while let Some(start) = remainder.find(marker) {
+        let target_start = start + marker.len();
+        let target_remainder = &remainder[target_start..];
+        let Some(end) = target_remainder.find(')') else {
+            errors.push(format!(
+                "skill `{skill_name}` has an unterminated local reference link in {}",
+                display_relative(root, skill_md_path)
+            ));
+            return;
+        };
+
+        let target = &target_remainder[..end];
+        let Some(name) = target.strip_suffix(".md") else {
+            errors.push(format!(
+                "skill `{skill_name}` has invalid local reference link `references/{target}` in {}; use `references/<declared-name>.md`",
+                display_relative(root, skill_md_path)
+            ));
+            remainder = &target_remainder[end + 1..];
+            continue;
+        };
+
+        if !is_valid_reference_name(name) {
+            errors.push(format!(
+                "skill `{skill_name}` has invalid local reference link `references/{target}` in {}",
+                display_relative(root, skill_md_path)
+            ));
+        } else if !declared.contains(name) {
+            errors.push(format!(
+                "skill `{skill_name}` links undeclared reference `references/{target}` in {}; add `{name}` to skill.toml or remove the link",
+                display_relative(root, skill_md_path)
+            ));
+        }
+
+        remainder = &target_remainder[end + 1..];
+    }
 }
 
 fn validate_metadata_names(

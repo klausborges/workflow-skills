@@ -2,43 +2,59 @@
 
 ## Purpose
 
-This repo defines a small set of agent workflow skills for explaining the workflow, explaining codebase areas, diagnosis, planning, implementation, handoff, review, architecture improvement, and planning prototypes.
+This repo provides portable skills for explanation, diagnosis, planning, implementation, handoff, review, architecture discovery, and disposable planning prototypes. The workflow should add only the process justified by the task's ambiguity, risk, and coordination needs.
 
-The skills are intended to be portable across repos and agent tools while preserving a concise, explicit workflow. They borrow selectively from Matt Pocock's agent skills, Superpowers, and Vercel Labs Skills without requiring those projects at runtime.
+Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills carry only the focused shared references they need.
 
-## Target State
+## Current behavior
 
-- The repo exposes installable skills under `skills/`.
-- `explain-workflow` explains how to use the workflow skills for concrete situations without starting the work by default.
-- `explain-codebase` explains unfamiliar codebase areas, modules, callers, flows, tests, and terms without editing files.
-- `diagnose-issue` builds a feedback loop, reproduces the issue, finds root cause, and fixes normal bugs after the verification path is clear.
-- `use-workflow` routes substantial work to the most specific workflow skill without forcing itself into small direct tasks.
-- `plan-work` turns unclear feature or workflow ideas into target-state artifacts first, then an ephemeral Plan. It keeps canonical docs current during planning by using draft docs or Plan Doc Delta for future behavior.
-- `implement-plan` executes approved Plan phases, keeps checklist state current, uses feedback-calibrated test discipline, applies phase-relevant Doc Delta and draft-doc promotions as behavior lands, and runs phase self-review.
-- `write-handoff` creates fresh-context prompts or files for implementation, continuation, research, refactor, bugfix, review, review-continuation, or review-fix work.
-- `review-work` reviews Plans, implementation, and ad hoc targets with mode-specific scope, reports review signal and review ledgers across rounds, and handles final doc sync and Plan cleanup prompts when implementation is fully complete and reviewed.
-- `improve-architecture` remains explicit-invocation by default, shapes targeted architecture improvements, and conditionally compares seam/interface options before planning candidate changes.
-- `plan-prototype` supports throwaway visual or logic prototypes that answer a planning question, then get deleted or absorbed.
+- `use-workflow` routes to the smallest fitting skill and leaves clear low-risk tasks direct.
+- `explain-workflow` explains invocation without starting work by default.
+- `explain-codebase` maps code and stays read-only.
+- `diagnose-issue` finds causes with evidence and stays read-only unless the user explicitly authorizes a fix.
+- `plan-work` runs when explicitly requested or when material ambiguity, coordination, cross-cutting scope, irreversibility, or risk warrants it. Planning may remain in chat; otherwise a saved ephemeral Plan is the default.
+- `implement-plan` executes selected Phases with risk-matched verification, Plan/doc updates, Plan-defined review checkpoints, and mandatory fresh-context end-of-Phase review.
+- `write-handoff` creates bounded continuation prompts or files. Immediate/Durable lifecycle is independent of chat/file storage.
+- `review-work` reviews Plans, implementation, continuation rounds, or other scoped artifacts without mutating them unless fixes are separately authorized.
+- `improve-architecture` discovers opportunities or resolves unclear interface choices. Concrete change review belongs to `review-work`; already-decided refactors may be implemented directly.
+- `plan-prototype` builds the smallest disposable experiment needed to answer one planning question.
 
-## Key Concepts
+## Cost and authority
 
-Canonical workflow language lives in the root `GLOSSARY.md`.
+- Match questions, research, tools, delegation, artifacts, and verification to actual uncertainty and risk.
+- Consolidate owner decisions and include recommendations. Do not interview for facts the repo can answer.
+- Research only consequential gaps, starting with local and first-party evidence.
+- Do not require a Plan, Roadmap, durable doc, handoff file, subagent pass, worktree, commit, or PR merely because a task is multi-step.
+- Every implementation Phase ends with an independent fresh-context review of the whole Phase. Direct unplanned implementation is one Phase-equivalent scope and gets the same review before delivery.
+- Plans place extra review checkpoints after high-impact Tasks or Task groups; low-impact Tasks can wait for the Phase review.
+- The parent verifies delegated review claims against primary evidence. Reviews are not recursively reviewed.
 
-Shared skill references live in `skills/_shared/`:
+## Artifacts and lifecycle
 
-- `workflow-language.md` defines portable workflow terms for installed skills.
-- `document-conventions.md` defines where Plans, Target-State Docs, ADRs, and glossaries belong.
-- `templates.md` defines reusable Design Brief, Plan, Handoff, and Phase Self-Review shapes.
-- `research-ladder.md` defines source preferences without hard-coding one research tool.
-- `architecture-language.md` defines optional architecture vocabulary.
+The hierarchy is `Roadmap > Plan > optional Milestone > Phase > Task`. “Slice” is not a hierarchy term; a vertical slice is only a testing or implementation technique.
 
-Installable skills must be self-contained. The canonical files in `skills/_shared/` are generated into each skill's `references/` directory according to each skill's metadata.
+A Roadmap is an optional thin progress/prioritization view over Plan links. Projects may have a main `plans/roadmap.md`, multiple `plans/<scope>-roadmap.md` files, or no Roadmap. A Plan may appear in more than one Roadmap and remains authoritative. Roadmaps do not repeat Plan milestones, phases, tasks, acceptance criteria, or research.
 
-Workflow lifecycle rules that affect installed skill behavior should be mirrored in shared references or templates, so standalone installed skills keep the same planning, implementation, review, and cleanup expectations.
+Plans and Roadmaps are ephemeral even when committed or retained temporarily. A completed standalone Plan may be offered for deletion once after final review and doc sync. An active Roadmap gates cleanup of linked Plans; ask once when the Roadmap closes. Never delete automatically. Replace a deleted Plan link with a checked plain-text one-line outcome.
 
-## Reference Metadata
+Canonical Target-State Docs describe current durable truth. During planning, correct them only when the correction is already true. Use `docs/_drafts/` for a substantial proposed new doc and the owning Plan's explicitly Phase-tagged Doc Delta for future changes to existing docs. Sync these as behavior lands, normally at Phase closeout or handoff.
 
-Each installable skill has a `skill.toml` file that declares the reference files shipped with that skill:
+Canonical docs, source, code comments, commits, and PRs must remain coherent after workflow artifacts are removed. They do not reference Plan paths or workflow-relative identifiers such as `Phase 0`, `P0`, `Milestone 0`, or `M0`. Workflow artifacts may use hierarchy terms.
+
+## Shared references
+
+Canonical references live under `skills/_shared/`:
+
+- `workflow-language.md`: portable hierarchy and lifecycle boundary
+- `review-language.md`: review modes, signal, and ledger
+- `document-conventions.md`: artifact locations and lifecycle
+- `planning-templates.md`: Design Brief, current-doc, Roadmap, and Plan shapes
+- `handoff-template.md`: handoff shape
+- `phase-review-template.md`: compact end-of-Phase review record
+- `research-ladder.md`: conditional source preference
+- `architecture-language.md`: optional architecture heuristics
+
+Each skill's `skill.toml` declares what it packages:
 
 ```toml
 [references]
@@ -48,117 +64,31 @@ shared = [
 owned = []
 ```
 
-Reference names are bare names. A shared reference named `workflow-language` maps to `skills/_shared/workflow-language.md` and is generated into `skills/<skill>/references/workflow-language.md`.
+A shared name maps to `skills/_shared/<name>.md` and is generated at `skills/<skill>/references/<name>.md`. A skill-owned reference lives in that directory and is declared under `owned`.
 
-`skill.toml` is the only reference artifact contract. `wflow` does not parse `SKILL.md` links; this intentionally avoids Markdown path parsing and keeps verification focused on the files that will be packaged with each skill.
+`skill.toml` is the packaging contract. `wflow refs sync` creates, updates, and prunes generated shared references without deleting owned references. `wflow refs verify` checks manifest names, package safety, generated equality, owned files, and stale temporary artifacts. Skill Markdown links and provider metadata are validated by repository formatting/check tooling rather than treated as packaging declarations.
 
-To add an existing shared reference to a skill:
+To change references:
 
-1. Add the bare reference name to `[references].shared` in that skill's `skill.toml`.
-2. Run `mise run sync-references`.
-3. Run `mise run check`.
-4. Optionally link the generated local file from `SKILL.md`, for example `references/workflow-language.md`.
-
-To add a skill-owned reference:
-
-1. Create `skills/<skill>/references/<name>.md`.
-2. Add the bare reference name to `[references].owned`.
-3. Use a name that does not exist in `skills/_shared/`; shared-name collisions are rejected.
+1. Edit the canonical shared file or create an owned reference.
+2. Update the skill's sorted `shared` or `owned` list.
+3. Run `mise run sync-references`.
 4. Run `mise run check`.
-5. Optionally link it from that skill's `SKILL.md`.
 
-`wflow refs sync` may create, update, and prune generated shared references. It must not delete skill-owned references. `wflow refs verify` fails when metadata, package files, generated shared files, skill-owned files, or stale temporary reference artifacts disagree. Verification reports independent validation failures together when it can; for example, invalid `skill.toml` does not suppress package-file safety checks for the same skill.
+## Workflow boundaries
 
-## User/System Flows
+- Explanation and review do not mutate by default.
+- Diagnosis does not fix by default.
+- Planning does not auto-start implementation.
+- Implementation changes only the authorized scope and preserves unrelated dirty work.
+- Handoffs do not replace Plans or duplicate durable docs.
+- Architecture discovery does not force a refactor Plan or handoff.
+- Prototypes do not become production work without explicit authorization.
+- Cleanup is limited to artifacts created by the current task whose disposition is clear; preexisting drafts and prototypes are preserved.
 
-### Explanation
+## Out of scope
 
-1. The user asks how to use the workflow, how to invoke a skill, or how the workflow applies to a concrete situation.
-2. The agent answers from the user's point of view with the relevant skill, what to ask next, and what to expect.
-3. If the request might also mean "start the work", the agent explains first and gives the exact next prompt instead of starting by default.
-
-### Codebase Explanation
-
-1. The user asks how a codebase area, feature, flow, module, or call path works.
-2. The agent reads local docs, relevant source, callers, entry points, and tests.
-3. The agent returns a read-only map of purpose, entry points, key modules, flow, tests/checks, terms, and unknowns.
-4. If concrete architecture friction appears, the agent may recommend `improve-architecture` as a next step without starting it automatically.
-
-### Diagnosis
-
-1. The user reports a bug, failing test, build failure, flaky behavior, unexpected output, or performance regression.
-2. The agent builds or identifies a fast feedback loop and reproduces the reported symptom.
-3. The agent forms falsifiable hypotheses, instruments narrowly, and identifies root cause before changing behavior.
-4. The agent fixes normal bugs once root cause and verification path are clear.
-5. The agent stops before risky fixes, public behavior changes, production-sensitive work, performance trade-offs, or missing architecture seams.
-
-### Planning
-
-1. The user explains an idea, requirements, and constraints.
-2. The agent reads local context, researches as needed, and asks one focused question at a time.
-3. The agent proposes a concise Design Brief with recommendation, trade-offs, constraints, acceptance criteria, and docs needed.
-4. After approval, the agent writes needed target-state artifacts first: canonical Target-State Doc updates only for currently true durable information, Draft Target-State Docs under `docs/_drafts/` for substantial new proposed docs, or Plan Doc Delta entries for future changes to existing canonical docs.
-5. The agent writes an ephemeral Plan with phases, tasks, acceptance criteria, verification strategy, Doc Delta when durable docs are affected, and out-of-scope.
-6. The agent self-reviews the Plan before handing it back.
-
-### Implementation
-
-1. The agent reads the Plan, related Target-State Docs, and relevant source.
-2. Before code changes, the agent checks related canonical docs, referenced draft docs, and Plan Doc Delta. Canonical docs should describe current durable truth; future behavior remains in draft docs or Doc Delta until the relevant implementation phase lands.
-3. The agent identifies selected phases or infers the next unchecked phase.
-4. The agent asks questions only for real ambiguity, HITL work, or explicit override confirmation.
-5. The agent uses feedback-calibrated test discipline: cheap tests use red/green vertical slices, while medium or heavy tests use same-phase or acceptance-gate verification with the narrowest meaningful command.
-6. As each phase lands, the agent applies only phase-relevant Doc Delta items and promotes or merges referenced draft docs for behavior implemented in that phase.
-7. The agent updates Plan tasks and acceptance criteria only when work is verified.
-8. When implementation changes unresolved target state, the agent updates the draft doc or Doc Delta first, then updates canonical docs once the behavior is settled.
-9. Before completing a phase, the agent runs focused self-review, using a fresh subagent when the harness provides one.
-10. When all implementation phases are complete, the agent leaves Plan cleanup for final review.
-
-### Handoff
-
-1. The agent identifies the handoff type and durability.
-2. The handoff starts with a `Read First` list.
-3. The handoff includes current state, task, constraints, implementation notes, verification, completion criteria, and out-of-scope.
-4. Review-continuation handoffs carry prior review findings, patch notes, rejected or deferred items, review signal, and the intended next review mode.
-5. File handoffs default to durable handoffs.
-6. Ordinary chat handoffs do not add Plan notes unless tracked work changes.
-
-### Review
-
-1. The agent establishes the primary review target before judging findings: Plan, implementation, continuation, ad hoc code, or non-code artifact.
-2. Plan review checks implementation readiness only: dependency reachability, task-to-acceptance coherence, hard prerequisites, locked-decision contradictions, cross-plan ownership, verification strategy, and whether durable-doc needs are represented by canonical docs, draft docs, or Doc Delta. It rejects prose/style churn, exhaustiveness demands, and architecture redesign unless the Plan cannot execute safely or verifiably.
-3. Implementation review starts from the code or diff, using the Plan, Target-State Docs, acceptance criteria, and tests as reference truth.
-4. Continuation review is the default for repeated rounds. It focuses on accepted fixes, patch notes, changed surface, rejected or deferred items that should not be relitigated, and unresolved high-risk areas unless the user explicitly asks for independent cross-validation. Ambiguous "fresh review" wording asks for clarification because fresh context is an execution detail, not a review mode.
-5. The agent checks whether Target-State Docs still match implemented behavior during implementation review and final closeout.
-6. For Plan-backed implementation review, the agent checks only draft docs and Doc Delta items referenced by the current Plan; unrelated files in `docs/_drafts/` may be noted as follow-up but do not block current Plan closeout.
-7. Small, factual doc drift may be fixed directly when implementation evidence is clear.
-8. Substantive or product-sensitive doc drift is a blocking review finding until the user decides or the fix is routed through implementation.
-9. Findings lead, ordered by severity.
-10. Multi-aspect review is explicit, inferred from the change when requested, and reconciled before reporting.
-11. Each nontrivial review reports a compact Review Ledger. If another review round is useful, the agent also reports the next review context so a fresh reviewer can continue without re-walking stale territory.
-12. Repeated review rounds report high, medium, or low Review Signal with a recommendation to patch, rerun a scoped review, close out, or route architecture friction to `improve-architecture`.
-13. Review may recommend `improve-architecture` when architecture friction is real, but should not start it automatically.
-14. After full implementation and review pass with Target-State Docs current, referenced draft docs resolved, and current-Plan Doc Delta items resolved, the agent asks the user whether to delete the completed Plan.
-
-## Constraints
-
-- Plans are ephemeral; durable current target state belongs in canonical docs under `docs/`.
-- Draft docs under `docs/_drafts/` may describe proposed target state before implementation. They are pending work artifacts and should be promoted, merged, abandoned, deferred, or deleted before Plan cleanup.
-- Future changes to existing canonical docs belong in the Plan's Doc Delta until the relevant behavior lands.
-- Target-State Docs and code should not reference Plan files, Plan phases, Doc Delta items, or Plan-only decisions; they must remain coherent after completed Plans are deleted.
-- Target-State Docs should avoid code examples except for stable contracts that prose cannot describe clearly.
-- ADRs are rare and reserved for hard-to-reverse, surprising, trade-off-heavy decisions.
-- Skills should use stronger tools when available or requested, but must remain portable and fall back to first-party docs, `llms.txt`, official examples, CLI help, and local examples.
-- The workflow should not require commits, worktrees, issue publishing, or subagent-driven implementation by default. Subagents are preferred for self-review when the harness provides fresh-context subagents.
-- Users may commit Plans when useful for history, but live workflow state should not depend on completed Plans remaining in the workspace.
-- Agents must not delete Plans automatically. Plan deletion requires explicit user approval after full implementation, final review, Target-State Doc sync, referenced draft-doc resolution, and Doc Delta resolution.
-- Handoffs are first-class workflow artifacts, not summaries.
-- Codebase explanation is read-only by default.
-- Diagnosis requires root-cause evidence before fixes.
-
-## Out of Scope
-
-- Recreating Superpowers' full visual companion loop by default.
-- Treating PRDs, GitHub issues, commits, or worktrees as required workflow artifacts.
-- Creating `.out-of-scope/` as a default convention.
-- Keeping reference clone contents in the published repo.
+- Requiring PRDs, issues, commits, worktrees, or permanent Plans.
+- Creating process artifacts for their own sake.
+- Recreating a heavyweight review or companion loop for low-risk work.
+- Keeping reference source clones in the published repo.

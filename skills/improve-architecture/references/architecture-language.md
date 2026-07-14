@@ -1,26 +1,18 @@
 # Architecture Language
 
-Use this vocabulary when it clarifies planning, review, or architecture improvement.
+Use these terms only when they clarify a real design decision.
 
-**Module**: anything with an interface and an implementation.
+- **Module**: interface plus implementation.
+- **Interface**: what a caller must know, including invariants, ordering, errors, configuration, and relevant performance behavior.
+- **Depth**: useful behavior hidden behind a smaller interface.
+- **Seam**: place where behavior can vary without editing the caller.
+- **Adapter**: concrete implementation at a seam.
+- **Leverage**: capability callers gain from depth.
+- **Locality**: change, knowledge, bugs, and verification concentrated in one place.
 
-**Interface**: everything a caller must know to use a module correctly, including invariants, ordering, error modes, configuration, and performance characteristics.
+Heuristics, not laws:
 
-**Implementation**: code inside a module.
-
-**Depth**: leverage at the interface. A deep module puts lots of behavior behind a small interface; a shallow module exposes nearly as much complexity as it hides.
-
-**Seam**: a place where behavior can be altered without editing in that place.
-
-**Adapter**: concrete thing satisfying an interface at a seam.
-
-**Leverage**: what callers get from depth.
-
-**Locality**: what maintainers get from depth: change, bugs, knowledge, and verification concentrated in one place.
-
-Principles:
-
-- The interface is the test surface.
-- Use the deletion test: if deleting a module makes complexity vanish, it was pass-through; if complexity reappears across callers, it was earning its keep.
-- One adapter means a hypothetical seam. Two adapters means a real seam.
-- Do not expose internal seams just because tests use them.
+- A public or intentionally stable interface is the primary behavioral test surface; test internals only when they carry distinct risk.
+- Use the deletion test: if removing a module merely spreads its complexity across callers, it was earning its keep.
+- One adapter may still justify a seam for volatility, ownership, or testing isolation. Ask what variation or boundary the seam protects.
+- Do not expose internal seams only for tests.

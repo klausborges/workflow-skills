@@ -1,5 +1,3 @@
 [references]
-shared = [
-  "workflow-language",
-]
+shared = []
 owned = []
