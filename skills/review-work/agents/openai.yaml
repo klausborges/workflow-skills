@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Work"
-  short_description: "Review implementation against plans, docs, tests, and risks."
+  short_description: "Read-only review of Plans, changes, fixes, and scoped artifacts."
   default_prompt: "Review this work."

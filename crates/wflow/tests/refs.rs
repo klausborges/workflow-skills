@@ -188,14 +188,25 @@ owned = [
 }
 
 #[test]
-fn verify_ignores_skill_markdown_reference_links() {
+fn verify_ignores_nonlocal_skill_markdown_reference_links() {
     let fixture = Fixture::valid();
     fixture.write(
         "skills/demo/SKILL.md",
-        "Use [parent](../references/workflow-language.md), [absolute](/references/workflow-language.md), [url](https://example.test/references/workflow-language.md), and [bad](references/workflow-language.md.bak).\n",
+        "Use [parent](../references/workflow-language.md), [absolute](/references/workflow-language.md), and [url](https://example.test/references/workflow-language.md).\n",
     );
 
     fixture.assert_ok(&["refs", "verify"]);
+}
+
+#[test]
+fn verify_rejects_invalid_local_skill_markdown_reference_link() {
+    let fixture = Fixture::valid();
+    fixture.write(
+        "skills/demo/SKILL.md",
+        "Use [bad](references/workflow-language.md.bak).\n",
+    );
+
+    fixture.assert_err_contains(&["refs", "verify"], "invalid local reference link");
 }
 
 #[test]
@@ -357,14 +368,55 @@ owned = [
 }
 
 #[test]
-fn verify_accepts_skill_markdown_links_not_declared_in_metadata() {
+fn verify_rejects_skill_markdown_links_not_declared_in_metadata() {
     let fixture = Fixture::valid();
     fixture.write(
         "skills/demo/SKILL.md",
         "Use [workflow](references/workflow-language.md) and [templates](references/templates.md).\n",
     );
 
-    fixture.assert_ok(&["refs", "verify"]);
+    fixture.assert_err_contains(&["refs", "verify"], "links undeclared reference");
+}
+
+#[test]
+fn verify_rejects_missing_openai_interface_metadata() {
+    let fixture = Fixture::valid();
+    fixture.remove("skills/demo/agents/openai.yaml");
+
+    fixture.assert_err_contains(&["refs", "verify"], "missing OpenAI interface metadata");
+}
+
+#[test]
+fn verify_rejects_invalid_openai_interface_metadata() {
+    let fixture = Fixture::valid();
+    fixture.write(
+        "skills/demo/agents/openai.yaml",
+        r#"interface:
+  display_name: "Demo"
+  short_description: ""
+  default_prompt: "Run the demo."
+"#,
+    );
+
+    fixture.assert_err_contains(
+        &["refs", "verify"],
+        "OpenAI interface field `short_description`",
+    );
+}
+
+#[test]
+fn verify_rejects_malformed_quoted_openai_interface_metadata() {
+    let fixture = Fixture::valid();
+    fixture.write(
+        "skills/demo/agents/openai.yaml",
+        r#"interface:
+  display_name: "bad "quote""
+  short_description: "Demonstrate a valid skill fixture."
+  default_prompt: "Run the demo."
+"#,
+    );
+
+    fixture.assert_err_contains(&["refs", "verify"], "OpenAI interface field `display_name`");
 }
 
 #[test]

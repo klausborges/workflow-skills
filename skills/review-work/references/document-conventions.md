@@ -1,39 +1,23 @@
 # Document Conventions
 
-Create directories lazily.
+Create directories only when needed.
 
-- `plans/`: ephemeral implementation Plans.
-- `docs/`: durable Target-State Docs.
-- `docs/_drafts/`: non-current Draft Target-State Docs for substantial new proposed docs.
-- `docs/<scope>/`: scoped Target-State Docs when a feature/app/domain needs multiple docs.
-- `GLOSSARY.md`: root Glossary.
-- `docs/<scope>/GLOSSARY.md`: scoped Glossary.
-- `GLOSSARY-MAP.md`: optional map only when multiple scoped glossaries make discovery hard.
-- `docs/adr/`: default ADR location.
-- `docs/<scope>/adr/`: scoped ADRs only when clearly local.
+- `plans/roadmap.md`: optional main Roadmap.
+- `plans/<scope>-roadmap.md`: optional scoped Roadmap; use a subdirectory only when it improves navigation.
+- `plans/<name>.md`: ephemeral Plan.
+- `docs/`: current durable Target-State Docs.
+- `docs/_drafts/`: explicitly non-current Draft Target-State Docs.
+- `GLOSSARY.md` or `docs/<scope>/GLOSSARY.md`: canonical language.
+- `docs/adr/` or, when clearly local, `docs/<scope>/adr/`: ADRs.
 
-Plans may be standalone or include `Related Docs`.
+Roadmaps contain a checkbox, Plan link, and one-line outcome per active Plan. They may also list one-line candidates and cross-Plan dependencies. They do not repeat Plan milestones, phases, tasks, acceptance criteria, or research. A Plan may appear in multiple Roadmaps and stays authoritative.
 
-Plans are temporary work artifacts. After implementation is complete, final review passes, and related Target-State Docs are current, ask the user whether to delete the completed Plan. Never delete a Plan automatically.
+Plans and Roadmaps are ephemeral. For a completed Plan not linked from an active Roadmap, ask once after final review and doc sync whether to delete it. An active Roadmap gates linked-Plan cleanup: when work-tracking mutation is authorized, mark the Plan and Roadmap item complete; otherwise report the required update. Ask once about the Roadmap and completed Plans when the Roadmap closes. Never delete automatically. If a Plan is deleted, replace its Roadmap link with a checked plain-text one-line outcome.
 
-Users may commit Plans when useful for history, but live docs and code should not depend on completed Plans staying in the workspace.
+Canonical Target-State Docs describe current durable truth. During planning, update them only for currently true clarifications or corrections. Use a Draft Target-State Doc for a substantial proposed new doc; use the Plan's Doc Delta for future changes to existing docs. Every Doc Delta item must name its Phase explicitly.
 
-Plans always include `Out of Scope`.
+Resolve relevant draft docs and Doc Delta items as their Phase lands. Sync docs at Phase closeout or handoff; update earlier only when downstream work needs the contract.
 
-When durable docs are affected, Plans include a `Doc Delta` section. Use checkbox items under `Draft Docs` and `Existing Docs`. Each item carries an inline phase tag such as `(Phase 2)`; items without a tag default to the final implementation phase (the last numbered Phase N, not Final Review And Cleanup). A Doc Delta item is resolved when checked or removed as obsolete.
+Canonical docs, source, code comments, commits, and PRs must remain coherent after workflow artifacts are removed. Do not reference Plan paths or workflow-relative identifiers such as `Phase 0`, `P0`, `Milestone 0`, or `M0`; name the behavior, component, or outcome instead. Workflow artifacts may use hierarchy terms.
 
-Referenced draft docs are draft paths listed under the current Plan's `Doc Delta` > `Draft Docs`. Unlisted files in `docs/_drafts/` are unrelated to the current Plan's closeout.
-
-Canonical Target-State Docs under `docs/` should describe current durable truth. They may be updated during planning only for currently true clarifications, stale-current-doc fixes, stable background, or canonical terminology already valid today.
-
-Draft Target-State Docs may describe proposed target state before implementation. Create them only for substantial new durable docs that are likely to become canonical docs. Do not use draft docs for small future edits to existing docs; use Plan Doc Delta instead.
-
-Draft docs are pending work artifacts. During implementation, promote or merge referenced draft docs as behavior lands. Delete draft docs after promotion, merge, abandonment, or explicit deferment. Record abandonment or deferment as a checked `Draft Docs` Doc Delta item with an inline reason.
-
-Target-State Docs include `Out of Scope` only when exclusions matter long-term.
-
-Target-State Docs avoid code examples by default. Tiny snippets are allowed only for durable contracts such as public type shape, state machine table, event payload schema, or config shape.
-
-Target-State Docs and code comments should not reference Plan files, Plan phases, Doc Delta items, or Plan-only decisions. They must stay coherent after a completed Plan is deleted.
-
-Do not create `.out-of-scope/` by default. Use Plans, Target-State Docs, or ADRs.
+Target-State Docs include `Out of Scope` only when exclusions matter durably and avoid code examples except for stable contracts that prose cannot express clearly.

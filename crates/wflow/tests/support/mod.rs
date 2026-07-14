@@ -24,6 +24,14 @@ impl Fixture {
             "Use [workflow](references/workflow-language.md).\n",
         );
         fixture.write(
+            "skills/demo/agents/openai.yaml",
+            r#"interface:
+  display_name: "Demo"
+  short_description: "Demonstrate a valid skill fixture."
+  default_prompt: "Run the demo."
+"#,
+        );
+        fixture.write(
             "skills/demo/skill.toml",
             r#"[references]
 shared = [

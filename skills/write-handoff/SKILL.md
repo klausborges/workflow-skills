@@ -1,70 +1,44 @@
 ---
 name: write-handoff
-description: Write a fresh-context handoff prompt or file. Use when the user asks for a handoff, prompt for another agent/model/tool, continuation brief, implementation brief, research brief, refactor brief, bugfix brief, review brief, or review-fix brief tied to a Plan, Docs, current work, or review findings.
+description: Write a bounded fresh-context prompt or file for continuation, implementation, research, refactor, bugfix, review, or review-fix work. Choose lifecycle independently from storage format.
 ---
 
 # Write Handoff
 
-Create a handoff that lets a fresh agent succeed without inheriting this context.
+Give the next worker enough stable context to complete one bounded job without recreating the owning Plan or docs.
 
-Use workflow terms from [workflow-language.md](references/workflow-language.md).
-Use the Handoff template in [templates.md](references/templates.md).
+Use [workflow-language.md](references/workflow-language.md), [review-language.md](references/review-language.md) for review work, and [handoff-template.md](references/handoff-template.md).
 
-## Handoff Types
+## Choose intent and lifecycle
 
-- `Implementation Handoff`: implement selected Plan phase(s).
-- `Continuation Handoff`: continue partially completed work with fresh context.
-- `Research Handoff`: investigate options, prototype lightly if useful, and return a recommendation.
-- `Refactor Handoff`: change implementation direction or clean up wrong work.
-- `Bugfix Handoff`: fix a discovered issue.
-- `Review Handoff`: review implementation with extra context.
-- `Review-Fix Handoff`: address accepted review findings.
-- `Review-Continuation Handoff`: run a continuation or explicitly independent next review round with fresh context.
+Common types are implementation/continuation, research, refactor/bugfix, review, review-continuation, and review-fix. Use the smallest type that describes the next job.
 
-Use the same base template for all types. Adjust `Task`, `Current State`, and `Completion Criteria`.
+Choose lifecycle from expected use:
 
-## Review Handoff Intent
+- **Immediate**: next known worker or near-term continuation; current paths and volatile status may help.
+- **Durable**: later or unknown worker, or reusable work across tools; emphasize stable behavior, acceptance criteria, and scope boundaries.
 
-Use when the handoff target is a reviewer.
+Default to Immediate unless the expected lifecycle clearly requires Durable. A handoff in chat or a file can be either; file storage does not imply durability.
 
-- `delta`, `continuation`, or `another review`: write a Review-Continuation Handoff focused on accepted fixes, patch notes, changed surface, unresolved high-risk areas, and do-not-relitigate items.
-- `independent` or `cross-validation`: write a review handoff for an explicitly independent pass, and label the expected cost and duplicate-finding risk.
-- Ambiguous `fresh review` or `fresh context`: ask whether the user wants continuation/delta review or independent cross-validation before writing the handoff.
-- If prior Review Signal was low and the user still asks for another review handoff, write it if requested, but label it optional/low ROI.
+## Build the handoff
 
-Review-Continuation Handoffs include:
+1. Read the owning Plan, docs, Review Ledger, current diff, or source only as needed for this task.
+2. State the exact task, current state, scope, constraints, completion conditions, and verification.
+3. Link only authoritative files the next worker actually needs. Do not copy whole Plans/docs or generate a replacement Plan.
+4. Include volatile implementation notes only when they are not discoverable and materially reduce rework.
+5. Keep adjacent ideas out of scope or in the owning Plan's follow-ups.
 
-- prior findings and patch notes
-- accepted, rejected, and deferred items
-- Review Signal, scope, round, and intended next review mode
-- next focus and remaining risk surface
-- do-not-relitigate items
-- optional/low-ROI label when prior Review Signal was low
-- Target-State Doc sync status, current-Plan Doc Delta status, and referenced draft-doc status when Plan-backed
+Create a file only when the user asks for one or the authorized workflow clearly needs a stored artifact. Use the repository's established handoff location when present; otherwise ask or return copyable text.
 
-## Durability
+## Review handoffs
 
-- `Immediate Handoff`: same-day/current-codebase continuation. Concrete files and current state are fine.
-- `Durable Handoff`: later/unknown agent, or reusable prompt for repeated work across models/tools. Prefer behavior, acceptance criteria, and scope boundaries over brittle paths.
+- For a continuation/delta round, carry accepted findings, patch notes, changed surface, settled items, Review Signal, unresolved risks, and intended next scope.
+- For explicit independent cross-validation, say that overlap is possible and avoid anchoring the reviewer to desired findings.
+- If `fresh review` could materially mean continuation or independent cross-validation, consolidate that choice with any other owner questions rather than silently choosing.
+- If prior Review Signal was Low, note the likely low return without refusing an explicitly requested round.
 
-Default to Immediate unless the user asks for durable or the handoff is written to a file.
+## Owning artifact updates
 
-File handoffs default to Durable.
+Do not add bookkeeping just because a handoff exists. Update a Plan only when verified Task state, required work, or follow-ups changed. Add a sparse pointer to a handoff file only when it prevents the artifact from being lost.
 
-## Plan Updates
-
-Do not add "handoff prepared" notes for ordinary chat handoffs.
-
-Update the Plan only when tracked work changes:
-
-- after partial implementation, check completed tasks/criteria already verified
-- add required discovered tasks under the current phase
-- add useful but non-required bugfix/refactor/review work to `Discovered Follow-Ups`
-- for file handoffs, add a sparse pointer only if needed to avoid losing the file
-
-## Quality Bar
-
-- Include a `Read First` list with the Plan, related Docs, and key files.
-- Do not repeat Docs/Plans except for facts that are extremely important or easy to miss.
-- Include constraints, verification, and completion criteria.
-- Be explicit about what is out of scope.
+Use [handoff-template.md](references/handoff-template.md), omit unused sections, and keep the result self-contained and concise.

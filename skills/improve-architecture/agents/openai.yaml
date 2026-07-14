@@ -1,4 +1,4 @@
 interface:
   display_name: "Improve Architecture"
-  short_description: "Find and shape architecture deepening opportunities."
+  short_description: "Discover and shape evidence-backed architecture improvements."
   default_prompt: "Find architecture improvement opportunities."

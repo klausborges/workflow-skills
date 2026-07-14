@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan Work"
-  short_description: "Research, grill, document, and plan substantial work."
+  short_description: "Shape uncertain or substantial work into an executable direction."
   default_prompt: "Plan this work before implementation."

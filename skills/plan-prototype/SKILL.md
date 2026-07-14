@@ -1,44 +1,26 @@
 ---
 name: plan-prototype
-description: Build or plan a throwaway prototype to answer a planning question. Use when the user wants mockups, UI variants, diagrams, option canvases, interaction flows, logic/state/data/API prototypes, or to try a design before committing to implementation.
+description: Build the smallest throwaway visual or logic prototype needed to answer a planning question before production implementation.
 ---
 
 # Plan Prototype
 
-Use throwaway prototypes to answer one planning question before committing to implementation.
+Answer one planning question with the smallest disposable experiment.
 
-Use workflow terms from [workflow-language.md](references/workflow-language.md).
+Use [workflow-language.md](references/workflow-language.md) when the result feeds a Plan or durable doc.
 
-Prototype output should be deleted or absorbed once it has answered the question.
+## Scope
 
-## Pick The Mode
+- State the question and the evidence that would answer it.
+- Choose a visual prototype for UI, diagrams, flows, or option canvases; choose a logic prototype for state, data, API, or business-rule questions.
+- Ask about mode only when the question does not make it clear.
+- Compare multiple variants only when comparison is the question. Do not add a switcher, persistence, polish, abstractions, or tests unless they materially improve the answer.
+- Prefer existing project tooling and in-memory state. Mark prototype code as throwaway.
 
-- Visual prototype/mockup: UI variants, diagrams, option canvases, interaction flows.
-- Logic prototype: state/data/API model exploration, often as a tiny interactive terminal app.
+Put a visual prototype in the real page/flow only when real density, navigation, or data is necessary to answer the question. Keep logic behind a small interface only when portability is itself useful to the experiment.
 
-Ask if the mode is unclear.
+## Closeout
 
-## Rules
+Report the answer, supporting observations, uncertainty, and recommended design consequence. Record it in an existing Plan, doc, or ADR only when that owning artifact exists and the conclusion belongs there; chat may be sufficient.
 
-- State the question the prototype answers.
-- Mark prototype code clearly as throwaway.
-- Prefer existing project tooling.
-- Do not add polish, persistence, or tests unless the question requires it.
-- Surface state/variants clearly so the user can inspect behavior.
-- Capture the answer in the Plan, Target-State Doc, ADR, or implementation before deleting or absorbing the prototype.
-
-## Visual Prototype
-
-Prefer several structurally different variants, not color/copy tweaks.
-
-When possible, put variants inside an existing page/flow so they run against real density, data, navigation, and constraints.
-
-Use a simple switcher or URL parameter so variants are easy to compare and share.
-
-## Logic Prototype
-
-Use for state machines, data models, API shape, and business logic that needs to be felt through examples.
-
-Keep the core logic behind a small portable interface. The TUI/shell is throwaway; the validated logic shape may inform real code later.
-
-Prefer in-memory state. Avoid real persistence unless persistence is the question.
+Delete or absorb only prototype artifacts created by this task after their disposition is clear. Preserve preexisting prototypes and unrelated drafts. Do not turn a useful experiment into production implementation without explicit authorization.

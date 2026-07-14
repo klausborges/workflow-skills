@@ -1,7 +1,9 @@
-# Plans
+# Planning artifacts
 
-This directory contains active Plans that are temporarily committed as a public roadmap and examples of the workflow in use.
+This directory contains the repo's ephemeral public Roadmap and active Plans. They are committed for coordination and as examples, not as permanent target-state documentation.
 
-Plans are ephemeral work artifacts, not permanent target-state docs. Keeping them in git is useful for this repo's public roadmap, but it also risks stale context. Keep durable behavior in `docs/`, keep canonical terms in `GLOSSARY.md`, and delete completed Plans promptly.
+See [`roadmap.md`](./roadmap.md) for progress and prioritization. Each linked Plan remains authoritative for its own milestones, phases, tasks, acceptance criteria, and research.
+
+Keep durable behavior in `docs/` and canonical terms in `GLOSSARY.md`. At Roadmap closeout, ask once whether to delete the Roadmap and completed Plans; never delete them automatically.
 
 Use `plans/.local/` for private scratch Plans that should not be published.
