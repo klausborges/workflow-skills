@@ -51,7 +51,7 @@ Ordering: Loose | Strict | Mixed
 
 ## Candidates
 
-- One-line idea not yet shaped into a Plan.
+- One-line idea; promote it to a Plan only when its implementation outcome and blocking questions can be stated.
 
 ## Cross-plan constraints
 

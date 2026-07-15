@@ -18,13 +18,14 @@ This skill is a guide, not a router. Give the relevant skill, an exact next prom
 ## Recipes
 
 - Uncertain or high-risk work, or an explicit planning request -> `plan-work`. Planning can stay in chat when requested; otherwise a saved ephemeral Plan is the default.
-- Approved Plan -> `implement-plan`. Expect scoped implementation, evidence, Plan/doc updates, and independent fresh-context review of every completed Phase.
-- Clear bounded implementation -> implement directly; it still gets a fresh-context review before delivery.
+- Already-decided work from a Plan, handoff, findings, direct brief, docs task, fix, or refactor -> `implement-work`. Plan tracking applies only when a Plan governs the work; verification and independent fresh-context review always apply.
+- Tiny clear implementation -> work directly; it still gets a fresh-context review before delivery.
 - Code orientation -> `explain-codebase`.
 - Root-cause investigation -> `diagnose-issue`; fixes require explicit authorization.
 - Plan, implementation, continuation, or artifact review -> `review-work`; review is read-only unless fixes are separately requested.
 - Continuation prompt or file -> `write-handoff`; file/chat storage is separate from Immediate/Durable lifecycle.
 - Architecture opportunity discovery -> `improve-architecture`; concrete change review belongs to `review-work`.
+- Bounded behavior-preserving simplification -> `simplify-work`.
 - Disposable design experiment -> `plan-prototype`.
 - Unsure but substantial -> `use-workflow`.
 

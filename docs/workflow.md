@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repo provides portable skills for explanation, diagnosis, planning, implementation, handoff, review, architecture discovery, and disposable planning prototypes. The workflow should add only the process justified by the task's ambiguity, risk, and coordination needs.
+This repo provides portable skills for explanation, diagnosis, planning, implementation, simplification, handoff, review, architecture discovery, and disposable planning prototypes. The workflow should add only the process justified by the task's ambiguity, risk, and coordination needs.
 
 Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills carry only the focused shared references they need.
 
@@ -13,19 +13,22 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 - `explain-codebase` maps code and stays read-only.
 - `diagnose-issue` finds causes with evidence and stays read-only unless the user explicitly authorizes a fix.
 - `plan-work` runs when explicitly requested or when material ambiguity, coordination, cross-cutting scope, irreversibility, or risk warrants it. Planning may remain in chat; otherwise a saved ephemeral Plan is the default.
-- `implement-plan` executes selected Phases with risk-matched verification, Plan/doc updates, Plan-defined review checkpoints, and mandatory fresh-context end-of-Phase review.
+- `implement-work` executes already-decided work from a Plan, handoff, findings, direct brief, docs task, fix, or refactor. Plan mechanics are conditional; risk-matched verification and fresh-context review are not.
 - `write-handoff` creates bounded continuation prompts or files. Immediate/Durable lifecycle is independent of chat/file storage.
 - `review-work` reviews Plans, implementation, continuation rounds, or other scoped artifacts without mutating them unless fixes are separately authorized.
-- `improve-architecture` discovers opportunities or resolves unclear interface choices. Concrete change review belongs to `review-work`; already-decided refactors may be implemented directly.
+- `improve-architecture` discovers opportunities or resolves unclear interface choices. Concrete change review belongs to `review-work`; already-decided changes route to implementation or simplification.
+- `simplify-work` executes a bounded behavior-preserving simplification without default repo scans, Plans, interviews, or reports.
 - `plan-prototype` builds the smallest disposable experiment needed to answer one planning question.
 
 ## Cost and authority
 
 - Match questions, research, tools, delegation, artifacts, and verification to actual uncertainty and risk.
+- Repo-local instructions govern generic defaults. Surface material conflicts with the current request with a recommendation rather than silently choosing.
+- Unless the user or repo declares stable compatibility, code and APIs are evergreen: deep or breaking design improvement does not lower correctness, and durable data still requires explicit verified migration.
 - Consolidate owner decisions and include recommendations. Do not interview for facts the repo can answer.
 - Research only consequential gaps, starting with local and first-party evidence.
 - Do not require a Plan, Roadmap, durable doc, handoff file, subagent pass, worktree, commit, or PR merely because a task is multi-step.
-- Every implementation Phase ends with an independent fresh-context review of the whole Phase. Direct unplanned implementation is one Phase-equivalent scope and gets the same review before delivery.
+- Every implementation Phase ends with an independent fresh-context review of the whole Phase. Direct unplanned implementation and bounded simplification are Phase-equivalent scopes and get the same review before delivery.
 - Plans place extra review checkpoints after high-impact Tasks or Task groups; low-impact Tasks can wait for the Phase review.
 - The parent verifies delegated review claims against primary evidence. Reviews are not recursively reviewed.
 
@@ -33,7 +36,7 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 
 The hierarchy is `Roadmap > Plan > optional Milestone > Phase > Task`. “Slice” is not a hierarchy term; a vertical slice is only a testing or implementation technique.
 
-A Roadmap is an optional thin progress/prioritization view over Plan links. Projects may have a main `plans/roadmap.md`, multiple `plans/<scope>-roadmap.md` files, or no Roadmap. A Plan may appear in more than one Roadmap and remains authoritative. Roadmaps do not repeat Plan milestones, phases, tasks, acceptance criteria, or research.
+A Roadmap is an optional thin progress/prioritization view over Plan links. Projects may have a main `plans/roadmap.md`, multiple `plans/<scope>-roadmap.md` files, or no Roadmap. The canonical Glossary defines `Loose`, `Strict`, and `Mixed` eligibility semantics. A Plan may appear in more than one Roadmap and remains authoritative. Roadmaps do not repeat Plan milestones, phases, tasks, acceptance criteria, or research.
 
 Plans and Roadmaps are ephemeral even when committed or retained temporarily. A completed standalone Plan may be offered for deletion once after final review and doc sync. An active Roadmap gates cleanup of linked Plans; ask once when the Roadmap closes. Never delete automatically. Replace a deleted Plan link with a checked plain-text one-line outcome.
 
@@ -53,6 +56,7 @@ Canonical references live under `skills/_shared/`:
 - `phase-review-template.md`: compact end-of-Phase review record
 - `research-ladder.md`: conditional source preference
 - `architecture-language.md`: optional architecture heuristics
+- `engineering-discipline.md`: proportionate implementation and simplification heuristics
 
 Each skill's `skill.toml` declares what it packages:
 
@@ -81,8 +85,9 @@ To change references:
 - Diagnosis does not fix by default.
 - Planning does not auto-start implementation.
 - Implementation changes only the authorized scope and preserves unrelated dirty work.
+- Simplification preserves intended behavior and does not use line count or repo-wide scanning as a default objective.
 - Handoffs do not replace Plans or duplicate durable docs.
-- Architecture discovery does not force a refactor Plan or handoff.
+- Architecture discovery does not force a refactor Plan or handoff; decided behavior-preserving changes belong to `simplify-work`.
 - Prototypes do not become production work without explicit authorization.
 - Cleanup is limited to artifacts created by the current task whose disposition is clear; preexisting drafts and prototypes are preserved.
 

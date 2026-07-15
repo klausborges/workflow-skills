@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Work"
+  short_description: "Implement bounded work with evidence and fresh-context review."
+  default_prompt: "Implement this bounded work."

@@ -12,7 +12,8 @@ Map the requested code area without changing it.
 1. Read repo instructions and relevant current docs, Glossary, or ADRs.
 2. Infer the smallest useful scope when the user did not name one.
 3. Inspect entry points, key modules, callers, tests, and important data/control flow.
-4. Explain ownership and flow at the user's level; separate verified facts from unknowns.
+4. Read relevant ADRs before using history. Inspect targeted history only when the user asks or current evidence cannot explain a consequential design choice.
+5. Explain ownership and flow at the user's level; distinguish verified evidence, inference, and unknowns.
 
 Prefer a compact shape:
 

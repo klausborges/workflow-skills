@@ -11,21 +11,25 @@ Use [workflow-language.md](references/workflow-language.md), [review-language.md
 
 ## Establish scope
 
-Identify the primary target, comparison point, boundary, and requested intensity before judging findings. Ask only when the boundary cannot be discovered safely.
+Identify the primary target, comparison point, boundary, and requested intensity before judging findings. For branch or diff review, resolve the comparison point and confirm the target scope is non-empty before expensive analysis. Ask only when the boundary cannot be discovered safely.
 
 - **Plan Review Mode**: determine whether a Plan is coherent, executable, scoped, and verifiable. Check dependencies, Task-to-acceptance coverage, prerequisites, locked-decision contradictions, cross-Plan ownership, review placement, verification, and doc lifecycle. Do not demand implementation evidence, prose polish, exhaustive edge cases, or architecture redesign unless the Plan cannot execute safely.
 - **Implementation Review Mode**: start from the concrete code, tests, docs, diff, or delivered artifact. Use relevant Plans and current docs as reference truth, not as the primary artifact.
 - **Continuation Review**: focus on accepted fixes, patch notes, changed surface, unresolved risk, and settled items that should not be relitigated.
-- **Independent review**: use for explicit cross-validation or the mandatory fresh-context implementation review. It may overlap prior findings because independence is intentional.
+- **Independent review**: use for explicit cross-validation or the mandatory fresh-context implementation review. Inspect primary evidence before prior findings or author conclusions when practical; reconcile them afterward. It may overlap prior findings because independence is intentional.
 - **Ad hoc review**: adapt the same evidence-led method to the file set, feature, branch, commit, or non-code artifact the user named.
 
 ## Review method
 
 1. Read repo instructions and authoritative artifacts.
-2. Inspect the actual target and its callers, tests, docs, or runtime behavior as risk warrants.
+2. Inspect the actual target and its callers, tests, docs, or runtime behavior as risk warrants. When changes touch environment variables, secrets, ports, scripts, or setup commands, trace the affected developer run/build path as a caller-visible contract.
 3. Verify assumptions with code, diffs, schemas, commands, first-party docs, or focused runtime checks.
 4. Look for correctness failures, missing requirements, unsafe lifecycle behavior, doc drift, test gaps, security/data-loss risk, and material maintainability issues.
 5. Reconcile duplicate or conflicting evidence before reporting.
+
+For a fresh implementation review, include a calibrated structural-simplification pass: check for avoidable concepts, branches, mutable state, indirection, or a materially simpler design. Report only concrete, proportionate improvements; this is not a separate reviewer, fixed size threshold, or presumptive blocker.
+
+Use blast radius as an optional lens when a change crosses shared contracts, persistence, security, concurrency, deployment, or a widely used interface. When used, trace affected callers and consumers in proportion to risk, identify the one or two invariants the change's safety depends on, and prove them through the cheapest stable real surface. Report anything short of proof as residual risk; do not perform a repo-wide impact scan by default.
 
 Default to balanced review. Add adversarial depth, multiple lenses, subagents, research, or extra rounds only when the user asks or risk and uncertainty materially justify the cost. Infer useful lenses without asking unless the choice materially changes scope, latency, or expense.
 

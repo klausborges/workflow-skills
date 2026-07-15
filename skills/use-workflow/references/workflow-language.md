@@ -9,6 +9,8 @@ Use this compact hierarchy consistently:
 - **Task**: concrete work inside a Phase.
 - **Review checkpoint**: Plan-defined review after high-impact Tasks or Task groups, in addition to the end-of-Phase review.
 
+`Loose` Roadmap order is advisory. `Strict` makes the earliest incomplete Plan the only eligible Plan, with no override; reorder or restructure the Roadmap before proceeding otherwise. `Mixed` enforces named cross-Plan blockers while other unblocked Plans remain independently eligible. Ordering selects Plans, not Phases, and never authorizes work. Dependencies that must hold across Roadmaps belong in named cross-Plan constraints, not local list order.
+
 Do not use **slice** as a hierarchy term. A vertical slice is only an implementation or testing technique.
 
 Other artifacts:
