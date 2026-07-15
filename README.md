@@ -135,18 +135,18 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        2,099 |              2,916 |             14,948 |
-| implementation       |        1,909 |              2,092 |             10,152 |
-| review               |        2,655 |              1,052 |              3,210 |
-| diagnosis            |          713 |              1,947 |             14,015 |
-| architecture         |        1,066 |              3,832 |             13,186 |
-| simplification       |          801 |                n/a |                n/a |
-| prototype            |          677 |              3,525 |             13,186 |
+| planning             |        2,286 |              2,916 |             14,948 |
+| implementation       |        2,276 |              2,092 |             10,152 |
+| review               |        2,879 |              1,052 |              3,210 |
+| diagnosis            |          750 |              1,947 |             14,015 |
+| architecture         |        1,376 |              3,832 |             13,186 |
+| simplification       |        1,077 |                n/a |                n/a |
+| prototype            |          766 |              3,525 |             13,186 |
 | codebase explanation |          257 |                 89 |                n/a |
-| handoff              |        1,324 |                160 |                n/a |
-| workflow routing     |        1,004 |              3,281 |              3,106 |
-| workflow explanation |          804 |                n/a |              3,106 |
-| total                |       13,309 |             22,894 |             88,909 |
+| handoff              |        1,413 |                160 |                n/a |
+| workflow routing     |        1,109 |              3,281 |              3,106 |
+| workflow explanation |          893 |                n/a |              3,106 |
+| total                |       15,082 |             22,894 |             88,909 |
 
 ## credits
 

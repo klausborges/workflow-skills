@@ -6,6 +6,8 @@ This glossary is the canonical vocabulary for the workflow skills.
 
 **Roadmap**: An ephemeral progress and prioritization view over thin links to Plans. A project may have a main Roadmap and any number of scoped Roadmaps. Ordering is `Loose`, `Strict`, or `Mixed`.
 
+`Loose` order is advisory. `Strict` makes the earliest incomplete Plan the only eligible Plan, with no override; reorder or restructure the Roadmap before proceeding otherwise. `Mixed` enforces named cross-Plan blockers while other unblocked Plans remain independently eligible. Ordering selects Plans, not Phases, and never authorizes work. Dependencies that must hold across Roadmaps belong in named cross-Plan constraints, not local list order.
+
 **Plan**: An ephemeral implementation artifact for one outcome. A Plan owns its milestones, phases, tasks, acceptance criteria, verification strategy, and Doc Delta. It may appear in more than one Roadmap and remains authoritative there.
 
 **Milestone**: An optional grouping of related Phases inside a Plan. Use it only when it improves navigation or marks a meaningful integration boundary.

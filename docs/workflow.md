@@ -23,6 +23,8 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 ## Cost and authority
 
 - Match questions, research, tools, delegation, artifacts, and verification to actual uncertainty and risk.
+- Repo-local instructions govern generic defaults. Surface material conflicts with the current request with a recommendation rather than silently choosing.
+- Unless the user or repo declares stable compatibility, code and APIs are evergreen: deep or breaking design improvement does not lower correctness, and durable data still requires explicit verified migration.
 - Consolidate owner decisions and include recommendations. Do not interview for facts the repo can answer.
 - Research only consequential gaps, starting with local and first-party evidence.
 - Do not require a Plan, Roadmap, durable doc, handoff file, subagent pass, worktree, commit, or PR merely because a task is multi-step.
@@ -34,7 +36,7 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 
 The hierarchy is `Roadmap > Plan > optional Milestone > Phase > Task`. “Slice” is not a hierarchy term; a vertical slice is only a testing or implementation technique.
 
-A Roadmap is an optional thin progress/prioritization view over Plan links. Projects may have a main `plans/roadmap.md`, multiple `plans/<scope>-roadmap.md` files, or no Roadmap. A Plan may appear in more than one Roadmap and remains authoritative. Roadmaps do not repeat Plan milestones, phases, tasks, acceptance criteria, or research.
+A Roadmap is an optional thin progress/prioritization view over Plan links. Projects may have a main `plans/roadmap.md`, multiple `plans/<scope>-roadmap.md` files, or no Roadmap. The canonical Glossary defines `Loose`, `Strict`, and `Mixed` eligibility semantics. A Plan may appear in more than one Roadmap and remains authoritative. Roadmaps do not repeat Plan milestones, phases, tasks, acceptance criteria, or research.
 
 Plans and Roadmaps are ephemeral even when committed or retained temporarily. A completed standalone Plan may be offered for deletion once after final review and doc sync. An active Roadmap gates cleanup of linked Plans; ask once when the Roadmap closes. Never delete automatically. Replace a deleted Plan link with a checked plain-text one-line outcome.
 

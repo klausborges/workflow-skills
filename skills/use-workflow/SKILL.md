@@ -5,7 +5,7 @@ description: Lightweight workflow router. Use for substantial planning, implemen
 
 # Use Workflow
 
-Route work to the smallest fitting workflow. Honor repo-local instructions and explicit user requests. Do not turn a clear low-risk task into a project.
+Route work to the smallest fitting workflow. Honor repo-local instructions and explicit user requests. When they materially conflict, surface the conflict with a recommendation rather than silently choosing. Do not turn a clear low-risk task into a project.
 
 Use the repo Glossary when present; otherwise use [workflow-language.md](references/workflow-language.md).
 

@@ -12,10 +12,10 @@ Use [research-ladder.md](references/research-ladder.md) when external docs or to
 ## Process
 
 1. Build the fastest useful feedback loop: focused test, build, CLI call, request, browser check, trace replay, benchmark, or small disposable harness.
-2. Reproduce the reported symptom when feasible and capture the exact failure. If reproduction is unavailable, distinguish conclusions from hypotheses and request only the missing evidence that matters.
+2. Reproduce the reported symptom when feasible and capture the exact failure. For flaky behavior, record a baseline reproduction rate and raise it enough to compare changes. If reproduction is unavailable, distinguish conclusions from hypotheses and request only the missing evidence that matters.
 3. Read full errors, logs, stack traces, recent diffs, dependency/config changes, environment differences, callers, and nearby working examples as relevant.
 4. Keep ranked falsifiable hypotheses only while uncertainty remains. When direct evidence explains the cause, proceed to verification instead of manufacturing alternatives.
-5. Instrument the boundary that separates plausible causes. Change one variable at a time, trace bad values to their source, measure performance, and wait on real async conditions rather than arbitrary sleeps.
+5. Instrument the boundary that separates plausible causes. Minimize a reproducible symptom by removing inputs, steps, config, or callers one at a time until only load-bearing elements remain. Trace bad values to their source, measure performance, and wait on real async conditions rather than arbitrary sleeps.
 6. State the most supported cause and the evidence that rules in or out meaningful alternatives.
 
 ## When fixes are authorized
