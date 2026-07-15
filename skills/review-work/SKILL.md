@@ -27,6 +27,10 @@ Identify the primary target, comparison point, boundary, and requested intensity
 4. Look for correctness failures, missing requirements, unsafe lifecycle behavior, doc drift, test gaps, security/data-loss risk, and material maintainability issues.
 5. Reconcile duplicate or conflicting evidence before reporting.
 
+For a fresh implementation review, include a calibrated structural-simplification pass: check for avoidable concepts, branches, mutable state, indirection, or a materially simpler design. Report only concrete, proportionate improvements; this is not a separate reviewer, fixed size threshold, or presumptive blocker.
+
+Use blast radius as an optional lens when a change crosses shared contracts, persistence, security, concurrency, deployment, or a widely used interface. Trace affected callers and consumers in proportion to risk; do not perform a repo-wide impact scan by default.
+
 Default to balanced review. Add adversarial depth, multiple lenses, subagents, research, or extra rounds only when the user asks or risk and uncertainty materially justify the cost. Infer useful lenses without asking unless the choice materially changes scope, latency, or expense.
 
 Subagent reports are leads. The main reviewer verifies each substantive accepted claim against primary evidence. Do not recursively commission reviews of the review.

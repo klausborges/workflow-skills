@@ -12,6 +12,10 @@ Use these terms only when they clarify a real design decision.
 
 Heuristics, not laws:
 
+- Start from caller-visible usage and sketch only the call, component, data, or control flow needed to expose the decision.
+- Minimize reader load: reduce the layers a change must trace and the hidden or mutable state it must remember.
+- Prefer separate ownership before coordinating shared state; serialize only around a real shared invariant.
+- Parse untrusted input at the boundary into valid internal data, preserving raw input only for a named need.
 - A public or intentionally stable interface is the primary behavioral test surface; test internals only when they carry distinct risk.
 - Use the deletion test: if removing a module merely spreads its complexity across callers, it was earning its keep.
 - One adapter may still justify a seam for volatility, ownership, or testing isolation. Ask what variation or boundary the seam protects.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simplify Work"
+  short_description: "Simplify a bounded area without changing intended behavior."
+  default_prompt: "Simplify this bounded work."

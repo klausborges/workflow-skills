@@ -1,6 +1,6 @@
 # workflow skills
 
-personal agent workflow skills for codebase explanation, diagnosis, planning, implementation, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
+personal agent workflow skills for codebase explanation, diagnosis, planning, implementation, simplification, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
 
 inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and built to work with [vercel labs skills](https://github.com/vercel-labs/skills).
 
@@ -15,11 +15,13 @@ if the agent does not pick it up, be explicit: `use explain-workflow to show me 
 then try a concrete prompt:
 
 - `use plan-work to plan this feature`
+- `use implement-work to implement this handoff`
 - `explain how this code path works`
 - `diagnose this failing test`
 - `use review-work to review this change`
 - `use write-handoff to prepare a handoff`
 - `use improve-architecture to find deepening opportunities`
+- `use simplify-work to simplify this module without changing behavior`
 
 ## skills
 
@@ -30,10 +32,11 @@ then try a concrete prompt:
 | [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find evidence-backed causes; apply fixes only when explicitly authorized.               |
 | [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route work to the smallest fitting workflow.                                            |
 | [`plan-work`](./skills/plan-work/SKILL.md)                       | shape uncertain or substantial work, with an optional saved Plan.                       |
-| [`implement-plan`](./skills/implement-plan/SKILL.md)             | implement Plan Phases with evidence, updates, and fresh-context review.                 |
+| [`implement-work`](./skills/implement-work/SKILL.md)             | implement bounded work from Plans or other inputs with evidence and fresh review.       |
 | [`write-handoff`](./skills/write-handoff/SKILL.md)               | write concise fresh-context handoffs with lifecycle separate from storage.              |
 | [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of Plans, changes, continuation rounds, or other scoped artifacts.     |
 | [`improve-architecture`](./skills/improve-architecture/SKILL.md) | discover evidence-backed architecture improvements without forcing a refactor workflow. |
+| [`simplify-work`](./skills/simplify-work/SKILL.md)               | simplify a bounded area while preserving intended behavior.                             |
 | [`plan-prototype`](./skills/plan-prototype/SKILL.md)             | answer one planning question with a minimal throwaway visual or logic prototype.        |
 
 target-state docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
@@ -132,21 +135,22 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        1,958 |              2,916 |             14,948 |
-| implementation       |        1,728 |              2,092 |             10,152 |
-| review               |        2,460 |              1,052 |              3,210 |
-| diagnosis            |          699 |              1,947 |             14,015 |
-| architecture         |          670 |              3,832 |             13,186 |
+| planning             |        2,099 |              2,916 |             14,948 |
+| implementation       |        1,909 |              2,092 |             10,152 |
+| review               |        2,655 |              1,052 |              3,210 |
+| diagnosis            |          713 |              1,947 |             14,015 |
+| architecture         |        1,066 |              3,832 |             13,186 |
+| simplification       |          801 |                n/a |                n/a |
 | prototype            |          677 |              3,525 |             13,186 |
-| codebase explanation |          226 |                 89 |                n/a |
+| codebase explanation |          257 |                 89 |                n/a |
 | handoff              |        1,324 |                160 |                n/a |
-| workflow routing     |          951 |              3,281 |              3,106 |
-| workflow explanation |          768 |                n/a |              3,106 |
-| total                |       11,461 |             22,894 |             88,909 |
+| workflow routing     |        1,004 |              3,281 |              3,106 |
+| workflow explanation |          804 |                n/a |              3,106 |
+| total                |       13,309 |             22,894 |             88,909 |
 
 ## credits
 
-this repo borrows selectively from [matt pocock's skills](https://github.com/mattpocock/skills) and [superpowers](https://github.com/obra/superpowers). matt's repo is a useful model for small focused skills, while superpowers is the heavier workflow loop this trims down. [vercel labs skills](https://github.com/vercel-labs/skills) shaped the packaging target through the skills CLI.
+this repo borrows selectively from [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), [cursor's pstack and thermos plugins](https://github.com/cursor/plugins), and [dmmulroy's skills](https://github.com/dmmulroy/skills). their implementation, simplification, domain-modeling, and review ideas are adapted here as concise heuristics rather than imported workflows. [vercel labs skills](https://github.com/vercel-labs/skills) shaped the packaging target through the skills CLI.
 
 ## license
 

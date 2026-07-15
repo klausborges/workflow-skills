@@ -28,7 +28,7 @@ Use [research-ladder.md](references/research-ladder.md) when external docs or to
 - Before delivery, send the entire fix—not only its latest patch—to an independent fresh-context reviewer through `review-work`. Verify accepted claims, address authorized blocking findings, and rerun affected checks.
 - Remove only temporary instrumentation and scratch artifacts created by this task. Preserve preexisting drafts, fixtures, and unrelated work.
 
-If the correct fix lacks a safe test or architecture seam, report that constraint and route broader design work to `improve-architecture` or `plan-work` rather than hiding it in the bugfix.
+If the correct fix lacks a safe test or architecture seam, report that constraint and route unresolved design to `improve-architecture` or `plan-work`. Route an already-understood behavior-preserving cleanup to `simplify-work` rather than hiding it in the bugfix.
 
 ## Output
 

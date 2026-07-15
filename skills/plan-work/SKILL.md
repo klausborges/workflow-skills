@@ -26,6 +26,10 @@ Do not start implementation.
 5. Produce the requested planning result. For a saved Plan, use `plans/<outcome>.md`; create a Roadmap only when multiple Plans benefit from prioritization or progress tracking.
 6. Check coherence, executability, scope, verification, and doc lifecycle before delivery.
 
+When domain terms, states, relationships, invariants, data flow, or access patterns are load-bearing or unclear, model them explicitly before shaping logic. Use the repo Glossary as authority and add a compact call-stack, component-tree, or data-flow sketch only when it resolves a design decision. Do not silently change canonical terms or docs; record future changes in the authorized draft or Phase-tagged Doc Delta and surface owner decisions.
+
+If the verification design would add module mocks or substantial new end-to-end infrastructure, make that an explicit owner decision and explain the coupling, maintenance, and execution cost. Repo conventions remain authoritative over specialized stack guidance.
+
 ## Artifact ownership
 
 - A Roadmap is a thin grouping of Plan links, candidates, and cross-Plan constraints. It may be main or scoped, and its ordering must be labeled `Loose`, `Strict`, or `Mixed`.
@@ -49,6 +53,7 @@ Keep only execution-bearing context. Verify that:
 - review checkpoints reflect risk rather than Task count;
 - every Doc Delta item has an explicit Phase;
 - unresolved decisions are visible rather than hidden in prose;
+- load-bearing domain and data-model decisions are explicit when applicable;
 - workflow files are not treated as permanent product documentation.
 
 Fix clear issues inline. Return the file path when a file was requested or created, plus a short summary and any owner decisions still needed.
