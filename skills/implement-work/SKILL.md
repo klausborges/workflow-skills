@@ -16,7 +16,7 @@ Use [engineering-discipline.md](references/engineering-discipline.md). For Plan-
 3. If a Plan governs the work, select the requested Phase(s), or the next unchecked Phase when asked to continue, and note its review checkpoints and Doc Delta.
 4. Ask only for real ambiguity, credentials, product judgment, risky authority, or an explicit human checkpoint. Otherwise proceed.
 
-Do not create a Plan, interview loop, handoff, worktree, commit, or PR unless the input or authorized workflow calls for it. Module mocks and substantial new end-to-end test infrastructure require owner approval because they add coupling, maintenance, and execution cost.
+Do not create a Plan, interview loop, handoff, worktree, commit, or PR unless the input or authorized workflow calls for it.
 
 ## Execute and verify
 
