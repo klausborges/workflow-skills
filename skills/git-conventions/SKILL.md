@@ -1,6 +1,6 @@
 ---
 name: git-conventions
-description: Shared git conventions for personal repos covering remote naming, primary remote choice, conventional commit shape, and commit/PR writing style. Use when setting up or renaming remotes, choosing where to push or open PRs, or when another git skill points here.
+description: Shared git conventions for personal repos covering remote naming, primary remote choice, conventional commit shape, worktree placement, and commit/PR writing style. Use when setting up or renaming remotes, choosing where to push or open PRs, deciding where a worktree lives, or when another git skill points here.
 ---
 
 # Git Conventions
@@ -14,6 +14,10 @@ description: Shared git conventions for personal repos covering remote naming, p
 ## Commits and PR titles
 
 First line is `type(scope): description`, scope optional. Types: `feat`, `fix`, `docs`, `ci`, `build`, `chore`, `refactor`, `test`, `perf`, `revert`.
+
+## Worktrees
+
+Worktrees are optional. Manual ones live at `<repo>/.worktrees/<branch>` with slashes flattened to dashes, and the directory stays gitignored. Native harness worktree homes (for example Claude Code's `.claude/worktrees/`) are equally fine. Keep project folders free of bare worktree siblings.
 
 ## Writing style
 

@@ -43,7 +43,7 @@ On "let's get the PRs merged": map the stack bottom-up, record every branch's cu
 2. Rebase the next branch onto the fresh default using the recorded tips: `git rebase --onto <default> <old-base-tip> <branch>`. Then rebase each remaining branch onto its rewritten parent the same way: `git rebase --onto <parent> <old-parent-tip> <branch>`. Record the new tips.
 3. On conflict, stop and report; a half-resolved rebase never gets pushed.
 4. Confirm each branch's content survived: `git range-diff <old-base-tip>..<old-tip> <new-base>..<branch>` shows only the base change. Push with `--force-with-lease` only then.
-5. Retarget the next PR (`gh pr edit <next> --base <default>`), reply with its link, and wait for the next "merged #N". Resync this way even when the merge was not a squash. After the last PR, confirm the stack is complete and offer local branch cleanup.
+5. Retarget the next PR (`gh pr edit <next> --base <default>`), reply with its link, and wait for the next "merged #N". Resync this way even when the merge was not a squash. After the last PR, confirm the stack is complete and offer local cleanup (a branch checked out in a worktree needs `git worktree remove` first).
 
 ## Guardrails
 
