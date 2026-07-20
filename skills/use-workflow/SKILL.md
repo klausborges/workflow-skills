@@ -20,6 +20,8 @@ Use the repo Glossary when present; otherwise use [workflow-language.md](referen
 - Discover architecture improvement opportunities -> `improve-architecture`
 - Simplify an already-bounded area without changing intended behavior -> `simplify-work`
 - Answer a design question with a disposable mockup or logic prototype -> `plan-prototype`
+- Write a commit message or commit changes -> `commit-work` when installed
+- Open or update a PR, deliver stacked PRs, or run the stack merge loop -> `manage-pr` when installed
 
 A task being new, multi-step, or nontrivial is not by itself a reason to require planning. Clear low-risk work may remain direct; use `implement-work` when execution discipline or continuation context materially helps.
 
