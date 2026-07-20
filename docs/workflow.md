@@ -19,6 +19,7 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 - `improve-architecture` discovers opportunities or resolves unclear interface choices. Concrete change review belongs to `review-work`; already-decided changes route to implementation or simplification.
 - `simplify-work` executes a bounded behavior-preserving simplification without default repo scans, Plans, interviews, or reports.
 - `plan-prototype` builds the smallest disposable experiment needed to answer one planning question.
+- `coding-standards` is an optional front door to the shared engineering standards; canonical rules stay in the `engineering-discipline` reference, and stack-specific standards belong in sibling skills that link back to it.
 - `git-conventions`, `commit-work`, `manage-pr`, and `manage-worktrees` are optional git skills: shared remote/commit/worktree/style conventions, conventional commit messages, GitHub PR management including stacked PRs and the stack merge loop, and consistent worktree placement and cleanup. Installing them does not make commits, PRs, or worktrees required workflow artifacts.
 
 ## Cost and authority

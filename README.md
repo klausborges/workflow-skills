@@ -42,6 +42,7 @@ then try a concrete prompt:
 | [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages from local evidence; commits on request.                   |
 | [`manage-pr`](./skills/manage-pr/SKILL.md)                       | create/update GitHub PRs, stacked PRs, and the stack merge loop.                        |
 | [`manage-worktrees`](./skills/manage-worktrees/SKILL.md)         | create, reuse, and clean up git worktrees consistently.                                 |
+| [`coding-standards`](./skills/coding-standards/SKILL.md)         | front door to the shared engineering standards, with room for stack-specific siblings.  |
 
 target-state docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 
@@ -148,10 +149,11 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 | prototype            |          766 |              3,525 |             13,186 |
 | codebase explanation |          257 |                 89 |                n/a |
 | handoff              |        1,413 |                160 |                n/a |
-| workflow routing     |        1,109 |              3,281 |              3,106 |
+| workflow routing     |        1,197 |              3,281 |              3,106 |
 | git workflow         |        1,779 |                792 |              1,896 |
 | workflow explanation |          893 |                n/a |              3,106 |
-| total                |       16,861 |             23,686 |             90,805 |
+| coding standards     |          713 |                n/a |                n/a |
+| total                |       17,662 |             23,686 |             90,805 |
 
 ## credits
 
