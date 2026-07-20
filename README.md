@@ -38,6 +38,9 @@ then try a concrete prompt:
 | [`improve-architecture`](./skills/improve-architecture/SKILL.md) | discover evidence-backed architecture improvements without forcing a refactor workflow. |
 | [`simplify-work`](./skills/simplify-work/SKILL.md)               | simplify a bounded area while preserving intended behavior.                             |
 | [`plan-prototype`](./skills/plan-prototype/SKILL.md)             | answer one planning question with a minimal throwaway visual or logic prototype.        |
+| [`git-conventions`](./skills/git-conventions/SKILL.md)           | shared remote naming, primary remote choice, commit shape, and commit/PR style.         |
+| [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages from local evidence; commits on request.                   |
+| [`manage-pr`](./skills/manage-pr/SKILL.md)                       | create/update GitHub PRs, stacked PRs, and the stack merge loop.                        |
 
 target-state docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 
@@ -150,7 +153,7 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 ## credits
 
-this repo borrows selectively from [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), [cursor's pstack and thermos plugins](https://github.com/cursor/plugins), and [dmmulroy's skills](https://github.com/dmmulroy/skills). their implementation, simplification, domain-modeling, and review ideas are adapted here as concise heuristics rather than imported workflows. [vercel labs skills](https://github.com/vercel-labs/skills) shaped the packaging target through the skills CLI.
+this repo borrows selectively from [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), [cursor's pstack, thermos, and team-kit plugins](https://github.com/cursor/plugins), and [dmmulroy's skills](https://github.com/dmmulroy/skills). their implementation, simplification, domain-modeling, and review ideas are adapted here as concise heuristics rather than imported workflows. [vercel labs skills](https://github.com/vercel-labs/skills) shaped the packaging target through the skills CLI.
 
 ## license
 

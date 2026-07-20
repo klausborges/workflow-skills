@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage PR"
+  short_description: "Create/update GitHub PRs, stacked PRs, and the stack merge loop."
+  default_prompt: "Open a PR for this branch."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit Work"
+  short_description: "Conventional commit messages from local evidence; commits on request."
+  default_prompt: "Write a commit message for the staged changes."

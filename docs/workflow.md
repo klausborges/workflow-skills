@@ -19,6 +19,7 @@ Canonical vocabulary lives in [`GLOSSARY.md`](../GLOSSARY.md). Installed skills 
 - `improve-architecture` discovers opportunities or resolves unclear interface choices. Concrete change review belongs to `review-work`; already-decided changes route to implementation or simplification.
 - `simplify-work` executes a bounded behavior-preserving simplification without default repo scans, Plans, interviews, or reports.
 - `plan-prototype` builds the smallest disposable experiment needed to answer one planning question.
+- `git-conventions`, `commit-work`, and `manage-pr` are optional git skills: shared remote/commit/style conventions, conventional commit messages, and GitHub PR management including stacked PRs and the stack merge loop. Installing them does not make commits or PRs required workflow artifacts.
 
 ## Cost and authority
 
