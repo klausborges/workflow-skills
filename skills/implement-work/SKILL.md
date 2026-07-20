@@ -1,6 +1,6 @@
 ---
 name: implement-work
-description: Implement an already-decided bounded scope from a Plan, handoff, review findings, direct brief, docs task, fix, or refactor. Use for implementation or continuation work with risk-matched verification and mandatory fresh-context review; use diagnose-issue first when the cause is unknown.
+description: Implement an already-decided bounded scope from a Plan, handoff, review findings, direct brief, docs task, fix, or refactor. Use for implementation or continuation work; use diagnose-issue first when the cause is unknown.
 ---
 
 # Implement Work
@@ -32,8 +32,8 @@ Do not create a Plan, interview loop, handoff, worktree, commit, or PR unless th
 
 1. Self-check the entire authorized scope against its input, docs, tests, actual diff, and durable-artifact boundary.
 2. Run the relevant verification and read its output.
-3. Send the entire scope—not only the latest patch—to an independent fresh-context reviewer using `review-work`.
-4. Verify accepted reviewer claims against primary evidence. Fix authorized blocking findings and rerun the affected checks; repeat only the review coverage justified by the changed surface or residual risk.
+3. Send the entire scope, not only the latest patch, to an independent fresh-context reviewer through `review-work`; verify accepted claims against primary evidence, fix authorized blocking findings, and rerun affected checks.
+4. Repeat only the review coverage justified by the changed surface or residual risk.
 5. Update governing artifacts. For Plan-backed work, use [phase-review-template.md](references/phase-review-template.md), finish the selected Phase's Plan/doc updates, and only then mark it complete.
 
 Do not recursively review the review. Add Milestone-level integration review only when cross-Phase acceptance or risk warrants it. Leave Plan or Roadmap cleanup to final review.

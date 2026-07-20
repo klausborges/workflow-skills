@@ -25,7 +25,7 @@ Use [research-ladder.md](references/research-ladder.md) when external docs or to
 - If a public contract, migration, persistence, auth/security behavior, production state, or performance trade-off needs owner judgment, stop and recommend options before mutating it.
 - If repeated changes fail, stop stacking patches. Reassess the mental model, feedback loop, and architecture using the new evidence.
 - Re-run the original feedback loop and relevant regression checks; read the results before claiming success.
-- Before delivery, send the entire fix—not only its latest patch—to an independent fresh-context reviewer through `review-work`. Verify accepted claims, address authorized blocking findings, and rerun affected checks.
+- Before delivery, send the entire scope, not only the latest patch, to an independent fresh-context reviewer through `review-work`; verify accepted claims against primary evidence, fix authorized blocking findings, and rerun affected checks.
 - Remove only temporary instrumentation and scratch artifacts created by this task. Preserve preexisting drafts, fixtures, and unrelated work.
 
 If the correct fix lacks a safe test or architecture seam, report that constraint and route unresolved design to `improve-architecture` or `plan-work`. Route an already-understood behavior-preserving cleanup to `simplify-work` rather than hiding it in the bugfix.

@@ -140,20 +140,20 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        2,286 |              2,916 |             14,948 |
-| implementation       |        2,276 |              2,092 |             10,152 |
+| planning             |        2,270 |              2,916 |             14,948 |
+| implementation       |        2,267 |              2,092 |             10,152 |
 | review               |        2,879 |              1,052 |              3,210 |
-| diagnosis            |          750 |              1,947 |             14,015 |
+| diagnosis            |          755 |              1,947 |             14,015 |
 | architecture         |        1,376 |              3,832 |             13,186 |
-| simplification       |        1,077 |                n/a |                n/a |
+| simplification       |        1,088 |                n/a |                n/a |
 | prototype            |          766 |              3,525 |             13,186 |
 | codebase explanation |          257 |                 89 |                n/a |
-| handoff              |        1,413 |                160 |                n/a |
-| workflow routing     |        1,197 |              3,281 |              3,106 |
+| handoff              |        1,406 |                160 |                n/a |
+| workflow routing     |        1,175 |              3,281 |              3,106 |
 | git workflow         |        1,779 |                792 |              1,896 |
 | workflow explanation |          893 |                n/a |              3,106 |
 | coding standards     |          713 |                n/a |                n/a |
-| total                |       17,662 |             23,686 |             90,805 |
+| total                |       17,624 |             23,686 |             90,805 |
 
 ## credits
 

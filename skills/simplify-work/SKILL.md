@@ -31,4 +31,4 @@ For Plan-backed work, select the requested or next unchecked Phase, follow its c
 
 ## Close the scope
 
-Self-check behavior preservation and whether the result materially lowers reader load. Send the entire change to an independent fresh-context `review-work` reviewer, verify accepted claims, fix authorized blockers, and rerun affected checks. Report the simplification, behavior evidence, and residual risk concisely.
+Self-check behavior preservation and whether the result materially lowers reader load. Send the entire scope, not only the latest patch, to an independent fresh-context reviewer through `review-work`; verify accepted claims against primary evidence, fix authorized blocking findings, and rerun affected checks. Report the simplification, behavior evidence, and residual risk concisely.
