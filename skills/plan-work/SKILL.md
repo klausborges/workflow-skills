@@ -1,6 +1,6 @@
 ---
 name: plan-work
-description: Plan substantial work when explicitly requested or when material ambiguity, coordination, cross-cutting scope, irreversibility, or risk warrants planning. Produces focused decisions and, unless the user opts out, an ephemeral Plan.
+description: Plan substantial work when explicitly requested or when material ambiguity, coordination, cross-cutting scope, irreversibility, or risk warrants planning.
 ---
 
 # Plan Work

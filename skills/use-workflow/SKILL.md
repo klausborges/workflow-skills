@@ -25,7 +25,7 @@ Use the repo Glossary when present; otherwise use [workflow-language.md](referen
 - Set up an isolated worktree or clean up stale ones -> `manage-worktrees` when installed
 - Answer a coding-standards question or ground a structure/verification decision -> `coding-standards` when installed
 
-A task being new, multi-step, or nontrivial is not by itself a reason to require planning. Clear low-risk work may remain direct; use `implement-work` when execution discipline or continuation context materially helps.
+Clear low-risk work may remain direct; use `implement-work` when execution discipline or continuation context materially helps.
 
 Concrete architecture review belongs to `review-work`. Use `simplify-work` for an explicitly chosen behavior-preserving simplification, `implement-work` for other decided changes, and `improve-architecture` when the opportunity or interface shape still needs discovery.
 

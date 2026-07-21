@@ -1,6 +1,6 @@
 ---
 name: write-handoff
-description: Write a bounded fresh-context prompt or file for continuation, implementation, research, refactor, bugfix, review, or review-fix work. Choose lifecycle independently from storage format.
+description: Write a bounded fresh-context prompt or file for continuation, implementation, research, refactor, bugfix, review, or review-fix work.
 ---
 
 # Write Handoff
