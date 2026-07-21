@@ -16,7 +16,6 @@ Use [engineering-discipline.md](references/engineering-discipline.md). Accept a 
 - Do not scan the whole repo, create a Plan or handoff, run an interview, or produce HTML by default.
 - Do not use line count as the goal. Prefer fewer concepts, branches, layers, mutable states, and duplicated rules when that reduces reader load.
 - Preserve unrelated dirty work and preexisting drafts or prototypes. Clean only task-created artifacts whose disposition is clear.
-- Module mocks and substantial new end-to-end test infrastructure require owner approval because they add coupling, maintenance, and execution cost.
 - If the change requires new product behavior, changing a declared compatibility contract, or unresolved architecture placement, stop for owner judgment or route discovery to `improve-architecture`.
 
 ## Simplify
