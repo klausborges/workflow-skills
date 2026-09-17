@@ -44,6 +44,23 @@ install_mise() {
   rm -rf -- "$temp_dir"
 }
 
+configure_login_shell() {
+  local marker="# workflow-skills mise shims"
+
+  if grep -Fqx "$marker" "$HOME/.bash_profile" 2>/dev/null; then
+    echo "The workflow-skills login-shell hook is already configured."
+    return
+  fi
+
+  cat >> "$HOME/.bash_profile" <<EOF
+
+$marker
+if [[ "\${PWD}" == "$root" || "\${PWD}" == "$root/"* ]]; then
+  eval "\$("$mise_bin" activate bash --shims)"
+fi
+EOF
+}
+
 install_skills() {
   if [[ ! -f "$skilltree_root/skills/effect-v4/SKILL.md" ]]; then
     echo "The configured skilltree additional repository is missing at $skilltree_root." >&2
@@ -54,7 +71,13 @@ install_skills() {
   amp skill add --global --overwrite "$skilltree_root"
 }
 
+validate_environment() {
+  env -i HOME="$HOME" USER="${USER:-$(id -un)}" PATH=/usr/bin:/bin \
+    /bin/bash -lc 'cd -- "$1" && "$1/.agents/resume"' _ "$root"
+}
+
 run_step "Installing mise $mise_version" install_mise
+run_step "Configuring the repository login environment" configure_login_shell
 run_step "Trusting the repository tool configuration" \
   "$mise_bin" trust --yes "$root/mise.toml"
 run_step "Installing the pinned repository toolchain" "$mise_bin" install
@@ -62,6 +85,6 @@ run_step "Building wflow" \
   "$mise_bin" exec -- env -u RUSTC_WRAPPER cargo build --locked --bin wflow
 run_step "Generating workflow skill references" "$root/target/debug/wflow" refs sync
 run_step "Installing workflow and skilltree skills" install_skills
-run_step "Validating the installed orb environment" "$root/.agents/resume"
+run_step "Validating the installed orb environment" validate_environment
 
 echo "Orb setup complete."

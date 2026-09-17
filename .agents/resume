@@ -15,7 +15,19 @@ export PATH="$HOME/.local/bin:$PATH"
 [[ -x "$mise_bin" ]] || { echo "mise is missing; run .agents/setup." >&2; exit 1; }
 [[ -x "$root/target/debug/wflow" ]] || { echo "wflow is missing; run .agents/setup." >&2; exit 1; }
 
-"$mise_bin" exec -- rustc --version
+for tool in cargo rustc rustfmt cargo-clippy oxfmt prek; do
+  command -v "$tool" >/dev/null || {
+    echo "$tool is missing from PATH; run .agents/setup." >&2
+    exit 1
+  }
+done
+
+cargo --version
+rustc --version
+rustfmt --version
+cargo-clippy --version
+oxfmt --version
+prek --version
 "$root/target/debug/wflow" --version
 
 for skill in commit-work manage-pr use-workflow effect-v4; do
