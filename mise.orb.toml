@@ -1,0 +1,11 @@
+min_version = "2026.9.10"
+
+[bootstrap.mise_shell_activate]
+bash_profile = "shims"
+
+[tasks.bootstrap]
+description = "Build wflow and generate workflow skill references for an orb"
+run = [
+  "env -u RUSTC_WRAPPER cargo build --locked --bin wflow",
+  "./target/debug/wflow refs sync",
+]

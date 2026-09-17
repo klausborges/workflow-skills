@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd -- "$root"
+export GIT_TERMINAL_PROMPT=0
+export MISE_CEILING_PATHS="$(dirname -- "$root")"
+
+# shellcheck source=.agents/amp-kit/orbs/common.sh
+source "$root/.agents/amp-kit/orbs/common.sh"
+ensure_mise
+
+mise trust --yes "$root/mise.toml"
+mise trust --yes "$root/mise.orb.toml"
+mise -E orb bootstrap --yes
