@@ -112,6 +112,24 @@ npx skills add . --list
 mise run check
 ```
 
+format owned markdown:
+
+```bash
+mise run format
+```
+
+sync generated skill references:
+
+```bash
+mise run sync-references
+```
+
+install pre-commit hooks:
+
+```bash
+mise run prek:install
+```
+
 ## rust-analyzer
 
 The repository launcher keeps rust-analyzer's Cargo work inside the mise-managed
@@ -141,24 +159,6 @@ the launcher controls target selection. Keep `checkOnSave=true` for normal
 Cargo diagnostics, or set it to `false` when the client should not run checks
 on save. Do not set `check.overrideCommand`; rust-analyzer should construct its
 normal Cargo command.
-
-format owned markdown:
-
-```bash
-mise run format
-```
-
-sync generated skill references:
-
-```bash
-mise run sync-references
-```
-
-install pre-commit hooks:
-
-```bash
-mise run prek:install
-```
 
 ## reference comparison
 
