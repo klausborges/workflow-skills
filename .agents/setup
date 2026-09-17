@@ -3,40 +3,13 @@ set -euo pipefail
 
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd -- "$root"
-
 export GIT_TERMINAL_PROMPT=0
 export MISE_CEILING_PATHS="$(dirname -- "$root")"
-export MISE_YES=1
-export PATH="$HOME/.local/bin:$PATH"
 
-mise_bin="$(command -v mise || true)"
-if [[ -z "$mise_bin" ]]; then
-  mise_version="2026.9.10"
-  mise_bin="$HOME/.local/bin/mise"
-  install_script="$(mktemp)"
-  trap 'rm -f -- "$install_script"' EXIT
+# shellcheck source=.agents/amp-kit/orbs/common.sh
+source "$root/.agents/amp-kit/orbs/common.sh"
+ensure_mise
 
-  echo "==> Installing mise $mise_version"
-  curl --fail --location --retry 3 --silent --show-error \
-    "https://github.com/jdx/mise/releases/download/v$mise_version/install.sh" \
-    --output "$install_script"
-  printf '%s  %s\n' \
-    "9936b9658072ab94ff27f965a49166deafd783c74edb68636835d4ed4715f502" \
-    "$install_script" | sha256sum --check --status
-  mkdir -p -- "$(dirname -- "$mise_bin")"
-  MISE_VERSION="v$mise_version" MISE_INSTALL_PATH="$mise_bin" bash "$install_script"
-fi
-
-profile_path='export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"'
-grep -Fqx "$profile_path" "$HOME/.bash_profile" 2>/dev/null \
-  || printf '\n%s\n' "$profile_path" >> "$HOME/.bash_profile"
-
-echo "==> Installing the pinned repository toolchain"
-"$mise_bin" trust --yes "$root/mise.toml"
-"$mise_bin" install
-
-echo "==> Building wflow"
-"$mise_bin" exec -- env -u RUSTC_WRAPPER cargo build --locked --bin wflow
-
-echo "==> Generating workflow skill references"
-"$root/target/debug/wflow" refs sync
+mise trust --yes "$root/mise.toml"
+mise trust --yes "$root/mise.orb.toml"
+mise -E orb bootstrap --yes
