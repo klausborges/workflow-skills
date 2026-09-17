@@ -1,0 +1,12 @@
+[language-server.rust-analyzer]
+command = "./scripts/rust-analyzer"
+
+[language-server.rust-analyzer.config]
+checkOnSave = true
+
+[language-server.rust-analyzer.config.cargo.buildScripts]
+useRustcWrapper = false
+
+[[language]]
+name = "rust"
+language-servers = ["rust-analyzer"]

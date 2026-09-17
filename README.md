@@ -130,6 +130,36 @@ install pre-commit hooks:
 mise run prek:install
 ```
 
+## rust-analyzer
+
+The repository launcher keeps rust-analyzer's Cargo work inside the mise-managed
+Rust and Mr Boxington environment. Launch Helix from the repository root so its
+project-local language configuration can find the launcher:
+
+```bash
+mise exec helix@25.07.1 -- hx .
+```
+
+Helix is optional and is not part of the repository toolset. By default,
+rust-analyzer shares the workspace's `target/` directory. To avoid target-lock
+contention with another Cargo process, give the analyzer a separate target:
+
+```bash
+WORKFLOW_SKILLS_RA_SEPARATE_TARGET=1 mise exec helix@25.07.1 -- hx .
+```
+
+The separate target uses `target/rust-analyzer` and costs extra disk space.
+Switching back to the shared target does not delete its artifacts.
+
+Other LSP clients can run `./scripts/rust-analyzer` from the repository root.
+Their initialization options must set
+`cargo.buildScripts.useRustcWrapper=false` so rust-analyzer does not replace
+Mr Boxington's compiler wrapper. Leave `cargo.targetDir` unset (or `null`) so
+the launcher controls target selection. Keep `checkOnSave=true` for normal
+Cargo diagnostics, or set it to `false` when the client should not run checks
+on save. Do not set `check.overrideCommand`; rust-analyzer should construct its
+normal Cargo command.
+
 ## reference comparison
 
 rough `o200k_base` token counts for equivalent workflow areas. equivalent skills are approximate because the repos split workflow ideas differently.
