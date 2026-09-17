@@ -1,90 +1,42 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly mise_version="2026.9.2"
-readonly mise_installer_sha256="8c7e5818ea0c30087c3aebc1f9b093457204eb4669233497eeae216583272227"
-
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-skilltree_root="$root/../repos/skilltree"
-mise_bin="$HOME/.local/bin/mise"
-
 cd -- "$root"
+
 export GIT_TERMINAL_PROMPT=0
 export MISE_CEILING_PATHS="$(dirname -- "$root")"
 export MISE_YES=1
 export PATH="$HOME/.local/bin:$PATH"
 
-run_step() {
-  local label="$1"
-  shift
-  local started=$SECONDS
+mise_bin="$(command -v mise || true)"
+if [[ -z "$mise_bin" ]]; then
+  mise_version="2026.9.10"
+  mise_bin="$HOME/.local/bin/mise"
+  install_script="$(mktemp)"
+  trap 'rm -f -- "$install_script"' EXIT
 
-  echo "==> $label"
-  "$@"
-  echo "<== $label ($((SECONDS - started))s)"
-}
-
-install_mise() {
-  if [[ -x "$mise_bin" && "$($mise_bin --version)" == "$mise_version "* ]]; then
-    echo "mise $mise_version is already installed."
-    return
-  fi
-
-  local temp_dir install_script
-  temp_dir="$(mktemp -d)"
-  install_script="$temp_dir/install.sh"
-
+  echo "==> Installing mise $mise_version"
   curl --fail --location --retry 3 --silent --show-error \
     "https://github.com/jdx/mise/releases/download/v$mise_version/install.sh" \
     --output "$install_script"
-  printf '%s  %s\n' "$mise_installer_sha256" "$install_script" \
-    | sha256sum --check --status
+  printf '%s  %s\n' \
+    "9936b9658072ab94ff27f965a49166deafd783c74edb68636835d4ed4715f502" \
+    "$install_script" | sha256sum --check --status
   mkdir -p -- "$(dirname -- "$mise_bin")"
   MISE_VERSION="v$mise_version" MISE_INSTALL_PATH="$mise_bin" bash "$install_script"
-  rm -rf -- "$temp_dir"
-}
-
-configure_login_shell() {
-  local marker="# workflow-skills mise shims"
-
-  if grep -Fqx "$marker" "$HOME/.bash_profile" 2>/dev/null; then
-    echo "The workflow-skills login-shell hook is already configured."
-    return
-  fi
-
-  cat >> "$HOME/.bash_profile" <<EOF
-
-$marker
-if [[ "\${PWD}" == "$root" || "\${PWD}" == "$root/"* ]]; then
-  eval "\$("$mise_bin" activate bash --shims)"
 fi
-EOF
-}
 
-install_skills() {
-  if [[ ! -f "$skilltree_root/skills/effect-v4/SKILL.md" ]]; then
-    echo "The configured skilltree additional repository is missing at $skilltree_root." >&2
-    exit 1
-  fi
+profile_path='export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"'
+grep -Fqx "$profile_path" "$HOME/.bash_profile" 2>/dev/null \
+  || printf '\n%s\n' "$profile_path" >> "$HOME/.bash_profile"
 
-  amp skill add --global --overwrite "$root"
-  amp skill add --global --overwrite "$skilltree_root"
-}
+echo "==> Installing the pinned repository toolchain"
+"$mise_bin" trust --yes "$root/mise.toml"
+"$mise_bin" install
 
-validate_environment() {
-  env -i HOME="$HOME" USER="${USER:-$(id -un)}" PATH=/usr/bin:/bin \
-    /bin/bash -lc 'cd -- "$1" && "$1/.agents/resume"' _ "$root"
-}
+echo "==> Building wflow"
+"$mise_bin" exec -- env -u RUSTC_WRAPPER cargo build --locked --bin wflow
 
-run_step "Installing mise $mise_version" install_mise
-run_step "Configuring the repository login environment" configure_login_shell
-run_step "Trusting the repository tool configuration" \
-  "$mise_bin" trust --yes "$root/mise.toml"
-run_step "Installing the pinned repository toolchain" "$mise_bin" install
-run_step "Building wflow" \
-  "$mise_bin" exec -- env -u RUSTC_WRAPPER cargo build --locked --bin wflow
-run_step "Generating workflow skill references" "$root/target/debug/wflow" refs sync
-run_step "Installing workflow and skilltree skills" install_skills
-run_step "Validating the installed orb environment" validate_environment
-
-echo "Orb setup complete."
+echo "==> Generating workflow skill references"
+"$root/target/debug/wflow" refs sync
