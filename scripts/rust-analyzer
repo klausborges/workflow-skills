@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd -- "$root"
+
+case "${WORKFLOW_SKILLS_RA_SEPARATE_TARGET:-0}" in
+  0)
+    unset CARGO_TARGET_DIR
+    ;;
+  1)
+    export CARGO_TARGET_DIR="$root/target/rust-analyzer"
+    ;;
+  *)
+    printf 'WORKFLOW_SKILLS_RA_SEPARATE_TARGET must be 0 or 1\n' >&2
+    exit 2
+    ;;
+esac
+
+unset CARGO_BUILD_BUILD_DIR
+unset RUSTC_WRAPPER
+
+exec mise exec -- rust-analyzer "$@"
