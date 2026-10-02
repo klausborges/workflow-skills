@@ -1,8 +1,8 @@
 [tools]
-mr-boxington = "latest"
-oxfmt = "0.68.0"
-prek = "0.5.3"
-rust = { version = "1.98.1", components = "rustfmt,clippy,rust-analyzer", mr_boxington = true }
+mr-boxington = "1.21.0"
+oxfmt = "0.71.0"
+prek = "0.5.4"
+rust = { version = "1.99.0", components = "rustfmt,clippy,rust-analyzer", mr_boxington = true }
 
 [tasks.install]
 description = "Install these skills locally for Claude Code and Codex"
