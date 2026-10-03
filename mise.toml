@@ -1,5 +1,5 @@
 [tools]
-mr-boxington = "1.21.0"
+mr-boxington = "1.21.1"
 oxfmt = "0.71.0"
 prek = "0.5.4"
 rust = { version = "1.99.0", components = "rustfmt,clippy,rust-analyzer", mr_boxington = true }
