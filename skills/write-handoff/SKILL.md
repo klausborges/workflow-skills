@@ -7,7 +7,7 @@ description: Write a bounded fresh-context prompt or file for continuation, impl
 
 Give the next worker enough stable context to complete one bounded job without recreating the owning Plan or docs.
 
-Use [workflow-language.md](references/workflow-language.md), [review-language.md](references/review-language.md) for review work, and [handoff-template.md](references/handoff-template.md).
+Use [workflow-language.md](references/workflow-language.md) and [handoff-template.md](references/handoff-template.md).
 
 ## Choose intent and lifecycle
 

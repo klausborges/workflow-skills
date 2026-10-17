@@ -1,7 +1,7 @@
 [references]
 shared = [
-  "handoff-template",
-  "review-language",
   "workflow-language",
 ]
-owned = []
+owned = [
+  "handoff-template",
+]

@@ -1,6 +1,7 @@
 [references]
 shared = [
-  "architecture-language",
   "engineering-discipline",
 ]
-owned = []
+owned = [
+  "architecture-language",
+]
