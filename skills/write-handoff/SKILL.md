@@ -1,44 +1,34 @@
 ---
 name: write-handoff
-description: Write a bounded fresh-context prompt or file for continuation, implementation, research, refactor, bugfix, review, or review-fix work.
+description: Write a lane brief, a handoff with its kickoff, a compaction prompt, a resumption record or a night-shift report. Use before spawning a lane, when work must move to another session or person, or when asked for a "compaction prompt" or a "night shift".
 ---
 
-# Write Handoff
+# Write handoff
 
-Give the next worker enough stable context to complete one bounded job without recreating the owning Plan or docs.
+Read [handoff-template.md](references/handoff-template.md) before writing a brief or a handoff, and [workflow-language.md](references/workflow-language.md) for the loop terms.
 
-Use [workflow-language.md](references/workflow-language.md) and [handoff-template.md](references/handoff-template.md).
+## Briefs
 
-## Choose intent and lifecycle
+Without goal, scope, worktree with its actual parent, gate, and REPORT, don't spawn. For a lane that doesn't write, the worktree names what to read (a path or base..head), and the gate may read "none, because read-only". Point at files; never paste session history.
 
-Common types are implementation/continuation, research, refactor/bugfix, review, review-continuation, and review-fix. Use the smallest type that describes the next job.
+Briefs and handoffs live in the project's slot for them; the default is a gitignored folder in the repo, such as `plans/.local/`.
 
-Choose lifecycle from expected use:
+## Outputs
 
-- **Immediate**: next known worker or near-term continuation; current paths and volatile status may help.
-- **Durable**: later or unknown worker, or reusable work across tools; emphasize stable behavior, acceptance criteria, and scope boundaries.
+- **Handoff**: the brief plus a copy-pastable kickoff prompt, neither committed.
+- **Compaction prompt**: under 300 words, fenced, last in the message. It keeps what was decided, quoted exactly; where things stand, with heads, PRs and merge order; what is open; and details that would be hard to reconstruct.
+- **Resumption record**: worktree and branch, head, next gate, open findings, pending rulings, and receipts outside git. Write it on the plan surface, else in the PR body or chat, at close and at every handoff or compaction.
 
-Default to Immediate unless the expected lifecycle clearly requires Durable. A handoff in chat or a file can be either; file storage does not imply durability.
+Continue first, then compact. Write a handoff only when something must travel to another session, worktree or person.
 
-## Build the handoff
+## Unattended runs
 
-1. Read the owning Plan, docs, Review Ledger, current diff, or source only as needed for this task.
-2. State the exact task, current state, scope, constraints, completion conditions, and verification.
-3. Link only authoritative files the next worker actually needs. Do not copy whole Plans/docs or generate a replacement Plan.
-4. Include volatile implementation notes only when they are not discoverable and materially reduce rework.
-5. Keep adjacent ideas out of scope or in the owning Plan's follow-ups.
+First record what the owner approved for the run, quoted. The morning report leads with merge-readiness or what blocks it, then a PR table with heads and executed test counts, rulings needed with recommendations, defaults taken, and what went wrong. It ends with the compaction prompt.
 
-Create a file only when the user asks for one or the authorized workflow clearly needs a stored artifact. Use the repository's established handoff location when present; otherwise ask or return copyable text.
+## Gotchas
 
-## Review handoffs
-
-- For a continuation/delta round, carry accepted findings, patch notes, changed surface, settled items, Review Signal, unresolved risks, and intended next scope.
-- For explicit independent cross-validation, say that overlap is possible and avoid anchoring the reviewer to desired findings.
-- If `fresh review` could materially mean continuation or independent cross-validation, consolidate that choice with any other owner questions rather than silently choosing.
-- If prior Review Signal was Low, note the likely low return without refusing an explicitly requested round.
-
-## Owning artifact updates
-
-Do not add bookkeeping just because a handoff exists. Update a Plan only when verified Task state, required work, or follow-ups changed. Add a sparse pointer to a handoff file only when it prevents the artifact from being lost.
-
-Use [handoff-template.md](references/handoff-template.md), omit unused sections, and keep the result self-contained and concise.
+- A brief copied from the previous brief copies its mistakes: write each from the template.
+- Never-lines that have mattered: no network unless the brief needs it; never print secret values; name excluded paths and real-data stores; commit no binaries.
+- A session scratchpad or /tmp gets wiped: briefs, research and handoffs go in the durable slot.
+- A paraphrased ruling drifts: quote it with its source, and record silence as pending, never as a go.
+- A compacted session waits for input: a one-line nudge starts the next turn.
