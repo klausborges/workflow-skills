@@ -1,42 +1,19 @@
 ---
 name: diagnose-issue
-description: Diagnose bugs, failing tests, build failures, flaky behavior, unexpected output, or performance regressions. Read-only unless the user explicitly asks for a fix.
+description: Find the cause of a bug, failing test, flaky check or regression, read-only unless a fix is authorized. Use when something fails and the cause is unknown.
 ---
 
-# Diagnose Issue
+# Diagnose issue
 
-Find the cause with evidence before changing behavior. Diagnosis is read-only unless the user explicitly asks to fix or implement.
+Read [engineering-discipline.md](references/engineering-discipline.md) for the evidence rules, including the first failure.
 
-Use the repo's glossary and ADRs when present.
+Reproduce first. A passing retry explains nothing. Measure a flaky failure's rate over repeated runs, before and after.
 
-## Process
+Fix only when authorized, with a regression test seen failing without the fix. Report instead of making these calls: a cause that implies a design change, a fix that touches stored data or a shared contract, a test you would have to weaken.
 
-1. Build the fastest useful feedback loop: focused test, build, CLI call, request, browser check, trace replay, benchmark, or small disposable harness.
-2. Reproduce the reported symptom when feasible and capture the exact failure. For flaky behavior, record a baseline reproduction rate and raise it enough to compare changes. If reproduction is unavailable, distinguish conclusions from hypotheses and request only the missing evidence that matters.
-3. Read full errors, logs, stack traces, recent diffs, dependency/config changes, environment differences, callers, and nearby working examples as relevant.
-4. Keep ranked falsifiable hypotheses only while uncertainty remains. When direct evidence explains the cause, proceed to verification instead of manufacturing alternatives.
-5. Instrument the boundary that separates plausible causes. Minimize a reproducible symptom by removing inputs, steps, config, or callers one at a time until only load-bearing elements remain. Trace bad values to their source, measure performance, and wait on real async conditions rather than arbitrary sleeps.
-6. State the most supported cause and the evidence that rules in or out meaningful alternatives.
+After two failed attempts at the same cause, stop patching and report what you learned.
 
-## When fixes are authorized
+## Gotchas
 
-- Prefer a failing regression path before the fix when a useful seam exists.
-- Apply the smallest change that addresses the cause.
-- If a public contract, migration, persistence, auth/security behavior, production state, or performance trade-off needs owner judgment, stop and recommend options before mutating it.
-- If repeated changes fail, stop stacking patches. Reassess the mental model, feedback loop, and architecture using the new evidence.
-- Re-run the original feedback loop and relevant regression checks; read the results before claiming success.
-- Before delivery, send the entire scope, not only the latest patch, to an independent fresh-context reviewer through `review-work`; verify accepted claims against primary evidence, fix authorized blocking findings, and rerun affected checks.
-- Remove only temporary instrumentation and scratch artifacts created by this task. Preserve preexisting drafts, fixtures, and unrelated work.
-
-If the correct fix lacks a safe test or architecture seam, report that constraint and route unresolved design to `improve-architecture` or `plan-work`. Route an already-understood behavior-preserving cleanup to `simplify-work` rather than hiding it in the bugfix.
-
-## Output
-
-Keep the report compact:
-
-- Cause and evidence
-- Fix, only if authorized
-- Verification performed
-- Limitations, residual risk, or recommended next action
-
-Do not turn the diagnosis into a lab transcript or claim certainty beyond the evidence.
+- A mutation can miss its target: a mutation red counts only when a diff against pristine shows it landed and the run reached it.
+- An unexplained cause invites a story: write it as unknown.

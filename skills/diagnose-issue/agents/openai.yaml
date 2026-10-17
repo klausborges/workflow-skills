@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose Issue"
-  short_description: "Diagnose bugs, failures, flakes, and regressions without implicit fixes."
-  default_prompt: "Diagnose this issue."
+  short_description: "Find a failure's cause, read-only unless a fix is authorized."
+  default_prompt: "Diagnose this failure."
