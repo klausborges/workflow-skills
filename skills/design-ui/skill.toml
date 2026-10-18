@@ -1,0 +1,6 @@
+[references]
+shared = []
+owned = [
+  "ai-default-looks",
+  "craft-defaults",
+]

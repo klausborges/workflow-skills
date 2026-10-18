@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design UI"
+  short_description: "Set a design system before screens, with a direction from the product."
+  default_prompt: "Set up the design system for this UI."
