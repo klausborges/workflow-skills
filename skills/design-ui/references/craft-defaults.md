@@ -22,7 +22,7 @@ Read when writing tokens, building the core set, or adding motion. Values are st
 ## Theme
 
 - Light and dark are each designed; neither is the other inverted.
-- `color-scheme: light dark` on `:root` follows the system; under a stored choice it is `light` or `dark`. `light-dark()` resolves from it and takes colors only, so shadow tokens switch through the theme selector or a `prefers-color-scheme` media query.
+- `color-scheme: light dark` on `:root` follows the system; under a stored choice it is `light` or `dark`. `light-dark()` resolves from it but cannot select whole shadow values, so shadow tokens switch through the theme selector or a `prefers-color-scheme` media query.
 - A stored choice is applied by an inline script in `<head>` that sets the theme attribute before first paint. Paint `html` with the `ground` token and keep the `theme-color` meta in step.
 - A state that starts folded or collapsed renders that way on first paint, with no animation.
 
@@ -81,5 +81,5 @@ Rules:
 - Transitions retarget when interrupted. Never gate input on an animation.
 - Content and input land at once; motion dresses the change. A repeat retargets or skips.
 - Pin actions, fix sticky heights, anchor the scroll, and animate the smallest part, so nothing around the motion moves.
-- Entrances start at a scale of 0.9 to 0.98 with opacity, never 0. Popovers grow from their trigger. Exits are shorter than entrances.
+- Entrances start at a scale of 0.9 to 0.98 with opacity, never from scale 0. Popovers grow from their trigger. Exits are shorter than entrances.
 - One ambient animation at a time; continuous loops stop at rest. Flashing stays within WCAG's limits.

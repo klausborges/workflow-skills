@@ -11,7 +11,7 @@ Read [ai-default-looks.md](references/ai-default-looks.md) before showing direct
 
 ## Start
 
-- **design.md, tokens and core set exist**: work inside them; design.md wins over this skill's defaults.
+- **design.md, tokens and core set exist**: work inside them; design.md wins over the switchable defaults below.
 - **design.md exists, its tokens or core set don't**: do steps 2 and 3 before any screen.
 - **No design.md, no UI yet**: run steps 1 to 4.
 - **No design.md, existing UI, a narrow request** (a fix, one small component): use the app's existing styles, add no new one-off values, and propose the extraction in the report instead of starting it.
