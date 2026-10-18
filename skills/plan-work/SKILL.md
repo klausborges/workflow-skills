@@ -7,7 +7,7 @@ description: Plan substantial work when explicitly requested or when material am
 
 Shape uncertain or substantial work into an executable direction without manufacturing ceremony.
 
-Use [workflow-language.md](references/workflow-language.md), [document-conventions.md](references/document-conventions.md), and [planning-templates.md](references/planning-templates.md).
+Use [workflow-language.md](references/workflow-language.md) and [planning-templates.md](references/planning-templates.md).
 
 ## Invocation and output
 

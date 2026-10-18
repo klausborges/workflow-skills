@@ -1,8 +1,6 @@
 [references]
 shared = [
-  "document-conventions",
   "engineering-discipline",
-  "phase-review-template",
   "workflow-language",
 ]
 owned = []

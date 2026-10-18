@@ -7,7 +7,7 @@ description: Diagnose bugs, failing tests, build failures, flaky behavior, unexp
 
 Find the cause with evidence before changing behavior. Diagnosis is read-only unless the user explicitly asks to fix or implement.
 
-Use [research-ladder.md](references/research-ladder.md) when external docs or tool behavior matter. Use repo Glossary and ADRs when present.
+Use the repo's glossary and ADRs when present.
 
 ## Process
 

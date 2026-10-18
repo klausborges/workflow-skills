@@ -1,7 +1,7 @@
 [references]
 shared = [
-  "document-conventions",
-  "planning-templates",
   "workflow-language",
 ]
-owned = []
+owned = [
+  "planning-templates",
+]

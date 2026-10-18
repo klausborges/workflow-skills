@@ -1,5 +1,3 @@
 [references]
-shared = [
-  "research-ladder",
-]
+shared = []
 owned = []

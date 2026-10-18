@@ -1,24 +1,27 @@
-# Workflow Language
+# Workflow language
 
-Use this compact hierarchy consistently:
+Read when a brief, plan or report uses one of these terms and the exact meaning matters. A repo's own glossary, `docs/glossary.md` when present, wins for its domain terms.
 
-- **Roadmap**: optional ephemeral progress/prioritization view over thin Plan links. A project may have one main Roadmap and multiple scoped Roadmaps. Ordering is `Loose`, `Strict`, or `Mixed`.
-- **Plan**: ephemeral artifact for one implementation outcome. It owns optional Milestones, Phases, Tasks, acceptance criteria, verification, and Doc Delta.
-- **Milestone**: optional related-Phase grouping inside a Plan.
-- **Phase**: coherent implementation and verification scope. Every implementation Phase ends with an independent fresh-context review of the whole Phase scope.
-- **Task**: concrete work inside a Phase.
-- **Review checkpoint**: Plan-defined review after high-impact Tasks or Task groups, in addition to the end-of-Phase review.
+## Plans
 
-`Loose` Roadmap order is advisory. `Strict` makes the earliest incomplete Plan the only eligible Plan, with no override; reorder or restructure the Roadmap before proceeding otherwise. `Mixed` enforces named cross-Plan blockers while other unblocked Plans remain independently eligible. Ordering selects Plans, not Phases, and never authorizes work. Dependencies that must hold across Roadmaps belong in named cross-Plan constraints, not local list order.
+- **Roadmap**: an ordered view over Plans: Loose (advisory), Strict (only the earliest open Plan is eligible) or Mixed (only named blockers hold).
+- **Plan**: one outcome and its Phases. Not canonical: it never holds current truth, and the host decides whether a finished Plan is deleted, archived or kept.
+- **Phase**: one coherent change, the unit of delivery and review. A **Milestone** is an optional label on Phases, never a level.
+- **Task**: concrete work inside a Phase; a doc change is a Task naming the doc.
+- **Candidate**: a Plan whose outcome is not committed to yet.
 
-Do not use **slice** as a hierarchy term. A vertical slice is only an implementation or testing technique.
+Durable text (docs, code, commits, PRs) never cites a positional id such as "Phase 2" or "M0"; a stable tracker id such as #55 is fine.
 
-Other artifacts:
+## The loop
 
-- **Target-State Doc**: durable canonical truth about current behavior, concepts, or structure.
-- **Draft Target-State Doc**: explicitly non-current proposed doc under `docs/_drafts/`.
-- **Doc Delta**: phase-tagged Plan checkboxes for future changes to existing canonical docs.
-- **Handoff**: bounded continuation prompt or file. Its lifecycle is **Immediate** or **Durable**; storage format does not determine durability.
-- **ADR**: record for a surprising, trade-off-heavy, hard-to-reverse architectural decision.
-
-Plans and Roadmaps are ephemeral even when retained temporarily. Canonical docs, source, code comments, commits, and PRs must remain coherent after they are removed and must not refer to workflow-relative identifiers such as `Phase 0`, `P0`, `Milestone 0`, or `M0`. Workflow artifacts may use the hierarchy terms.
+- **brief**: the input to one run of the loop: one scope, one worktree, one PR or stack, with or without a Plan.
+- **slice**: an informal word for a bounded chunk of work; never a level, a field or a heading.
+- **lane**: a delegated worker executing one brief.
+- **gate**: the project's check command on an exact state, reported with base, head, host and executed test count.
+- **plan surface**: where the repo keeps plans.
+- **review pair**: two reviewers on different models. **Blind**, **confirmation round** and **fresh read** are defined in review-work.
+- **lean pass**: a read for code tacked on until something worked; see improve-architecture.
+- **comments pass**: once per stack, over code the stack changed and nothing else, comments that restate the code or explain a workaround go, with the code fixed where needed. Existing why-comments stay. Its changes go back through review, like lean-pass and fresh-read fixes.
+- **unqualified surface**: what the gate and reviews did not exercise.
+- **compaction prompt**: the text handed to the summarizer before context is compacted.
+- **resumption record**: what a new session needs to pick the work up; see write-handoff.

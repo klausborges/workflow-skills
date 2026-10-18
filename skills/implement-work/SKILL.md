@@ -7,7 +7,7 @@ description: Implement an already-decided bounded scope from a Plan, handoff, re
 
 Execute the authorized outcome without imposing a Plan-shaped process on other inputs.
 
-Use [engineering-discipline.md](references/engineering-discipline.md). For Plan-backed work, also use [workflow-language.md](references/workflow-language.md), [document-conventions.md](references/document-conventions.md), and [phase-review-template.md](references/phase-review-template.md).
+Use [engineering-discipline.md](references/engineering-discipline.md). For Plan-backed work, also use [workflow-language.md](references/workflow-language.md).
 
 ## Establish the work scope
 
@@ -34,6 +34,6 @@ Do not create a Plan, interview loop, handoff, worktree, commit, or PR unless th
 2. Run the relevant verification and read its output.
 3. Send the entire scope, not only the latest patch, to an independent fresh-context reviewer through `review-work`; verify accepted claims against primary evidence, fix authorized blocking findings, and rerun affected checks.
 4. Repeat only the review coverage justified by the changed surface or residual risk.
-5. Update governing artifacts. For Plan-backed work, use [phase-review-template.md](references/phase-review-template.md), finish the selected Phase's Plan/doc updates, and only then mark it complete.
+5. Update governing artifacts. For Plan-backed work, finish the selected Phase's Plan/doc updates, and only then mark it complete.
 
 Do not recursively review the review. Add Milestone-level integration review only when cross-Phase acceptance or risk warrants it. Leave Plan or Roadmap cleanup to final review.

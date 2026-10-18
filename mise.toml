@@ -14,11 +14,11 @@ run = "npx skills add . --skill '*' -a claude-code codex -g -y"
 
 [tasks.format]
 description = "Format owned Markdown files"
-run = "oxfmt --write AGENTS.md GLOSSARY.md README.md 'docs/**/*.md' 'skills/**/*.md'"
+run = "oxfmt --write AGENTS.md README.md 'docs/**/*.md' 'skills/**/*.md'"
 
 [tasks."format:ci"]
 description = "Check owned Markdown formatting"
-run = "oxfmt --check AGENTS.md GLOSSARY.md README.md 'docs/**/*.md' 'skills/**/*.md'"
+run = "oxfmt --check AGENTS.md README.md 'docs/**/*.md' 'skills/**/*.md'"
 
 [tasks."sync-references"]
 description = "Generate shared reference docs into each installable skill"

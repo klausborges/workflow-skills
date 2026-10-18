@@ -1,26 +1,24 @@
-# Handoff Template
+# Handoff template
 
-Use only applicable sections.
+Read when writing a brief or a handoff. A brief missing a required field is not ready to hand over. Every other field may read "none, because ...".
 
 ```md
-# Handoff: Outcome
+# Brief: outcome
 
-Type: Implementation | Continuation | Research | Refactor | Bugfix | Review | Review-Continuation | Review-Fix
-Durability: Immediate | Durable
-
-## Task
-
-## Current state
-
-## Scope and constraints
-
-## Read first
-
-- Only authoritative files the next worker actually needs.
-
-## Completion and verification
-
-## Out of scope
+GOAL (required):
+SCOPE (required): what is in, what is out.
+WORKTREE (required): path, branch, and the actual parent it was created from; for a lane that doesn't write, what to read (a path or base..head).
+GATE (required): the repo's real command, the host, what counts as green; or "none, because read-only".
+ACCEPTANCE: observable results that close the goal.
+WRONG IMPLEMENTATIONS: plausible wrong versions a test must tell apart.
+INVARIANTS:
+DOCS TOUCHED:
+MAY:
+MAY NOT:
+STOP AND REPORT: conditions where the lane reports instead of proceeding.
+NEVER:
+SKILLS: skills to load.
+PREREQUISITES: host, install steps, local copies of material the lane can't reach.
+READ FIRST: files and pointers.
+REPORT (required): what comes back and where (a file when the lane can write, final output otherwise), verdict first.
 ```
-
-Add prior findings, patch notes, Review Signal, settled items, residual risks, and intended next scope for a review-continuation handoff. Add volatile status or file paths only when they help the expected recipient.

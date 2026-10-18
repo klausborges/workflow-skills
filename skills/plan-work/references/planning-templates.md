@@ -1,109 +1,41 @@
-# Planning Templates
+# Planning templates
 
-Use only the sections the work needs.
+Read when writing a plan or a roadmap to the plan surface. Keep only the sections the work needs.
 
-## Design Brief
+## Plan
 
-```md
-## Design Brief
-
-### Goal and target state
-
-### Recommended approach
-
-### Decisions and constraints
-
-### Acceptance criteria
-
-### Docs impact
-
-### Open questions or risks
-```
-
-## Current Target-State Doc
-
-Canonical docs describe current truth, not proposed behavior.
+The section through open questions is the design summary; show it in chat before anything is written.
 
 ```md
-# Name
+# Outcome
 
-## Purpose
+Goal:
+Decisions: each with its source.
+Acceptance:
+Open questions:
+Out of scope:
+Gate: command, host, what counts as green.
+Review pair:
+Unqualified:
 
-## Current behavior and contracts
+## Phase: outcome
 
-## Key concepts or flows
+- [ ] Task
+- Acceptance: observable behavior.
 
-## Constraints
-
-## Out of scope
+## Follow-ups
 ```
 
 ## Roadmap
 
 ```md
-# Roadmap: Scope
+# Roadmap: scope
 
 Ordering: Loose | Strict | Mixed
 
-## Plans
-
-- [ ] [Plan outcome](./plan.md) — one-line result
+- [ ] [Plan outcome](link): one-line result
 
 ## Candidates
 
-- One-line idea; promote it to a Plan only when its implementation outcome and blocking questions can be stated.
-
-## Cross-plan constraints
-
-- Only dependencies or shared constraints that affect ordering.
+- One-line idea.
 ```
-
-## Plan
-
-```md
-# Outcome
-
-## Goal
-
-## Related docs
-
-## Phase checklist
-
-- [ ] Phase 1: Outcome
-
-## Verification strategy
-
-## Out of scope
-
-## Phase 1: Outcome
-
-### Goal
-
-### Tasks
-
-- [ ] Concrete change.
-- [ ] Relevant verification.
-
-### Acceptance criteria
-
-- [ ] Observable behavior or contract is true.
-- [ ] Phase verification passes.
-- [ ] Relevant docs and Doc Delta items are current.
-- [ ] Independent fresh-context review covers the full Phase scope.
-
-### Review checkpoints
-
-- Optional checkpoints after high-impact Tasks or Task groups.
-
-## Doc Delta
-
-Include only when existing durable docs need future changes.
-
-- [ ] (Phase N) `docs/path.md`: required current-truth update.
-
-## Discovered follow-ups
-
-- Useful work outside this Plan's required scope.
-```
-
-Milestones are optional headings that group related Phases. Keep research notes only when they carry a decision, constraint, or source needed to execute the Plan.

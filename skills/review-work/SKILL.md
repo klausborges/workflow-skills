@@ -7,7 +7,7 @@ description: Read-only review of Plans, implementation, continuation rounds, or 
 
 Review the requested artifact with evidence and technical judgment. This skill is read-only unless the user explicitly asks for fixes or implementation.
 
-Use [workflow-language.md](references/workflow-language.md), [review-language.md](references/review-language.md), [document-conventions.md](references/document-conventions.md), and, when relevant, [research-ladder.md](references/research-ladder.md) or [architecture-language.md](references/architecture-language.md).
+Use [workflow-language.md](references/workflow-language.md).
 
 ## Establish scope
 
