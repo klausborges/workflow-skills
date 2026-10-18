@@ -1,4 +1,4 @@
 interface:
   display_name: "Write Handoff"
-  short_description: "Create concise fresh-context prompts or files with explicit lifecycle."
-  default_prompt: "Write a handoff for this work."
+  short_description: "Briefs, handoffs, compaction prompts and resumption records."
+  default_prompt: "Write a brief for this work."

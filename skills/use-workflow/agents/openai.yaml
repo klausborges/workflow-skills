@@ -1,4 +1,4 @@
 interface:
   display_name: "Use Workflow"
-  short_description: "Route substantial work through the workflow skills."
-  default_prompt: "Use the workflow skills for this work."
+  short_description: "Run work through the brief, review and close loop."
+  default_prompt: "Run this through the workflow loop."
