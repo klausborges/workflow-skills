@@ -1,6 +1,6 @@
 # workflow skills
 
-personal agent workflow skills for planning, implementation, review, the lean pass, diagnosis, codebase explanation, handoffs, and git. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
+personal agent workflow skills for planning, implementation, review, the lean pass, diagnosis, codebase explanation, handoffs, ui design, and git. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
 
 inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and built to work with [vercel labs skills](https://github.com/vercel-labs/skills).
 
@@ -35,6 +35,7 @@ then try a concrete prompt:
 | [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find a failure's cause; fix only when authorized.                   |
 | [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map how a code area works, read-only.                               |
 | [`coding-standards`](./skills/coding-standards/SKILL.md)         | design, test and evidence standards.                                |
+| [`design-ui`](./skills/design-ui/SKILL.md)                       | tokens and a core set before screens, drawn from the product.       |
 | [`git-conventions`](./skills/git-conventions/SKILL.md)           | remote names, commit shape, worktree placement, writing style.      |
 | [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages; commits on request.                   |
 | [`manage-pr`](./skills/manage-pr/SKILL.md)                       | PRs and gh stacks, restacking after merges.                         |
