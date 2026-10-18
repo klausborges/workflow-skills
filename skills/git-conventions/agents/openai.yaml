@@ -1,4 +1,4 @@
 interface:
   display_name: "Git Conventions"
-  short_description: "Remote naming, primary remote choice, commit shape, and commit/PR style."
+  short_description: "Remotes, commit shape, worktree placement and writing style."
   default_prompt: "What are the git conventions for this repo?"

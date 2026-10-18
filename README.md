@@ -1,6 +1,6 @@
 # workflow skills
 
-personal agent workflow skills for codebase explanation, diagnosis, planning, implementation, simplification, handoff, review, architecture improvement, and small planning prototypes. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
+personal agent workflow skills for planning, implementation, review, the lean pass, diagnosis, codebase explanation, handoffs, and git. not a framework, not a ceremony generator, mostly a set of rails i kept wanting back.
 
 inspired by [matt pocock's skills](https://github.com/mattpocock/skills), [superpowers](https://github.com/obra/superpowers), and built to work with [vercel labs skills](https://github.com/vercel-labs/skills).
 
@@ -8,43 +8,39 @@ fork it if your planning/review language is different. the useful parts should f
 
 ## after install
 
-ask `explain how the workflow skills work`.
+ask `how do I use the workflow skills for <task>?`. you get the next prompt to run, and nothing starts.
 
-if the agent does not pick it up, be explicit: `use explain-workflow to show me how this workflow works`.
+if the agent does not pick it up, be explicit: `use use-workflow to explain how to plan this feature`.
 
 then try a concrete prompt:
 
 - `use plan-work to plan this feature`
-- `use implement-work to implement this handoff`
+- `use implement-work to implement this brief`
 - `explain how this code path works`
 - `diagnose this failing test`
 - `use review-work to review this change`
-- `use write-handoff to prepare a handoff`
-- `use improve-architecture to find deepening opportunities`
-- `use simplify-work to simplify this module without changing behavior`
+- `use write-handoff to write a compaction prompt`
+- `run a lean pass on this stack`
 
 ## skills
 
-| skill                                                            | purpose                                                                                 |
-| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [`explain-workflow`](./skills/explain-workflow/SKILL.md)         | explain how to invoke the workflow without starting work by default.                    |
-| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map code areas, modules, callers, flows, tests, and terms without editing.              |
-| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find evidence-backed causes; apply fixes only when explicitly authorized.               |
-| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | route work to the smallest fitting workflow.                                            |
-| [`plan-work`](./skills/plan-work/SKILL.md)                       | shape uncertain or substantial work, with an optional saved Plan.                       |
-| [`implement-work`](./skills/implement-work/SKILL.md)             | implement bounded work from Plans or other inputs with evidence and fresh review.       |
-| [`write-handoff`](./skills/write-handoff/SKILL.md)               | write concise fresh-context handoffs with lifecycle separate from storage.              |
-| [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of Plans, changes, continuation rounds, or other scoped artifacts.     |
-| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | discover evidence-backed architecture improvements without forcing a refactor workflow. |
-| [`simplify-work`](./skills/simplify-work/SKILL.md)               | simplify a bounded area while preserving intended behavior.                             |
-| [`plan-prototype`](./skills/plan-prototype/SKILL.md)             | answer one planning question with a minimal throwaway visual or logic prototype.        |
-| [`git-conventions`](./skills/git-conventions/SKILL.md)           | shared remote naming, primary remote choice, commit shape, and commit/PR style.         |
-| [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages from local evidence; commits on request.                   |
-| [`manage-pr`](./skills/manage-pr/SKILL.md)                       | create/update GitHub PRs, stacked PRs, and the stack merge loop.                        |
-| [`manage-worktrees`](./skills/manage-worktrees/SKILL.md)         | create, reuse, and clean up git worktrees consistently.                                 |
-| [`coding-standards`](./skills/coding-standards/SKILL.md)         | front door to the shared engineering standards, with room for stack-specific siblings.  |
+| skill                                                            | purpose                                                             |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | the work loop, its routes, and how to use these skills.             |
+| [`plan-work`](./skills/plan-work/SKILL.md)                       | plans of decisions, phases and a gate, plus throwaway probes.       |
+| [`write-handoff`](./skills/write-handoff/SKILL.md)               | briefs, handoffs, compaction prompts, resumption records.           |
+| [`implement-work`](./skills/implement-work/SKILL.md)             | execute a decided brief, red before green.                          |
+| [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of plans, changes, confirmation rounds and stacks. |
+| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | the lean pass and owner-requested simplifications.                  |
+| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find a failure's cause; fix only when authorized.                   |
+| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map how a code area works, read-only.                               |
+| [`coding-standards`](./skills/coding-standards/SKILL.md)         | design, test and evidence standards.                                |
+| [`git-conventions`](./skills/git-conventions/SKILL.md)           | remote names, commit shape, worktree placement, writing style.      |
+| [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages; commits on request.                   |
+| [`manage-pr`](./skills/manage-pr/SKILL.md)                       | PRs and gh stacks, restacking after merges.                         |
+| [`manage-worktrees`](./skills/manage-worktrees/SKILL.md)         | create, reuse and remove worktrees.                                 |
 
-target-state docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
+repo docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 
 ## future work
 
@@ -170,20 +166,20 @@ local counts cover each skill's `SKILL.md` plus packaged references; `skill.toml
 
 | workflow area        | local tokens | matt pocock tokens | superpowers tokens |
 | -------------------- | -----------: | -----------------: | -----------------: |
-| planning             |        2,193 |              2,916 |             14,948 |
-| implementation       |        2,323 |              2,092 |             10,152 |
-| review               |        2,802 |              1,052 |              3,210 |
-| diagnosis            |          755 |              1,947 |             14,015 |
-| architecture         |        1,533 |              3,832 |             13,186 |
-| simplification       |        1,220 |                n/a |                n/a |
-| prototype            |          766 |              3,525 |             13,186 |
-| codebase explanation |          257 |                 89 |                n/a |
-| handoff              |        1,406 |                160 |                n/a |
-| workflow routing     |        1,175 |              3,281 |              3,106 |
-| git workflow         |        1,779 |                792 |              1,896 |
-| workflow explanation |          893 |                n/a |              3,106 |
-| coding standards     |          811 |                n/a |                n/a |
-| total                |       17,913 |             23,686 |             90,805 |
+| planning             |        1,064 |              3,099 |              7,986 |
+| implementation       |        1,344 |              1,622 |             21,924 |
+| review               |        1,626 |              1,521 |              3,592 |
+| diagnosis            |          686 |              2,374 |             12,050 |
+| architecture         |        1,118 |              5,433 |        in planning |
+| prototype            |  in planning |              3,546 |        in planning |
+| codebase explanation |           94 |                n/a |                n/a |
+| handoff              |        1,318 |                198 |                n/a |
+| workflow routing     |        1,135 |              5,073 |              4,886 |
+| git workflow         |        1,199 |                752 |              1,623 |
+| coding standards     |          575 |                n/a |                n/a |
+| total                |       10,159 |             23,618 |             52,061 |
+
+matt pocock's skills are counted at 49dd158 and superpowers at v7.0.0. superpowers counts cover markdown only and exclude its scripts. superpowers' brainstorming skill covers architecture and prototyping, so it is counted once, in planning. the totals in earlier versions of this table were mis-summed.
 
 ## credits
 
