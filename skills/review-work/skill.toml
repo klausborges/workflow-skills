@@ -1,5 +1,6 @@
 [references]
 shared = [
+  "engineering-discipline",
   "workflow-language",
 ]
 owned = []

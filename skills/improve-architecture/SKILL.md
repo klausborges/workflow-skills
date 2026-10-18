@@ -1,35 +1,33 @@
 ---
 name: improve-architecture
-description: Discover and shape architecture improvement or simplification opportunities in hard-to-understand, hard-to-test, shallow, scattered, or over-coupled code. Use when the opportunity or interface shape still needs discovery, not for an already-decided bounded change.
+description: The lean pass, sized by risk, and simplifications the owner asks for. Use for a "lean pass", when a slice or a milestone closes, or when the owner says "simplify X".
 ---
 
-# Improve Architecture
+# Improve architecture
 
-Find concrete architecture friction and shape only the decision still needed.
+As the main session, run the loop in use-workflow and size the pass here. As a lane, execute the brief and return its report. Read [architecture-language.md](references/architecture-language.md) when naming a finding, and [engineering-discipline.md](references/engineering-discipline.md) before judging tests or applying a change.
 
-Use [architecture-language.md](references/architecture-language.md), [engineering-discipline.md](references/engineering-discipline.md), and the repo Glossary/ADRs when present.
+The owner's purpose for the pass: to "look with a bit more clarity to ensure we didn't just tack things on until something worked, without zooming out a bit and ensuring the code is actually well architected and lean, my testing preferences, comments close to zero to avoid explanation of workarounds and hacks to mask problem areas".
 
-## Boundaries
+## Sizing
 
-- Use this skill to discover opportunities or clarify an unresolved module/interface/seam choice.
-- Use `review-work` to judge architecture in a concrete change, PR, or Phase.
-- Send an already-chosen behavior-preserving simplification to `simplify-work`; send other decided implementation to `implement-work`. Do not force candidate selection, an interview, a Plan, or a handoff.
-- Review may recommend this skill but should not start it automatically.
+- **Milestone close, or a change to a shared contract**: four reads, named by role: two independent architecture reads on the primary model line, one on the second line with the first two withheld, and one on the tests.
+- **Normal slice**: one blind read per model line.
+- **Lighter route**: none.
+
+The main session compares the reads and is never one of them. Findings are reported, the owner rules, and accepted fixes land as their own PR on top of the stack.
 
 ## Discovery
 
-1. Start from caller-visible usage. Map the smallest useful call, component, data, or control-flow sketch needed to clarify modules, ownership, interfaces, and seams.
-2. Identify evidence-backed friction: scattered knowledge, shallow pass-through layers, leaky details, avoidable branches or mutable state, hard-to-test behavior, change amplification, unclear ownership, or a data model that permits invalid states.
-3. Present a small ranked set of candidates only when the user has not already selected the area.
-4. For the chosen candidate, clarify only load-bearing constraints, migration, verification, and caller impact.
-5. Return the smallest useful next artifact: recommendation, interface choice, bounded `simplify-work` or `implement-work` scope, Plan request, or handoff. Do not create a Plan or handoff by default.
+Start from caller-visible usage. Name friction as scattered knowledge, pass-through layers, unowned rules, invalid states, workarounds explained by comments, or defensive code and tests with no failure they guard. A finding names the caller, the rule, the owner it proposes, and how unchanged behavior is shown. A no-change verdict needs evidence too.
 
-Candidate summaries should name the area, observed friction, opportunity, benefits, risks, and evidence.
+## Apply
 
-## Interface or seam choice
+A direct "simplify X" from the owner is applied, not only reported. Preserve behavior, add a characterization check only when existing evidence can't protect it, and set no line-count goal.
 
-When placement is genuinely unresolved, compare two or three materially different options by caller impact, hidden complexity, migration cost, testability, volatility, and ownership. Recommend one. Skip this branch when placement is obvious or unchanged.
+## Gotchas
 
-Treat architecture vocabulary as heuristics. A single adapter can justify a seam when it isolates volatility, ownership, or testing; ask what boundary it protects. Prefer public or intentionally stable interfaces as behavioral test surfaces without exposing internals only for tests.
-
-Do not propose broad rewrites, relitigate ADRs without new friction, or make ordinary feature work speak architecture jargon unnecessarily.
+- A lean pass on a lean-pass PR never ends: that PR gets none.
+- Test advice from a lean read can be wrong: check it by mutation before relaying it.
+- Input for a named next consumer looks like churn: it stays.
+- A tidy-up that touches stored data risks loss: stored data outranks tidiness.
