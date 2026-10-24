@@ -64,12 +64,12 @@ A worktree you start in, made by the host (the app or orchestrator that made you
 
 ### Removal
 
-Remove only worktrees you added, with `git worktree remove <path>` and no `--force`. It refuses on changes but silently deletes ignored files: first check `git -C <path> status --porcelain --ignored` and move anything besides build output and dependencies (briefs, `.env`, notes). A detached HEAD's commits go with the worktree, so check that HEAD is on a branch.
+Remove only worktrees you added, or those an owner-requested sweep covers, with `git worktree remove <path>` and no `--force`. It refuses on changes but silently deletes ignored files: first check `git -C <path> status --porcelain --ignored` and move anything besides build output and dependencies (briefs, `.env`, notes). A detached HEAD's commits go with the worktree, so check that HEAD is on a branch.
 
 - At merge: once the primary remote shows a PR merged (not `git branch --merged`: a squash merge leaves the tip unreachable), remove the worktree you added for its branch.
 - Stacks: a worktree that switches between a stack's branches goes only once none of them has an open PR.
 - At the end of the work: remove the merged ones you added; name those you keep in your handoff notes.
-- Sweep: for each worktree in `.worktrees/`, read its PR state and `git status --porcelain --ignored`. Remove the merged, clean ones you added (across sessions: named in your own handoff notes), or all of them when the owner asked for the sweep; list the rest with their state.
+- Sweep: for each worktree in `.worktrees/`, read its PR state and `git status --porcelain --ignored`. Remove the merged ones you added that are clean apart from build output and dependencies (across sessions: named in your own handoff notes), or every such one when the owner asked for the sweep; list the rest with their state.
 - Local branches of merged PRs stay until the owner says they're no longer needed.
 - Never run `git clean`.
 
