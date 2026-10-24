@@ -1,6 +1,6 @@
 ---
 name: git-conventions
-description: 'Remotes, commits, PRs and stacks, and worktrees for the owner''s repos. Use for development work in a git repository: committing, opening or updating PRs and stacks, restacking after a merge or when the owner says "merged #N", and creating, reusing or removing worktrees.'
+description: 'Use for any development work in a git repository: committing, opening or updating PRs and stacks, restacking after a merge or when the owner says "merged #N", and creating, reusing or removing worktrees.'
 ---
 
 # Git conventions
@@ -13,11 +13,11 @@ Remotes are named by host: `github` for GitHub, `forge` for the personal Forgejo
 
 The first line is `type(scope): description`, scope optional. Types: `feat`, `fix`, `docs`, `ci`, `build`, `chore`, `refactor`, `test`, `perf`, `revert`. Add a body only when the why is not obvious from the diff. PR titles take the same shape.
 
-Messages and PR text describe the change, never plans, milestones or phases. Branch names may keep stack prefixes such as `m2/prng`, since the forge deletes remote branches at merge.
+Messages and PR text describe the change, never plans, milestones or phases. Branch names may keep stack prefixes such as `m2/prng`, since the PR host deletes remote branches at merge.
 
 No attribution or co-author trailers anywhere, including inside briefs.
 
-Stage only when asked; otherwise name what you would stage. Let hooks run, and fix or report what they catch.
+Stage and commit only when asked; otherwise name what you would stage. Let hooks run, and fix or report what they catch.
 
 ## PRs and stacks
 
@@ -58,22 +58,25 @@ A conflict, or a range-diff showing more than a base move, means more changed th
 
 ## Worktrees
 
-Use the harness's native worktree first. Manual ones live at `<repo>/.worktrees/<branch>` with slashes flattened to dashes, in a gitignored directory. Never nest a worktree. The manual fallback is `git worktree add .worktrees/<flattened-branch> <branch>` once `.worktrees/` is ignored, which checks out an existing branch as is; add `-b` before `<branch>` only for a new branch.
+Reuse the current worktree when inside one; otherwise prefer the harness's native worktree. Manual ones live at `<repo>/.worktrees/<branch>`, slashes flattened to dashes, with `.worktrees/` gitignored: `git worktree add .worktrees/<flattened-branch> <branch>`, adding `-b` before `<branch>` only for a new branch. Never nest a worktree.
 
-A worktree the host (an app or orchestrator that created the session's checkout) made for the session belongs to the host: work in it, and never remove, move or re-point it. Worktrees you add for lanes and spikes are yours to clean up.
-
-Reuse the current worktree when already inside one.
+A worktree you start in, made by the host (the app or orchestrator that made your checkout) or the harness, belongs to it: work in it, and never remove, move or re-point it. Worktrees you add, natively or by hand, are yours.
 
 ### Removal
 
-When the forge says a branch's PR merged, remove its worktree if clean, with `git worktree remove <path>` and no `--force`; its refusal is the check. Trust the forge, since a squash merge leaves the tip unreachable. At the close of a slice, remove the merged worktrees you added, and name the ones you keep in the resumption record. Local branches of merged PRs stay until a final closeout, when the owner says they're no longer needed. Never run `git clean`.
+Remove only worktrees you added, with `git worktree remove <path>` and no `--force`. It refuses on changes but silently deletes ignored files: first check `git -C <path> status --porcelain --ignored` and move anything besides build output and dependencies (briefs, `.env`, notes). A detached HEAD's commits go with the worktree, so check that HEAD is on a branch.
 
-To sweep, for each worktree under the repo's worktree folders read its PR's state from the forge and `git status --porcelain`. Remove the merged and clean ones, and list the rest for the owner.
+- At merge: once the primary remote shows a PR merged (not `git branch --merged`: a squash merge leaves the tip unreachable), remove the worktree you added for its branch.
+- Stacks: a worktree that switches between a stack's branches goes only once none of them has an open PR.
+- At the end of the work: remove the merged ones you added; name those you keep in your handoff notes.
+- Sweep: for each worktree in `.worktrees/`, read its PR state and `git status --porcelain --ignored`. Remove the merged, clean ones you added (across sessions: named in your own handoff notes), or all of them when the owner asked for the sweep; list the rest with their state.
+- Local branches of merged PRs stay until the owner says they're no longer needed.
+- Never run `git clean`.
 
 ### Worktree gotchas
 
 - A pre-commit tool that stashes unstaged changes shares one stash across worktrees: disable its stash in parallel worktrees.
-- A test that spawns git inside a hook inherits `GIT_DIR` and `GIT_WORK_TREE`. A `git init` there writes `core.worktree` into the main repo's config and points the main checkout at the worktree. Strip `GIT_*` from the spawned environment, and after a failed hook run check `git config --get core.worktree` in the main repo.
+- Plain git gives hooks `GIT_DIR` and `GIT_INDEX_FILE`; some hook runners add `GIT_WORK_TREE`. With both, a scratch `git init` in a test writes `core.worktree` into the main repo's config. Strip `GIT_*` from spawned git, and if the main repo then has `core.worktree`, run `git config --unset core.worktree`.
 
 ## Writing style
 
