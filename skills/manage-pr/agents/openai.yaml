@@ -1,4 +1,0 @@
-interface:
-  display_name: "Manage PR"
-  short_description: "Open and update PRs and gh stacks, and restack after merges."
-  default_prompt: "Open a PR for this branch."

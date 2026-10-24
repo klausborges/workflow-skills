@@ -1,4 +1,0 @@
-interface:
-  display_name: "Manage Worktrees"
-  short_description: "Create, reuse and remove git worktrees."
-  default_prompt: "Set up a worktree for this work."

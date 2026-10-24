@@ -1,4 +1,4 @@
 interface:
   display_name: "Git Conventions"
-  short_description: "Remotes, commit shape, worktree placement and writing style."
-  default_prompt: "What are the git conventions for this repo?"
+  short_description: "Remotes, commits, PRs and stacks, and the worktree lifecycle."
+  default_prompt: "Commit this work, open a draft PR for the branch, and remove the worktrees whose PRs merged."

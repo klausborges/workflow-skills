@@ -24,22 +24,19 @@ then try a concrete prompt:
 
 ## skills
 
-| skill                                                            | purpose                                                             |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | the work loop, its routes, and how to use these skills.             |
-| [`plan-work`](./skills/plan-work/SKILL.md)                       | plans of decisions, phases and a gate, plus throwaway probes.       |
-| [`write-handoff`](./skills/write-handoff/SKILL.md)               | briefs, handoffs, compaction prompts, resumption records.           |
-| [`implement-work`](./skills/implement-work/SKILL.md)             | execute a decided brief, red before green.                          |
-| [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of plans, changes, confirmation rounds and stacks. |
-| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | the lean pass and owner-requested simplifications.                  |
-| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find a failure's cause; fix only when authorized.                   |
-| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map how a code area works, read-only.                               |
-| [`coding-standards`](./skills/coding-standards/SKILL.md)         | design, test and evidence standards.                                |
-| [`design-ui`](./skills/design-ui/SKILL.md)                       | tokens and a core set before screens, drawn from the product.       |
-| [`git-conventions`](./skills/git-conventions/SKILL.md)           | remote names, commit shape, worktree placement, writing style.      |
-| [`commit-work`](./skills/commit-work/SKILL.md)                   | conventional commit messages; commits on request.                   |
-| [`manage-pr`](./skills/manage-pr/SKILL.md)                       | PRs and gh stacks, restacking after merges.                         |
-| [`manage-worktrees`](./skills/manage-worktrees/SKILL.md)         | create, reuse and remove worktrees.                                 |
+| skill                                                            | purpose                                                               |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`use-workflow`](./skills/use-workflow/SKILL.md)                 | the work loop, its routes, and how to use these skills.               |
+| [`plan-work`](./skills/plan-work/SKILL.md)                       | plans of decisions, phases and a gate, plus throwaway probes.         |
+| [`write-handoff`](./skills/write-handoff/SKILL.md)               | briefs, handoffs, compaction prompts, resumption records.             |
+| [`implement-work`](./skills/implement-work/SKILL.md)             | execute a decided brief, red before green.                            |
+| [`review-work`](./skills/review-work/SKILL.md)                   | read-only review of plans, changes, confirmation rounds and stacks.   |
+| [`improve-architecture`](./skills/improve-architecture/SKILL.md) | the lean pass and owner-requested simplifications.                    |
+| [`diagnose-issue`](./skills/diagnose-issue/SKILL.md)             | find a failure's cause; fix only when authorized.                     |
+| [`explain-codebase`](./skills/explain-codebase/SKILL.md)         | map how a code area works, read-only.                                 |
+| [`coding-standards`](./skills/coding-standards/SKILL.md)         | design, test and evidence standards.                                  |
+| [`design-ui`](./skills/design-ui/SKILL.md)                       | tokens and a core set before screens, drawn from the product.         |
+| [`git-conventions`](./skills/git-conventions/SKILL.md)           | remotes, commits, PRs and stacks, worktrees from creation to removal. |
 
 repo docs live in [`docs/`](./docs/). canonical shared references live in [`skills/_shared/`](./skills/_shared/) and are generated into each skill's `references/` directory so individual skills remain installable on their own.
 

@@ -17,7 +17,7 @@ Briefs and handoffs live in the project's slot for them; the default is a gitign
 
 - **Handoff**: the brief plus a copy-pastable kickoff prompt, neither committed.
 - **Compaction prompt**: under 300 words, fenced, last in the message. It keeps what was decided, quoted exactly; where things stand, with heads, PRs and merge order; what is open; and details that would be hard to reconstruct.
-- **Resumption record**: worktree and branch, head, next gate, open findings, pending rulings, and receipts outside git. Write it on the plan surface, else in the PR body or chat, at close and at every handoff or compaction.
+- **Resumption record**: worktree and branch, head, the worktrees the session added that are still open, next gate, open findings, pending rulings, and receipts outside git. Write it on the plan surface, else in the PR body or chat, at close and at every handoff or compaction.
 
 Continue first, then compact. Write a handoff only when something must travel to another session, worktree or person.
 
